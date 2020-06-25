@@ -55,11 +55,12 @@ $("#send").click(function(){
         dataType: 'jsonp',
         // set the request header authorization to the bearer token that is generated
         success: function(result) {
-          console.log(result);
-          $('<p>' + result['data'] +'</p>').appendTo('#result');
+          //console.log(result);
+          var button = "<button class='btn btn-primary' id='download' onclick='download_pdf(\""+result["file"]+"\")'>Baixar PDF</button>";
+          $("#result").append(button);
         },
         error: function(error) {
-          console.log("B");
+          alert(error);
         },
       });
 });
@@ -82,3 +83,49 @@ $(document).ready(function(){
         }
     });
 });
+
+/*
+function download_pdf(filename) {
+    var req = new XMLHttpRequest();
+    req.open("POST", "http://127.0.0.1:5000/download", true);
+    req.responseType = "blob";
+    
+    req.onreadystatechange = function() {
+      console.log(req.readyState)
+      console.log(req.status)
+      const blob = new Blob([req.response]);
+      const url = window.URL.createObjectURL(blob);
+    
+      const link = document.createElement('a')
+      link.href = url
+      link.download = "report.pdf"
+      link.click()
+    }
+    var params = "file="+filename;
+    req.send(params);
+}
+*/
+function download_pdf(filename){
+    var req = new XMLHttpRequest();
+
+    req.open("POST", "http://127.0.0.1:5000/reports/"+filename+"/pdf", true);
+    req.responseType = "blob";
+    req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    req.onreadystatechange = function(){
+        if (this.readyState == 4 && this.status == 200){
+            var blob = new Blob([this.response], {type: "application/pdf"});
+            var url = window.URL.createObjectURL(blob);
+            var link = document.createElement('a');
+            document.body.appendChild(link);
+            link.style = "display: none";
+            link.href = url;
+            link.download = "report.pdf";
+            link.click();
+
+            setTimeout(() => {
+            window.URL.revokeObjectURL(url);
+            link.remove(); } , 100);
+        }
+    };
+    req.send();
+}
