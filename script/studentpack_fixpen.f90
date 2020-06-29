@@ -846,7 +846,7 @@ subroutine tojson(n,nmem,x,nite,W,H,solfile,foundsol)
 20 format('                       [',F20.10,',',F20.10,'],')
 21 format('                       [',F20.10,',',F20.10,']')
 23 format('                     ]},')
-24 format('                     ]}',/,'}')
+24 format('                     ]}',/,']}')
 22 format('{',/,'   "found_solution": false',/,'}')
 
 end subroutine tojson
