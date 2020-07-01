@@ -1,0 +1,7 @@
+*.pdf
+*.json
+*.tex
+*~
+__pycache__/**
+script/*.mod
+script/teste.x

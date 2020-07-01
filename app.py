@@ -31,7 +31,7 @@ def optimizer():
 		os.remove(filename) #Removes .TEX file
 		os.remove(filename.replace(".tex", ".json")) #Removes .JSON file
 		process.terminate()
-		return '{0}({1})'.format(request.args.get('callback'), {'response': 200, 'file': filename.replace(".tex", ".pdf"), 'found_solution': str(loaded_json['found_solution']), 'number_items': loaded_json['number_items'], 'min_distance': loaded_json['min_distance'], 'solutions': len(loaded_json['solutions'])})
+		return '{0}({1})'.format(request.args.get('callback'), {'response': 200, 'file': filename.replace(".tex", ".pdf"), 'found_solution': str(loaded_json['found_solution']), 'number_items': loaded_json['number_items'], 'min_distance': loaded_json['min_distance'], 'solutions': len(loaded_json['solutions']), 'all_solutions': loaded_json['solutions']})
 
 
 @app.route('/reports/<filename>/pdf', methods=['POST'])

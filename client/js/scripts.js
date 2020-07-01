@@ -41,8 +41,93 @@
     });
 })(jQuery); // End of use strict
 
+var solution;
+var cntSolution = 0;
+
+function downloadCoord(s) {
+
+    let csvContent = "data:text/csv;charset=utf-8," 
+        + s.all_solutions[cntSolution].positions.map(e => e.join(",")).join("\n");
+
+    var encodedUri = encodeURI(csvContent);
+    window.open(encodedUri);
+
+}
+    
+function drawSolution(s, move) {
+
+    if (s == null) return;
+    
+    var mycanvas = document.getElementById("map");
+    var context = mycanvas.getContext("2d");
+
+    cnt = cntSolution + move;
+    
+    if (cnt < 0 || cnt >= s.all_solutions.length) return;
+
+    cntSolution += move;
+
+    const w = mycanvas.width;
+    const h = mycanvas.height;
+    
+    const salax = parseFloat($(".param_input")[3].value);
+    const salay = parseFloat($(".param_input")[4].value);
+    const scale = Math.min((w - 50) / salax, (h) / salay);
+
+    context.clearRect(0, 0, w, h);
+
+    context.fillStyle = "#fff";
+    context.fillRect(0, 0, w, h);
+
+    // Desenha a parte alocavel
+    context.strokeStyle = "red";
+    context.lineWidth   = "3";
+    context.strokeRect(0, h - salay * scale, salax * scale, salay * scale);
+
+    context.strokeStyle = "black";
+    context.lineWidth = "1";
+    context.strokeRect(0, 0, w, h);
+
+    // Desenha espaco do professor
+    context.strokeStyle = "red";
+    context.font = "15px Arial";
+    tw = context.measureText("P");
+    context.strokeText("P", w - tw.width - 1, h - (salay * scale) / 2 + 10);
+
+    console.log(h - salay * scale);
+    
+    currSol = s.all_solutions[cntSolution];
+
+    document.getElementById("display_distance").innerHTML = "Distância: " + Math.round(100 * currSol.min_distance) / 100.0;
+    
+    for (i = 0; i < currSol.positions.length; i++) {
+
+        context.globalAlpha = 0.2;
+        context.strokeStyle = "black";
+        context.lineWidth   = "1";
+        context.fillStyle   = "#BB8888";
+        context.beginPath();
+        context.arc(currSol.positions[i][0] * scale,
+                    h - currSol.positions[i][1] * scale,
+                    currSol.min_distance * scale / 2.0, 0, 2 * Math.PI);
+        context.fill();
+        context.stroke();
+
+        context.globalAlpha = 1.0;
+        context.fillStyle   = "black";
+        context.beginPath();
+        context.arc(currSol.positions[i][0] * scale,
+                    h - currSol.positions[i][1] * scale,
+                    1, 0, 2 * Math.PI);
+        context.fill();
+
+    }    
+}
+
 $("#send").click(function(){
     $("#result").empty();
+    solution = null;
+    
     $("#result").append('<div id="summary"></div>');
     $("#result_section").show();
     var values = $(".param_input").map(function() {
@@ -69,12 +154,22 @@ $("#send").click(function(){
         dataType: 'jsonp',
         // set the request header authorization to the bearer token that is generated
         success: function(result) {
-          //console.log(result);
-          if(result["found_solution"] == "True"){
-            var button = "<button class='btn btn-primary' id='download' onclick='download_pdf(\""+result["file"].replace(".pdf", "")+"\")'>Baixar PDF</button>";
-            $("#loading").remove();
-            $("#result").append(button);
-            $("div#summary").append('<center><h1 class="mb-0">Resultados</h1><h3 class="mb-0">Soluções encontradas: '+result["solutions"]+'</h3><h3 class="mb-0">Distância ideal calculada: '+result["min_distance"]+'</h3><h3 class="mb-0">Número de carteiras: '+result["number_items"]+'</h3></center>')
+            //console.log(result);
+            if(result["found_solution"] == "True"){
+                var button = "<button class='btn btn-primary' id='download' onclick='download_pdf(\""+result["file"].replace(".pdf", "")+"\")'>Baixar PDF</button>";
+                $("#loading").remove();
+                $("#result").append(button);
+                $("#result").append('<div class="row" id="display_distance"></div>');
+                $("#result").append('<div class="row"><canvas id="map" width="300" height="300">Por favor, use um navegador que suporte HTML5.</canvas></div>');
+                $("#result").append('<div class="row"><button class="btn btn-success" onclick="drawSolution(solution, -1)">&lt;</button>' +
+                                    '<button class="btn btn-success" onclick="drawSolution(solution, +1)">&gt;</button>' +
+                                    '<button class="btn btn-primary" onclick="downloadCoord(solution)">Baixar Coordenadas (CSV)</button></div>'
+                                   );
+                $("div#summary").append('<center><h1 class="mb-0">Resultados</h1><h3 class="mb-0">Soluções encontradas: '+result["solutions"]+'</h3><h3 class="mb-0">Distância ideal calculada: '+result["min_distance"]+'</h3><h3 class="mb-0">Número de carteiras: '+result["number_items"]+'</h3></center>');
+                solution = result;
+                cntSolution = 0;
+                drawSolution(solution, 0);
+              
           }else{
             $("div#summary").append('<center><h1 class="mb-0">Resultados</h1><h3 class="mb-0">Soluções encontradas: Nenhuma</h3></center>')
           }
