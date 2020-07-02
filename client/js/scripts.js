@@ -59,7 +59,7 @@ function drawSolution(s, move) {
     if (s == null) return;
     
     var mycanvas = document.getElementById("map");
-    var context = mycanvas.getContext("2d");
+    var ctx = mycanvas.getContext("2d");
 
     cnt = cntSolution + move;
     
@@ -74,54 +74,65 @@ function drawSolution(s, move) {
     const salay = parseFloat($(".param_input")[4].value);
     const scale = Math.min((w - 50) / salax, (h) / salay);
 
-    context.clearRect(0, 0, w, h);
+    ctx.clearRect(0, 0, w, h);
 
-    context.fillStyle = "#fff";
-    context.fillRect(0, 0, w, h);
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(0, 0, w, h);
 
-    // Desenha a parte alocavel
-    context.strokeStyle = "red";
-    context.lineWidth   = "3";
-    context.strokeRect(0, h - salay * scale, salax * scale, salay * scale);
+    // Draw room
+    ctx.strokeStyle = "red";
+    ctx.lineWidth   = "3";
+    ctx.strokeRect(0, h - salay * scale, salax * scale, salay * scale);
 
-    context.strokeStyle = "black";
-    context.lineWidth = "1";
-    context.strokeRect(0, 0, w, h);
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = "1";
+    ctx.strokeRect(0, 0, w, h);
 
-    // Desenha espaco do professor
-    context.strokeStyle = "red";
-    context.font = "15px Arial";
-    tw = context.measureText("P");
-    context.strokeText("P", w - tw.width - 1, h - (salay * scale) / 2 + 10);
+    // Draw teacher space
+    ctx.strokeStyle = "red";
+    ctx.font = "15px Arial";
+    tw = ctx.measureText("P");
+    ctx.strokeText("P", w - (50 + tw.width) / 2.0, h - (salay * scale) / 2 + 10);
+    ctx.strokeRect(w - 50 + 5, 0, w, h);
 
-    console.log(h - salay * scale);
-    
     currSol = s.all_solutions[cntSolution];
 
-    document.getElementById("display_distance").innerHTML = "Distância: " + Math.round(100 * currSol.min_distance) / 100.0;
+    radius = currSol.min_distance / 2.0;
+    
+    document.getElementById("display_distance").innerHTML = "Distância: " + Math.round(100 * 2 * radius) / 100.0;
+
+    var x, y;
     
     for (i = 0; i < currSol.positions.length; i++) {
 
-        context.globalAlpha = 0.2;
-        context.strokeStyle = "black";
-        context.lineWidth   = "1";
-        context.fillStyle   = "#BB8888";
-        context.beginPath();
-        context.arc(currSol.positions[i][0] * scale,
-                    h - currSol.positions[i][1] * scale,
-                    currSol.min_distance * scale / 2.0, 0, 2 * Math.PI);
-        context.fill();
-        context.stroke();
+        x = currSol.positions[i][0] * scale;
+        y = h - currSol.positions[i][1] * scale;
+        
+        ctx.globalAlpha = 0.2;
+        ctx.strokeStyle = "black";
+        ctx.lineWidth   = "1";
+        ctx.fillStyle   = "#BB8888";
+        ctx.beginPath();
+        ctx.arc(x, y, radius * scale, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.stroke();
 
-        context.globalAlpha = 1.0;
-        context.fillStyle   = "black";
-        context.beginPath();
-        context.arc(currSol.positions[i][0] * scale,
-                    h - currSol.positions[i][1] * scale,
-                    1, 0, 2 * Math.PI);
-        context.fill();
+        ctx.globalAlpha = 0.6;
+        ctx.strokeStyle = "black";
+        ctx.font = Math.max(5, parseInt(radius * scale / 2.0)) + "px Arial";
+        tw = ctx.measureText(i + 1);
+        ctx.strokeText(i + 1, x - tw.width / 2.0, y);
+        ctx.globalAlpha = 1.0;
 
-    }    
+    }
+
+    // Draw origin
+
+    ctx.globalAlpha = 0.7;
+    ctx.strokeStyle = "red";
+    ctx.font = "10px Arial";
+    ctx.strokeText("Origem", 2, h - 5);
+    ctx.globalAlpha = 1.0;
 }
 
 $("#send").click(function(){
