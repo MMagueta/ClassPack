@@ -212,7 +212,7 @@ $("#send_fileiras").click(function(){
         dataType: 'jsonp',
         // set the request header authorization to the bearer token that is generated
         success: function(result) {
-          var button = "<button class='btn btn-primary' id='download' onclick='download_pdf(\""+result["timestamp"].replace(".pdf", "")+"\")'>Baixar PDF</button>";
+          var button = "<button class='btn btn-primary' id='download' onclick='download_pdf(\""+result["timestamp"]+"\")'>Baixar PDF</button>";
           $("#loading").remove();
           $("#result").append(button);
         },
