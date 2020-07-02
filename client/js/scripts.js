@@ -54,7 +54,7 @@ function downloadCoord(s) {
 
 }
     
-function drawSolution(s, move) {
+function drawOptSolution(s, move) {
 
     if (s == null) return;
     
@@ -172,14 +172,14 @@ $("#send").click(function(){
                 $("#result").append(button);
                 $("#result").append('<div class="row" id="display_distance"></div>');
                 $("#result").append('<div class="row"><canvas id="map" width="300" height="300">Por favor, use um navegador que suporte HTML5.</canvas></div>');
-                $("#result").append('<div class="row"><button class="btn btn-success" onclick="drawSolution(solution, -1)">&lt;</button>' +
-                                    '<button class="btn btn-success" onclick="drawSolution(solution, +1)">&gt;</button>' +
+                $("#result").append('<div class="row"><button class="btn btn-success" onclick="drawOptSolution(solution, -1)">&lt;</button>' +
+                                    '<button class="btn btn-success" onclick="drawOptSolution(solution, +1)">&gt;</button>' +
                                     '<button class="btn btn-primary" onclick="downloadCoord(solution)">Baixar Coordenadas (CSV)</button></div>'
                                    );
                 $("div#summary").append('<center><h1 class="mb-0">Resultados</h1><h3 class="mb-0">Soluções encontradas: '+result["solutions"]+'</h3><h3 class="mb-0">Distância ideal calculada: '+result["min_distance"]+'</h3><h3 class="mb-0">Número de carteiras: '+result["number_items"]+'</h3></center>');
                 solution = result;
                 cntSolution = 0;
-                drawSolution(solution, 0);
+                drawOptSolution(solution, 0);
               
           }else{
             $("div#summary").append('<center><h1 class="mb-0">Resultados</h1><h3 class="mb-0">Soluções encontradas: Nenhuma</h3></center>')
