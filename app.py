@@ -67,10 +67,12 @@ def optimize_rows():
 	return '{0}({1})'.format(
                 request.args.get('callback'),
                 {'response': 200,
+                 'status': result["status"],
                  'timestamp': timestamp,
                  'A': result["resposta"],
                  'rows': result["num_fileiras"],
-                 'chairs': result["num_carteiras"]})
+                 'chairs': result["num_carteiras"],
+                 'students': result["num_alunos"]})
 
 if __name__ == '__main__':
 	app.run()

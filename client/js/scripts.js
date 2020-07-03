@@ -293,13 +293,25 @@ $("#send_fileiras").click(function(){
         dataType: 'jsonp',
         // set the request header authorization to the bearer token that is generated
         success: function(result) {
-            var button = "<button class='btn btn-primary' id='download' onclick='download_pdf(\""+result["timestamp"]+"\")'>Baixar PDF</button>";
-            $("#loading").remove();
-            $("#result").append(button);
-            $("#result").append('<div class="row"><canvas id="map" width="300" height="300">Por favor, use um navegador que suporte HTML5.</canvas></div>');
-            $("#result").append('<div class="row"><button class="btn btn-primary" onclick="downloadCoord(solution)">Baixar Coordenadas (CSV)</button></div>');
+            if (result.status) {
+                var button = "<button class='btn btn-primary' id='download' onclick='download_pdf(\""+result["timestamp"]+"\")'>Baixar PDF</button>";
+                $("#loading").remove();
+                $("#result").append(button);
+                $("#result").append('<div class="row"><canvas id="map" width="300" height="300">Por favor, use um navegador que suporte HTML5.</canvas></div>');
+                // Summary
+                $("div#summary").
+                    append('<center><h1 class="mb-0">Resultados</h1>' +
+                           '<h3 class="mb-0">Fileiras: ' + result.rows + '</h3>' +
+                           '<h3 class="mb-0">Cadeiras: ' + result.chairs + '</h3>' +
+                           '<h3 class="mb-0">Número de estudantes: ' + result.students + '</h3></center>');
+            // Set the solution to the global variable
             solution = result;
-            drawRowSol(solution);
+            // Draw the solution to canvas
+                drawRowSol(solution);
+            }
+            else{
+                $("div#summary").append('<center><h1 class="mb-0">Resultados</h1><h3 class="mb-0">Não há solução ótima</h3></center>');
+            }
         },
         error: function(error) {
           alert(error);
