@@ -54,8 +54,8 @@ def optimize_rows():
 	import time
 	data = list(request.args.values())[1:-1]
 	result = otimizar_filas(
-		float(data[0]),
-        float(data[1]),
+		float(data[1]),
+        float(data[0]),
         float(data[2]),
         float(data[3]),
         float(data[4]),
@@ -64,7 +64,13 @@ def optimize_rows():
 	timestamp = time.time()
 	print(result)
 	convert_coords_map(result["resposta"], timestamp)
-	return '{0}({1})'.format(request.args.get('callback'), {'response': 200, 'timestamp': timestamp})
+	return '{0}({1})'.format(
+                request.args.get('callback'),
+                {'response': 200,
+                 'timestamp': timestamp,
+                 'A': result["resposta"],
+                 'rows': result["num_fileiras"],
+                 'chairs': result["num_carteiras"]})
 
 if __name__ == '__main__':
 	app.run()
