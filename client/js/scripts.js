@@ -53,7 +53,42 @@ function downloadCoord(s) {
     window.open(encodedUri);
 
 }
-    
+
+function clearRoom(ctx, w, h) {
+
+    ctx.clearRect(0, 0, w, h);
+
+    ctx.fillStyle = "#fff";
+    ctx.fillRect(0, 0, w, h);
+
+}
+
+function drawRoomAndTeacherSpace(ctx, w, h, scale, salax, salay) {
+
+    // Draw room
+    ctx.strokeStyle = "red";
+    ctx.lineWidth   = "3";
+    ctx.strokeRect(0, h - salay * scale, salax * scale, salay * scale);
+
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = "1";
+    ctx.strokeRect(0, 0, w, h);
+
+    // Draw teacher space
+    ctx.strokeStyle = "red";
+    ctx.font = "15px Arial";
+    tw = ctx.measureText("P");
+    ctx.strokeText("P", w - (50 + tw.width) / 2.0, h - (salay * scale) / 2 + 10);
+    ctx.strokeRect(w - 50 + 5, 0, w, h);
+
+}
+
+/*
+  Draw solution `s` at position `cntSolution + move` if this value is
+  within the available number of solutions. The solution object `s`
+  has to be obtained by the optimization packing strategy.
+*/
+
 function drawOptSolution(s, move) {
 
     if (s == null) return;
@@ -72,29 +107,13 @@ function drawOptSolution(s, move) {
     
     const salax = parseFloat($(".param_input")[3].value);
     const salay = parseFloat($(".param_input")[4].value);
+    
     const scale = Math.min((w - 50) / salax, (h) / salay);
 
-    ctx.clearRect(0, 0, w, h);
-
-    ctx.fillStyle = "#fff";
-    ctx.fillRect(0, 0, w, h);
-
-    // Draw room
-    ctx.strokeStyle = "red";
-    ctx.lineWidth   = "3";
-    ctx.strokeRect(0, h - salay * scale, salax * scale, salay * scale);
-
-    ctx.strokeStyle = "black";
-    ctx.lineWidth = "1";
-    ctx.strokeRect(0, 0, w, h);
-
-    // Draw teacher space
-    ctx.strokeStyle = "red";
-    ctx.font = "15px Arial";
-    tw = ctx.measureText("P");
-    ctx.strokeText("P", w - (50 + tw.width) / 2.0, h - (salay * scale) / 2 + 10);
-    ctx.strokeRect(w - 50 + 5, 0, w, h);
-
+    clearRoom(ctx, w, h);
+    
+    drawRoomAndTeacherSpace(ctx, w, h, scale, salax, salay);
+    
     currSol = s.all_solutions[cntSolution];
 
     radius = currSol.min_distance / 2.0;
