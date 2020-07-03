@@ -137,10 +137,10 @@ function drawOptSolution(s, move) {
         ctx.stroke();
 
         ctx.globalAlpha = 0.6;
-        ctx.strokeStyle = "black";
+        ctx.fillStyle = "black";
         ctx.font = Math.max(5, parseInt(radius * scale / 2.0)) + "px Arial";
         tw = ctx.measureText(i + 1);
-        ctx.strokeText(i + 1, x - tw.width / 2.0, y);
+        ctx.fillText(i + 1, x - tw.width / 2.0, y);
         ctx.globalAlpha = 1.0;
 
     }
