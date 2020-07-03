@@ -154,6 +154,66 @@ function drawOptSolution(s, move) {
     ctx.globalAlpha = 1.0;
 }
 
+function drawRowSol(s) {
+
+    if (s == null) return;
+    
+    var mycanvas = document.getElementById("map");
+    var ctx = mycanvas.getContext("2d");
+
+    const w = mycanvas.width;
+    const h = mycanvas.height;
+    
+    // Get problem data
+    let values = $(".param_input_fileiras").get().map(e => parseFloat(e.value));
+
+    let rW = values[0];
+    let rH = values[1];
+    let cW = values[2];
+    let cH = values[3];
+    let cR = values[4];
+    let cC = values[5];
+
+    console.log(rW + " " + rH);
+    
+    clearRoom(ctx, w, h);
+
+    const scale = Math.min((w - 50) / rW, (h) / rH);
+
+    console.log(scale);
+    
+    drawRoomAndTeacherSpace(ctx, w, h, scale, rW, rH);
+
+    ctx.globalAlpha = 0.2;
+    ctx.strokeStyle = "black";
+    ctx.lineWidth   = "1";
+    ctx.fillStyle   = "#BB8888";
+
+    let py = h - rH * scale;
+
+    for (i = 0; i < solution.rows; i++) {
+
+        let px = 0;
+        
+        for (j = 0; j < solution.chairs; j++) {
+
+            if (solution.A[i][j] == 1)
+                ctx.fillRect(px, py, cW * scale, cH * scale);
+
+            ctx.strokeRect(px, py, cW * scale, cH * scale);
+
+            console.log(i + " " + j + " " + px + " " + cW * scale + " " + py + " " + cH * scale + "   = " + solution.A[i][j]);
+
+            px += (cW + cC) * scale;
+
+        }
+
+        py += (cH + cR) * scale;
+
+    }
+    
+}
+
 $("#send").click(function(){
     $("#result").empty();
     solution = null;
@@ -213,6 +273,8 @@ $("#send").click(function(){
 
 $("#send_fileiras").click(function(){
     $("#result").empty();
+    solution = null;
+    
     $("#result").append('<div id="summary"></div>');
     $("#result_section").show();
     var values = $(".param_input_fileiras").map(function(){
@@ -231,9 +293,13 @@ $("#send_fileiras").click(function(){
         dataType: 'jsonp',
         // set the request header authorization to the bearer token that is generated
         success: function(result) {
-          var button = "<button class='btn btn-primary' id='download' onclick='download_pdf(\""+result["timestamp"]+"\")'>Baixar PDF</button>";
-          $("#loading").remove();
-          $("#result").append(button);
+            var button = "<button class='btn btn-primary' id='download' onclick='download_pdf(\""+result["timestamp"]+"\")'>Baixar PDF</button>";
+            $("#loading").remove();
+            $("#result").append(button);
+            $("#result").append('<div class="row"><canvas id="map" width="300" height="300">Por favor, use um navegador que suporte HTML5.</canvas></div>');
+            $("#result").append('<div class="row"><button class="btn btn-primary" onclick="downloadCoord(solution)">Baixar Coordenadas (CSV)</button></div>');
+            solution = result;
+            drawRowSol(solution);
         },
         error: function(error) {
           alert(error);
