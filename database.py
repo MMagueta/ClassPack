@@ -23,16 +23,42 @@ def disconnect():
 
     client.disconnect()
 
-def gen_id(width, height, min_dist, ch_width, ch_height,
-           obstacles=[], type='chairs'):
+def sort_obs(obstacles):
 
-    # TODO: sort obstacles
-    s_obstacles = obstacles
+    print(obstacles)
+
+    for i in range(0, len(obstacles) - 1):
+
+        pmin = i
+        vmin = obstacles[i]
+
+        for j in range(i + 1, len(obstacles)):
+
+            jobs = obstacles[j]
+
+            if vmin[0] > jobs[0] or \
+               (vmin[0] == jobs[0] and vmin[1] > jobs[1]):
+
+                pmin = j
+                vmin = obstacles[j]
+
+        if pmin is not i:
+
+            tmp = obstacles[i]
+            obstacles[i] = vmin
+            obstacles[pmin] = tmp
+
+def gen_id(width, height, min_dist, ch_width, ch_height,
+           obstacles, ptype='chairs'):
+
+    sort_obs(obstacles)
     
-    id = type + ':' + ':'.join(
+    id = ptype + ':' + ':'.join(
         str(i) for i in [width, height, ch_width, ch_height, min_dist] +
-        list(k for ob in s_obstacles for k in ob)
+        list(k for ob in obstacles for k in ob)
     )
+
+    print(id)
 
     return id
 
@@ -42,7 +68,7 @@ def get_chairs(width, height, min_dist, ch_width, ch_height,
     global db
 
     id = gen_id(width, height, min_dist, ch_width, ch_height,
-               obstacles)
+                obstacles)
     
     if id in db:
 

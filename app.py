@@ -15,10 +15,12 @@ def optimizer():
 	from flask import request, send_file
 	data = list(request.args.values())[1:-1]
 
+	obstacles=list(list(int(data[7 + 3 * i + j]) for j in range(0, 3)) for i in range(0, int(data[6])))
 	try:
 		database.connect()
 		
-		result_tuple = database.get_chairs(float(data[1]), float(data[2]), float(data[0]), float(data[3]), float(data[4]))
+		result_tuple = database.get_chairs(float(data[1]), float(data[2]), float(data[0]), float(data[3]), float(data[4]),
+						   obstacles=obstacles)
 
 		if result_tuple is not None:
 
@@ -46,8 +48,9 @@ def optimizer():
 		os.remove(filename.replace(".tex", ".json")) #Removes .JSON file
 		process.terminate()
 
-		database.save_or_update_chairs(float(data[1]), float(data[2]), float(data[0]), float(data[3]), float(data[4]), loaded_json, filename.replace(".tex", ".pdf"))
-		# obstacles=list(list(int(data[6 + 3 * i + j]) for j in range(0, 3)) for i in range(0, int(data[5]))))
+		database.save_or_update_chairs(float(data[1]), float(data[2]), float(data[0]),
+					       float(data[3]), float(data[4]), loaded_json,
+					       filename.replace(".tex", ".pdf"), obstacles=obstacles)
                 
 		return '{0}({1})'.format(request.args.get('callback'), {'response': 200, 'file': filename.replace(".tex", ".pdf"), 'found_solution': str(loaded_json['found_solution']), 'number_items': loaded_json['number_items'], 'min_distance': loaded_json['min_distance'], 'solutions': len(loaded_json['solutions']), 'all_solutions': loaded_json['solutions']})
 
