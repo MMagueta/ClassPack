@@ -2,28 +2,38 @@ from time import time
 from hashlib import sha256
 from cloudant.client import CouchDB
 
-client = None
-db = None
-DBNAME = 'classpack'
+DB_SOL_NAME = 'classpack'
+DB_USR_NAME = 'users'
+DB_PRB_NAME = 'problems'
 
 def connect():
+    """
+    Conect to the CouchDB server.
+    """
 
     global client, db, DBNAME
 
+    # TODO: remove username and password from the code
     client = CouchDB('classpack_user', 'classpack_123',
                      url='http://127.0.0.2:5984', connect=True)
 
-    db = client[DBNAME]
+    return client
 
-    print(db.database_name)
-
-def disconnect():
-
-    global client
+def disconnect(client):
+    """
+    Disconnect from the CouchDB server.
+    """
 
     client.disconnect()
 
-def sort_obs(obstacles):
+def _sort_obs(obstacles):
+    """
+
+    Sort the list of triples (given by lists) `obstacles`. The idea is to
+    first sort by `x`, then by `y` and then by the `radius` of the
+    obstacle.
+
+    """
 
     print(obstacles)
 
@@ -37,7 +47,8 @@ def sort_obs(obstacles):
             jobs = obstacles[j]
 
             if vmin[0] > jobs[0] or \
-               (vmin[0] == jobs[0] and vmin[1] > jobs[1]):
+               (vmin[0] == jobs[0] and vmin[1] > jobs[1]) or \
+               (vmin[0] == jobs[0] and vmin[1] == jobs[1] and vmin[2] > jobs[2]):
 
                 pmin = j
                 vmin = obstacles[j]
@@ -48,27 +59,63 @@ def sort_obs(obstacles):
             obstacles[i] = vmin
             obstacles[pmin] = tmp
 
-def gen_id(width, height, min_dist, ch_width, ch_height,
-           obstacles, ptype='chairs'):
+def add_and_return_user(client, user):
+    """Store the user and return the document.
 
-    sort_obs(obstacles)
+    NOTE: the user is always stored, even if the email already
+    exists. This solves the problem of wrong email addresses and
+    different information. Also, avoids the need for passwords.
+
+    """
     
-    id = ptype + ':' + ':'.join(
+    if 'email' not in user or 'name' not in user or \
+       'institute' not in user:
+
+        return None
+
+    udb = client[DB_USR_NAME]
+
+    uid = user['email'] + ':' + sha256(str(time()).encode('latin')).hexdigest()
+
+    user_with_id = dict(user)
+    user_with_id['_id'] = uid
+    
+    return udb.create_document(user_with_id)
+            
+def gen_chair_id(width, height, min_dist, ch_width, ch_height,
+                 obstacles):
+    """Generate unique ids for saving the results of 'chairs' problems.
+
+    """
+
+    _sort_obs(obstacles)
+    
+    id = 'chairs:' + ':'.join(
         str(i) for i in [width, height, ch_width, ch_height, min_dist] +
         list(k for ob in obstacles for k in ob)
     )
 
-    print(id)
+    return id
+
+def gen_row_id(width, height, min_dist, ch_width, ch_height,
+               row_dist, col_dist):
+    """Generate unique ids for saving the results of 'rows' problems.
+
+    """
+
+    id = 'rows:' + ':'.join(
+        str(i) for i in [width, height, ch_width, ch_height, min_dist, row_dist, col_dist]
+    )
 
     return id
 
-def get_chairs(width, height, min_dist, ch_width, ch_height,
+def get_chairs(client, width, height, min_dist, ch_width, ch_height,
                obstacles=[]):
 
-    global db
+    db = client[DB_SOL_NAME]
 
-    id = gen_id(width, height, min_dist, ch_width, ch_height,
-                obstacles)
+    id = gen_chair_id(width, height, min_dist, ch_width, ch_height,
+                      obstacles)
     
     if id in db:
 
@@ -84,13 +131,13 @@ def get_chairs(width, height, min_dist, ch_width, ch_height,
 
     return None
 
-def save_or_update_chairs(width, height, min_dist, ch_width, ch_height,
+def save_or_update_chairs(client, width, height, min_dist, ch_width, ch_height,
                           solution, pdf_filename, obstacles=[]):
 
-    global db
+    db = client[DB_SOL_NAME]
 
-    id = gen_id(width, height, min_dist, ch_width, ch_height,
-               obstacles)
+    id = gen_chair_id(width, height, min_dist, ch_width, ch_height,
+                      obstacles)
 
     if id in db:
 

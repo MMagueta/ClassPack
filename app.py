@@ -1,5 +1,4 @@
 import database
-import atexit
 from flask import Flask, Response
 from flask_cors import CORS
 app = Flask(__name__)
@@ -15,11 +14,14 @@ def optimizer():
 	from flask import request, send_file
 	data = list(request.args.values())[1:-1]
 
-	obstacles=list(list(int(data[7 + 3 * i + j]) for j in range(0, 3)) for i in range(0, int(data[6])))
+	obstacles = list(list(float(data[7 + 3 * i + j]) for j in range(0, 3)) for i in range(0, int(data[6])))
+	client = None
+	
 	try:
-		database.connect()
+		client = database.connect()
 		
-		result_tuple = database.get_chairs(float(data[1]), float(data[2]), float(data[0]), float(data[3]), float(data[4]),
+		result_tuple = database.get_chairs(client, float(data[1]), float(data[2]),
+						   float(data[0]), float(data[3]), float(data[4]),
 						   obstacles=obstacles)
 
 		if result_tuple is not None:
@@ -34,6 +36,8 @@ def optimizer():
 		#print("> ", output, error)
 	except Exception as e:
 		print(e, error)
+		if client is not None:
+			database.disconnect(client)
 		return '{0}({1})'.format(request.args.get('callback'), {'response': 100, 'error': e})
 	else:
 		import latex_converter
@@ -48,10 +52,12 @@ def optimizer():
 		os.remove(filename.replace(".tex", ".json")) #Removes .JSON file
 		process.terminate()
 
-		database.save_or_update_chairs(float(data[1]), float(data[2]), float(data[0]),
+		database.save_or_update_chairs(client, float(data[1]), float(data[2]), float(data[0]),
 					       float(data[3]), float(data[4]), loaded_json,
 					       filename.replace(".tex", ".pdf"), obstacles=obstacles)
-                
+
+		database.disconnect(client)
+
 		return '{0}({1})'.format(request.args.get('callback'), {'response': 200, 'file': filename.replace(".tex", ".pdf"), 'found_solution': str(loaded_json['found_solution']), 'number_items': loaded_json['number_items'], 'min_distance': loaded_json['min_distance'], 'solutions': len(loaded_json['solutions']), 'all_solutions': loaded_json['solutions']})
 
 
@@ -94,11 +100,6 @@ def optimize_rows():
                  'rows': result["num_fileiras"],
                  'chairs': result["num_carteiras"],
                  'students': result["num_alunos"]})
-
-@atexit.register
-def shutdown():
-
-        database.disconnect()
 
 if __name__ == '__main__':
 
