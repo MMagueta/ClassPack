@@ -85,8 +85,8 @@ def optimize_rows():
         float(data[0]),
         float(data[2]),
         float(data[3]),
-        float(data[4]),
-        float(data[5]),
+        int(data[4]),
+        int(data[5]),
         float(data[6]))
 	timestamp = time.time()
 	print(result)
@@ -99,7 +99,9 @@ def optimize_rows():
                  'A': result["resposta"],
                  'rows': result["num_fileiras"],
                  'chairs': result["num_carteiras"],
-                 'students': result["num_alunos"]})
+                 'students': result["num_alunos"],
+                 'rowSpace': result["largura_corredor_vertical"],
+                 'chairSpace': result["largura_corredor_horizontal"]})
 
 if __name__ == '__main__':
 
