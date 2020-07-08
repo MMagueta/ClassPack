@@ -66,20 +66,33 @@ function clearRoom(ctx, w, h) {
 function drawRoomAndTeacherSpace(ctx, w, h, scale, salax, salay) {
 
     // Draw room
-    ctx.strokeStyle = "red";
-    ctx.lineWidth   = "3";
-    ctx.strokeRect(0, h - salay * scale, salax * scale, salay * scale);
-
     ctx.strokeStyle = "black";
     ctx.lineWidth = "1";
     ctx.strokeRect(0, 0, w, h);
 
+    ctx.strokeStyle = "red";
+    ctx.lineWidth   = "3";
+    ctx.strokeRect(2, h + 2 - salay * scale, salax * scale, salay * scale - 4);
+
     // Draw teacher space
     ctx.strokeStyle = "red";
+    ctx.lineWidth = "1";
     ctx.font = "15px Arial";
     tw = ctx.measureText("P");
     ctx.strokeText("P", w - (50 + tw.width) / 2.0, h - (salay * scale) / 2 + 10);
-    ctx.strokeRect(w - 50 + 5, 0, w, h);
+    ctx.strokeRect(w - 50 + 5, 1, 50 - 5 - 2, h - 2);
+
+}
+
+function drawChair(ctx, cw, ch, scale, px, py) {
+
+     // The chair: 2/3 of ch and 1/4 of cw
+    ctx.strokeRect(px - (cw / 8) * scale, py - (ch / 3) * scale, 
+                   cw * scale / 4, (2 * ch)  * scale / 3);
+
+    // The table: ch and 3/4 of cw
+    ctx.strokeRect(px + (ch / 8) * scale, py - (ch / 2) * scale,
+                   cw * 3 * scale / 4, ch * scale);
 
 }
 
@@ -107,6 +120,8 @@ function drawOptSolution(s, move) {
     
     const salax = parseFloat($(".param_input")[3].value);
     const salay = parseFloat($(".param_input")[4].value);
+    const cw = parseFloat($(".param_input")[1].value);
+    const ch = parseFloat($(".param_input")[2].value);
     
     const scale = Math.min((w - 50) / salax, (h) / salay);
 
@@ -116,7 +131,9 @@ function drawOptSolution(s, move) {
     
     currSol = s.all_solutions[cntSolution];
 
-    radius = currSol.min_distance / 2.0;
+    const radius = currSol.min_distance / 2.0;
+
+    const fontSize = Math.max(10, parseInt(radius * scale / 2.0));
     
     document.getElementById("display_distance").innerHTML = "Distância: " + Math.round(100 * 2 * radius) / 100.0;
 
@@ -127,20 +144,21 @@ function drawOptSolution(s, move) {
         x = currSol.positions[i][0] * scale;
         y = h - currSol.positions[i][1] * scale;
         
-        ctx.globalAlpha = 0.2;
+        ctx.globalAlpha = 0.8;
         ctx.strokeStyle = "black";
         ctx.lineWidth   = "1";
-        ctx.fillStyle   = "#BB8888";
-        ctx.beginPath();
-        ctx.arc(x, y, radius * scale, 0, 2 * Math.PI);
-        ctx.fill();
-        ctx.stroke();
+        drawChair(ctx, cw, ch, scale, x, y)
 
-        ctx.globalAlpha = 0.6;
-        ctx.fillStyle = "black";
-        ctx.font = Math.max(5, parseInt(radius * scale / 2.0)) + "px Arial";
+        ctx.globalAlpha = 0.7;
+        ctx.fillStyle = "brown";
+        ctx.font = fontSize + "px Arial";
         tw = ctx.measureText(i + 1);
-        ctx.fillText(i + 1, x - tw.width / 2.0, y);
+
+        if (y - (ch * scale) / 2 < fontSize)
+            ctx.fillText(i + 1, x, y + (ch * scale) / 2);
+        else
+            ctx.fillText(i + 1, x, y - (ch * scale) / 2);
+        
         ctx.globalAlpha = 1.0;
 
     }
