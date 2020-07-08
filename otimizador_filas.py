@@ -8,8 +8,8 @@ def otimizar_filas(hs,
                    vs,
                    hc,
                    vc,
-                   hr,
-                   vr,
+                   m,
+                   n,
                    dmin):
   #PAINEL DE CONTROLE
   #hs = 10 #largura da sala
@@ -18,27 +18,12 @@ def otimizar_filas(hs,
   #hc = 0.5 #largura da cadeira
   #vc = 0.5 #comprimento da cadeira
 
-  #hr = 0.5 #largura do corredor vertical
-  #vr = 0.6 #comprimento do corredor horizontal
+  hr = (hs-n*hc)/(n-1) #largura do corredor vertical
+  vr = (vs-m*vc)/(m-1) #comprimento do corredor horizontal
 
   #dmin = 1 #ditancia minima entre pessoas
 
   #CALCULO DOS PARAMETROS
-  if hc < hs-math.floor(hs/(hc+hr))*(hc+hr):
-    n = math.ceil(hs/(hc+hr))
-    #print("Numero de fileiras: " + str(math.ceil(hs/(hc+hr))))
-  else:
-    n = math.floor(hs/(hc+hr))
-    #print("Numero de fileiras: " + str(math.floor(hs/(hc+hr))))
-
-  if vc < vs-math.floor(vs/(vc+vr))*(vc+vr):
-    m = math.ceil(vs/(vc+vr))
-    #print("Numero de carteiras por fileira: " + str(math.ceil(vs/(vc+vr))))
-  else:
-    m = math.floor(vs/(vc+vr))
-    #print("Numero de cadeiras por fileira: " + str(math.floor(vs/(vc+vr))))
-
-  #print("Tabela de lugares possiveis na sala de aula:")
   cadeiras = []
   for j in range(m):
     for i in range(n):
@@ -115,6 +100,8 @@ def otimizar_filas(hs,
               'num_alunos' : solver.Objective().Value(),
               'num_fileiras' : n,
               'num_carteiras' : m,
+              "largura_corredor_vertical": hr,
+ 	            "largura_corredor_horizontal": vr,
               'resposta' : resposta.T.tolist(),
               'tempo_resolucao' : solver.wall_time(),
               'num_iteracoes' : solver.iterations(),

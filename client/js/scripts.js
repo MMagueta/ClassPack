@@ -86,11 +86,16 @@ function drawRoomAndTeacherSpace(ctx, w, h, scale, salax, salay) {
 
 function drawChair(ctx, cw, ch, scale, px, py) {
 
-     // The chair: 2/3 of ch and 1/4 of cw
+    // The chair: 2/3 of ch and 1/4 of cw
+    ctx.fillRect(px - (cw / 8) * scale, py - (ch / 3) * scale, 
+                   cw * scale / 4, (2 * ch)  * scale / 3);
+    
     ctx.strokeRect(px - (cw / 8) * scale, py - (ch / 3) * scale, 
                    cw * scale / 4, (2 * ch)  * scale / 3);
 
     // The table: ch and 3/4 of cw
+    ctx.fillRect(px + (ch / 8) * scale, py - (ch / 2) * scale,
+                   cw * 3 * scale / 4, ch * scale);
     ctx.strokeRect(px + (ch / 8) * scale, py - (ch / 2) * scale,
                    cw * 3 * scale / 4, ch * scale);
 
@@ -138,7 +143,7 @@ function drawOptSolution(s, move) {
     document.getElementById("display_distance").innerHTML = "Distância: " + Math.round(100 * 2 * radius) / 100.0;
 
     var x, y;
-    
+
     for (i = 0; i < currSol.positions.length; i++) {
 
         x = currSol.positions[i][0] * scale;
@@ -147,6 +152,9 @@ function drawOptSolution(s, move) {
         ctx.globalAlpha = 0.8;
         ctx.strokeStyle = "black";
         ctx.lineWidth   = "1";
+        // Do not paint the chairs
+        ctx.fillStyle = "white"
+    
         drawChair(ctx, cw, ch, scale, x, y)
 
         ctx.globalAlpha = 0.7;
@@ -189,8 +197,8 @@ function drawRowSol(s) {
     let rH = values[1];
     let cW = values[2];
     let cH = values[3];
-    let cR = values[4];
-    let cC = values[5];
+    let cR = solution.rowSpace;
+    let cC = solution.chairSpace;
 
     console.log(rW + " " + rH);
     
@@ -202,25 +210,23 @@ function drawRowSol(s) {
     
     drawRoomAndTeacherSpace(ctx, w, h, scale, rW, rH);
 
-    ctx.globalAlpha = 0.2;
+    ctx.globalAlpha = 0.8;
     ctx.strokeStyle = "black";
     ctx.lineWidth   = "1";
     ctx.fillStyle   = "#BB8888";
 
-    let py = h - rH * scale;
+    let py = h - rH * scale + cH * scale / 2;
 
     for (i = 0; i < solution.rows; i++) {
 
-        let px = 0;
+        let px = cW * scale / 4;
         
         for (j = 0; j < solution.chairs; j++) {
 
-            if (solution.A[i][j] == 1)
-                ctx.fillRect(px, py, cW * scale, cH * scale);
+            ctx.fillStyle = "white";
+            if (solution.A[i][j] == 1) ctx.fillStyle = "black";
 
-            ctx.strokeRect(px, py, cW * scale, cH * scale);
-
-            console.log(i + " " + j + " " + px + " " + cW * scale + " " + py + " " + cH * scale + "   = " + solution.A[i][j]);
+            drawChair(ctx, cW, cH, scale, px, py);
 
             px += (cW + cC) * scale;
 
