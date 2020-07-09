@@ -1,12 +1,37 @@
 import database
-from flask import Flask, Response
+from flask import Flask, Response, g, url_for, redirect
 from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
+@app.route('/login', methods=['GET', 'POST'])
+def save_user():
+
+        from flask import request, render_template
+
+        g._client = database.connect()
+
+        if request.method == 'POST':
+                g._uid = database.add_and_return_user(g._client,
+                        request.form['email'],
+                        request.form['name'],
+                        request.form['institution'])
+        else:
+                email = request.args.get('email')
+                name = request.args.get('name')
+                institution = request.args.get('institution')
+
+                if email is None or name is None or institution is None:
+                        return '{0}({1})'.format(request.args.get('callback'), {'response': 404})
+
+                g._uid = database.add_and_return_user(g._client, email, name, institution)
+
+        return render_template('main.html')
+
 @app.route('/')
 def index():
-	return "Index"
+        
+	return redirect(url_for('static', filename='firstpage.html'))
 
 @app.route('/optimize')
 def optimizer():
