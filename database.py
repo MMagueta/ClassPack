@@ -11,11 +11,17 @@ def connect():
     Conect to the CouchDB server.
     """
 
-    global client, db, DBNAME
+    client = None
 
-    # TODO: remove username and password from the code
-    client = CouchDB('classpack_user', 'classpack_123',
-                     url='http://127.0.0.2:5984', connect=True)
+    try:
+        
+        # TODO: remove username and password from the code
+        client = CouchDB('classpack_user', 'classpack_123',
+                         url='http://127.0.0.2:5984', connect=True)
+
+    except e:
+
+        pass
 
     return client
 
@@ -24,6 +30,8 @@ def disconnect(client):
     Disconnect from the CouchDB server.
     """
 
+    if client is None: return
+    
     client.disconnect()
 
 def _sort_obs(obstacles):
@@ -34,8 +42,6 @@ def _sort_obs(obstacles):
     obstacle.
 
     """
-
-    print(obstacles)
 
     for i in range(0, len(obstacles) - 1):
 
@@ -59,7 +65,7 @@ def _sort_obs(obstacles):
             obstacles[i] = vmin
             obstacles[pmin] = tmp
 
-def add_and_return_user(client, user):
+def add_and_return_user(client, email, name, institution):
     """Store the user and return the document.
 
     NOTE: the user is always stored, even if the email already
@@ -67,20 +73,23 @@ def add_and_return_user(client, user):
     different information. Also, avoids the need for passwords.
 
     """
+
+    if client is None: return ''
     
-    if 'email' not in user or 'name' not in user or \
-       'institute' not in user:
-
-        return None
-
     udb = client[DB_USR_NAME]
 
-    uid = user['email'] + ':' + sha256(str(time()).encode('latin')).hexdigest()
+    uid = email + ':' + sha256(str(time()).encode('latin')).hexdigest()
 
-    user_with_id = dict(user)
-    user_with_id['_id'] = uid
+    user_with_id = {
+        '_id': uid,
+        'email': email,
+        'name': name,
+        'institution': institution
+    }
+
+    udb.create_document(user_with_id)
     
-    return udb.create_document(user_with_id)
+    return uid
             
 def gen_chair_id(width, height, min_dist, ch_width, ch_height,
                  obstacles):
@@ -112,6 +121,8 @@ def gen_row_id(width, height, min_dist, ch_width, ch_height,
 def get_chairs(client, width, height, min_dist, ch_width, ch_height,
                obstacles=[]):
 
+    if client is None: return None
+
     db = client[DB_SOL_NAME]
 
     id = gen_chair_id(width, height, min_dist, ch_width, ch_height,
@@ -134,6 +145,8 @@ def get_chairs(client, width, height, min_dist, ch_width, ch_height,
 def save_or_update_chairs(client, width, height, min_dist, ch_width, ch_height,
                           solution, pdf_filename, obstacles=[]):
 
+    if client is None: return
+    
     db = client[DB_SOL_NAME]
 
     id = gen_chair_id(width, height, min_dist, ch_width, ch_height,

@@ -15,11 +15,11 @@ def optimizer():
 	data = list(request.args.values())[1:-1]
 
 	obstacles = list(list(float(data[7 + 3 * i + j]) for j in range(0, 3)) for i in range(0, int(data[6])))
-	client = None
 	
+	client = database.connect()
+
 	try:
-		client = database.connect()
-		
+
 		result_tuple = database.get_chairs(client, float(data[1]), float(data[2]),
 						   float(data[0]), float(data[3]), float(data[4]),
 						   obstacles=obstacles)
@@ -36,8 +36,7 @@ def optimizer():
 		#print("> ", output, error)
 	except Exception as e:
 		print(e, error)
-		if client is not None:
-			database.disconnect(client)
+		database.disconnect(client)
 		return '{0}({1})'.format(request.args.get('callback'), {'response': 100, 'error': e})
 	else:
 		import latex_converter
