@@ -242,7 +242,7 @@ $("#send").click(function(){
     $("#result").empty();
     solution = null;
     
-    $("#result").append('<div id="summary"></div>');
+    $("#result").append('<div id="summary" class="text-center"></div>');
     $("#result_section").show();
     var values = $(".param_input").map(function() {
         return this.value;
@@ -271,8 +271,6 @@ $("#send").click(function(){
             //console.log(result);
             $("#loading").remove();
             if(result["found_solution"] == "True"){
-                var button = "<button class='btn btn-primary' id='download' onclick='download_pdf(\""+result["file"].replace(".pdf", "")+"\")'>Baixar PDF</button>";
-                $("#result").append(button);
                 $("#result").append('<div class="row" id="display_distance"></div>');
                 $("#result").append('<div class="row"><canvas id="map" width="300" height="300">Por favor, use um navegador que suporte HTML5.</canvas></div>');
                 $("#result").append('<div class="row"><button class="btn btn-success" onclick="drawOptSolution(solution, -1)">&lt;</button>' +
@@ -280,6 +278,10 @@ $("#send").click(function(){
                                     '<button class="btn btn-primary" onclick="downloadCoord(solution)">Baixar Coordenadas (CSV)</button></div>'
                                    );
                 $("div#summary").append('<center><h1 class="mb-0">Resultados</h1><h3 class="mb-0">Soluções encontradas: '+result["solutions"]+'</h3><h3 class="mb-0">Distância ideal calculada: '+result["min_distance"]+'</h3><h3 class="mb-0">Número de carteiras: '+result["number_items"]+'</h3></center>');
+                $("div#summary").append("<button class='btn btn-primary' id='download' onclick='download_pdf(\"" +
+                                        result["file"].replace(".pdf", "") +
+                                        "\")'>Baixar PDF</button>");
+
                 solution = result;
                 cntSolution = 0;
                 drawOptSolution(solution, 0);
@@ -314,7 +316,7 @@ $("#send_fileiras").click(function(){
     for (var i = 0 ; i < values.length; i++){
         json_data[(i+1).toString()] = values[i];
     }
-    $("#result").append('<img src="assets/img/loading.gif" id="loading"></img>');
+    $("#result").append('<img src="assets/img/loading.gif" id="loading" class="text-center"></img>');
     $.ajax({
         url: "http://127.0.0.1:5000/rows",
         type: "GET",
@@ -325,8 +327,6 @@ $("#send_fileiras").click(function(){
         success: function(result) {
             $("#loading").remove();
             if (result.status) {
-                var button = "<button class='btn btn-primary' id='download' onclick='download_pdf(\""+result["timestamp"]+"\")'>Baixar PDF</button>";
-                $("#result").append(button);
                 $("#result").append('<div class="row"><canvas id="map" width="300" height="300">Por favor, use um navegador que suporte HTML5.</canvas></div>');
                 // Summary
                 $("div#summary").
@@ -334,6 +334,12 @@ $("#send_fileiras").click(function(){
                            '<h3 class="mb-0">Fileiras: ' + result.rows + '</h3>' +
                            '<h3 class="mb-0">Cadeiras: ' + result.chairs + '</h3>' +
                            '<h3 class="mb-0">Número de estudantes: ' + result.students + '</h3></center>');
+                $("div#summary").append(
+                    "<button class='btn btn-primary' id='download' " +
+                        "onclick='download_pdf(\"" +
+                        result["timestamp"] + "\")'>Baixar PDF</button>"
+                );
+
             // Set the solution to the global variable
             solution = result;
             // Draw the solution to canvas
