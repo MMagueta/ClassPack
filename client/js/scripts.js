@@ -307,7 +307,7 @@ $("#send_fileiras").click(function(){
     $("#result").empty();
     solution = null;
     
-    $("#result").append('<div id="summary"></div>');
+    $("#result").append('<div id="summary" class="text-center"></div>');
     $("#result_section").show();
     var values = $(".param_input_fileiras").map(function(){
         return this.value;
