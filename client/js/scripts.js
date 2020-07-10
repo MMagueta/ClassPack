@@ -269,9 +269,9 @@ $("#send").click(function(){
         // set the request header authorization to the bearer token that is generated
         success: function(result) {
             //console.log(result);
+            $("#loading").remove();
             if(result["found_solution"] == "True"){
                 var button = "<button class='btn btn-primary' id='download' onclick='download_pdf(\""+result["file"].replace(".pdf", "")+"\")'>Baixar PDF</button>";
-                $("#loading").remove();
                 $("#result").append(button);
                 $("#result").append('<div class="row" id="display_distance"></div>');
                 $("#result").append('<div class="row"><canvas id="map" width="300" height="300">Por favor, use um navegador que suporte HTML5.</canvas></div>');
@@ -290,7 +290,13 @@ $("#send").click(function(){
           
         },
         error: function(request, status, error) {
-            alert("Erro!");
+            $("#loading").remove();
+            $("#result").append(
+                '<div class="alert alert-danger alert-dismissible fade show">' +
+                    'Erro! Verifique seus dados. Caso ocorra novamente, entre em contato com o site.' +
+                    '<button type="button" class="close" data-dismiss="alert">' +
+                    '&times;</button> </div>'
+            );
         },
       });
 });
@@ -317,9 +323,9 @@ $("#send_fileiras").click(function(){
         dataType: 'jsonp',
         // set the request header authorization to the bearer token that is generated
         success: function(result) {
+            $("#loading").remove();
             if (result.status) {
                 var button = "<button class='btn btn-primary' id='download' onclick='download_pdf(\""+result["timestamp"]+"\")'>Baixar PDF</button>";
-                $("#loading").remove();
                 $("#result").append(button);
                 $("#result").append('<div class="row"><canvas id="map" width="300" height="300">Por favor, use um navegador que suporte HTML5.</canvas></div>');
                 // Summary
@@ -338,7 +344,13 @@ $("#send_fileiras").click(function(){
             }
         },
         error: function(error) {
-          alert(error);
+            $("#loading").remove();
+            $("#result").append(
+                '<div class="alert alert-danger alert-dismissible fade show">' +
+                    'Erro! Verifique seus dados. Caso ocorra novamente, entre em contato com o site.' +
+                    '<button type="button" class="close" data-dismiss="alert">' +
+                    '&times;</button> </div>'
+            );
         },
       });
 });
