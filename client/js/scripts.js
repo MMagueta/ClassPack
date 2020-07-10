@@ -123,10 +123,10 @@ function drawOptSolution(s, move) {
     const w = mycanvas.width;
     const h = mycanvas.height;
     
-    const salax = parseFloat($(".param_input")[3].value);
-    const salay = parseFloat($(".param_input")[4].value);
-    const cw = parseFloat($(".param_input")[1].value);
-    const ch = parseFloat($(".param_input")[2].value);
+    const salax = parseFloat($(".param_input")[0].value);
+    const salay = parseFloat($(".param_input")[1].value);
+    const cw = parseFloat($(".param_input")[2].value);
+    const ch = parseFloat($(".param_input")[3].value);
     
     const scale = Math.min((w - 50) / salax, (h) / salay);
 

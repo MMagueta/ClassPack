@@ -12,9 +12,11 @@ def optimizer():
 	import subprocess
 	from flask import request, send_file
 	data = list(request.args.values())[1:-1]
+	args = [data[4]] + data[2:4] + data[0:2] + data[5:]
+        
 	try:
 		process = subprocess.Popen(["script/teste.x"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
-		output, error = process.communicate(('\n'.join(data)).encode('utf-8'))
+		output, error = process.communicate(('\n'.join(args)).encode('utf-8'))
 		#print("> ", output, error)
 	except Exception as e:
 		print(e, error)
@@ -58,8 +60,8 @@ def optimize_rows():
         float(data[0]),
         float(data[2]),
         float(data[3]),
-        int(data[4]),
         int(data[5]),
+        int(data[4]),
         float(data[6]))
 	timestamp = time.time()
 	print(result)
