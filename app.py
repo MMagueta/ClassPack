@@ -55,11 +55,16 @@ def optimize_rows():
 	from latex_converter import convert_coords_map
 	import time
 	data = list(request.args.values())[1:-1]
+        # We have to adjust the right-oriented definition of the
+        # problem to the top-oriented way that the algorithm was
+        # made. Also, we artificially increase the "right" (top) part,
+        # so that the chair is inside the correct space, not the
+        # table.
 	result = otimizar_filas(
 		float(data[1]),
-        float(data[0]),
-        float(data[2]),
+        float(data[0]) + 7 * float(data[2]) / 8,
         float(data[3]),
+        float(data[2]),
         int(data[5]),
         int(data[4]),
         float(data[6]))
