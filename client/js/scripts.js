@@ -261,7 +261,7 @@ $("#send").click(function(){
     json_data[(i+step).toString()] = 2;
     $("#result").append('<img src="assets/img/loading.gif" id="loading"></img>');
     $.ajax({
-        url: "http://127.0.0.1:5000/optimize",
+        url: "http://172.31.123.223:5000/optimize",
         type: "GET",
         data: json_data,
         crossDomain: true,
@@ -278,9 +278,7 @@ $("#send").click(function(){
                                     '<button class="btn btn-primary" onclick="downloadCoord(solution)">Baixar Coordenadas (CSV)</button></div>'
                                    );
                 $("div#summary").append('<center><h1 class="mb-0">Resultados</h1><h3 class="mb-0">Soluções encontradas: '+result["solutions"]+'</h3><h3 class="mb-0">Distância ideal calculada: '+result["min_distance"]+'</h3><h3 class="mb-0">Número de carteiras: '+result["number_items"]+'</h3></center>');
-                $("div#summary").append("<button class='btn btn-primary' id='download' onclick='download_pdf(\"" +
-                                        result["file"].replace(".pdf", "") +
-                                        "\")'>Baixar PDF</button>");
+                $("div#summary").append("<button class='btn btn-primary' id='download' onclick='download_pdf()'>Baixar PDF</button>");
 
                 solution = result;
                 cntSolution = 0;
@@ -318,7 +316,7 @@ $("#send_fileiras").click(function(){
     }
     $("#result").append('<img src="assets/img/loading.gif" id="loading" class="text-center"></img>');
     $.ajax({
-        url: "http://127.0.0.1:5000/rows",
+        url: "http://172.31.123.223:5000/rows",
         type: "GET",
         data: json_data,
         crossDomain: true,
@@ -394,7 +392,7 @@ $(document).ready(function(){
 /*
 function download_pdf(filename) {
     var req = new XMLHttpRequest();
-    req.open("POST", "http://127.0.0.1:5000/download", true);
+    req.open("POST", "http://172.31.123.223:5000/download", true);
     req.responseType = "blob";
     
     req.onreadystatechange = function() {
@@ -412,10 +410,12 @@ function download_pdf(filename) {
     req.send(params);
 }
 */
+
+/*
 function download_pdf(filename){
     var req = new XMLHttpRequest();
 
-    req.open("POST", "http://127.0.0.1:5000/reports/"+filename+"/pdf", true);
+    req.open("POST", "http://172.31.123.223:5000/reports/"+filename+"/pdf", true);
     req.responseType = "blob";
     req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     req.onreadystatechange = function(){
@@ -435,6 +435,14 @@ function download_pdf(filename){
         }
     };
     req.send();
+}
+*/
+function download_pdf(filename){
+    printJS({
+        printable: 'map',
+        type: 'html',
+        style: "#map {display: block;margin: 0 auto;transform: scale(2.0);margin-top:20%;}"
+    })
 }
 
 $(document).ready(function(){
