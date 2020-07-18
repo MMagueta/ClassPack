@@ -16,91 +16,186 @@
         <link href="css/styles.css" rel="stylesheet" />
     </head>
     <body id="page-top">
-        <!-- Navigation-->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top scroll" id="sideNav">
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <div class="form-group" id="option_algo">
-                    <h4 class="mb-0">Otimizar fileiras</h4>
-                    <input type="radio" class="form-control" name="option_algo" value="fileiras">
-                    <h4 class="mb-0">Otimizar cadeiras</h4>
-                    <input type="radio" class="form-control" name="option_algo" value="cadeiras">
-                    <button class="btn btn-primary" id="choose">Escolher</button>
+      
+      <!-- Navigation-->
+      <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top scroll" id="sideNav">
+        <div class="navbar-brand"><a href="#about"><h3 class="mb-0">Sala Planejada</h3></a></div>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          
+          <!-- Layout com fileiras -->
+
+          <div class="navbar-nav">
+            <a href="#rowCollapsible" data-toggle="collapse">
+              <h4 class="mb-0">Layout com fileiras</h4>
+            </a>
+          </div>
+          <div id="rowCollapsible" class="collapse" data-parent="#navbarSupportedContent">
+            <form id="form">
+              
+              <h4 class="text-white mb-0">Sala</h4>
+              <div class="input-group mb-1">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Largura</span>
                 </div>
-                <div id="inter">
-                    <form id="form">
-                        <div class="form-group">
-                        <h4 class="mb-0">Distância mínima entre alunos</h4>
-                        <input type="text" class="form-control param_input" aria-describedby="emailHelp" type="number" placeholder="0.00" step="0.01" min="0" max="10" value="1.5">
-                        </div>
-                        <div class="form-group">
-                            <h4 class="mb-0">Tamanho aproximado da carteira [X|Y]</h4>
-                            <input type="text" class="form-control double param_input" id="exampleInputPassword1" value="0.5">
-                            <input type="text" class="form-control double param_input" id="exampleInputPassword1" value="0.5">
-                        </div>
-                        <div class="form-group">
-                            <h4 class="mb-0">Tamanho da sala [X|Y]</h4>
-                            <input type="text" class="form-control double param_input" id="exampleInputPassword1" value="5.25">
-                            <input type="text" class="form-control double param_input" id="exampleInputPassword1" value="7.05">
-                        </div>
-                        <div class="form-group">
-                            <h4 class="mb-0">Número de obstáculos</h4>
-                            <input type="text" class="form-control param_input" id="form_num_obstaculos" value="0">
-                        </div>
-                    </form>
-                    <a class="nav-link js-scroll-trigger" href="#result_section"><button class="btn btn-primary" id="send">Enviar</button></a>
+                <input type="text" class="form-control param_input_fileiras" id="rowRoomWidth" value="5.25">
+              </div>
+              <div class="input-group mb-1">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Comprimento</span>
                 </div>
-                <div id="inter_fileiras">
-                    <form id="form">
-                        <div class="form-group">
-                            <h4 class="mb-0">Tamanho da sala [X|Y]</h4>
-                            <input type="text" class="form-control double param_input_fileiras" id="exampleInputPassword1" value="5.25">
-                            <input type="text" class="form-control double param_input_fileiras" id="exampleInputPassword1" value="7.05">
-                        </div>
-                        <div class="form-group">
-                            <h4 class="mb-0">Tamanho aproximado da carteira [X|Y]</h4>
-                            <input type="text" class="form-control double param_input_fileiras" id="exampleInputPassword1" value="0.5">
-                            <input type="text" class="form-control double param_input_fileiras" id="exampleInputPassword1" value="0.5">
-                        </div>
-                        <div class="form-group">
-                            <h4 class="mb-0">Larguras do corredor [Entre fileiras| Entre carteiras]</h4>
-                            <input type="text" class="form-control double param_input_fileiras" id="exampleInputPassword1" value="1">
-                            <input type="text" class="form-control double param_input_fileiras" id="exampleInputPassword1" value="0">
-                        </div>
-                        <div class="form-group">
-                            <h4 class="mb-0">Distância mínima</h4>
-                            <input type="text" class="form-control param_input_fileiras" id="exampleInputPassword1" value="1.5">
-                        </div>
-                    </form>
-                    <a class="nav-link js-scroll-trigger" href="#result_section"><button class="btn btn-primary" id="send_fileiras">Enviar</button></a>
+                  <input type="text" class="form-control param_input_fileiras" id="rowRoomHeight" value="7.05">
+              </div>
+
+              <h4 class="text-white mb-0">Carteira</h4>
+              <div class="input-group mb-1">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Largura</span>
                 </div>
+                  <input type="text" class="form-control param_input_fileiras" id="rowChairWidth" value="0.5">
+              </div>
+              <div class="input-group mb-1">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Comprimento</span>
+                </div>
+                  <input type="text" class="form-control param_input_fileiras" id="rowChairHeight" value="0.5">
+              </div>
+              
+              <h4 class="text-white mb-0">Fileiras</h4>
+              <div class="input-group mb-1">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Quantidade</span>
+                </div>
+                  <input type="text" class="form-control param_input_fileiras" id="rowNumRows" value="7">
+              </div>
+
+              <div class="input-group mb-1">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Carteiras por fileira</span>
+                </div>
+                <input type="text" class="form-control param_input_fileiras" id="rowNumChairs" value="5">
+              </div>
+              
+              <h4 class="text-white mb-0">Alunos</h4>
+              <div class="input-group mb-1">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Distância mínima</span>
+                 </div>
+                <input type="text" class="form-control param_input_fileiras" id="rowMinDistance" value="1.5">
+              </div>
+            </form>
+            <a class="nav-link js-scroll-trigger" href="#result_section"><button class="btn btn-primary" id="send_fileiras">Enviar</button></a>
+          </div>
+
+          <!-- Layout sem fileiras -->
+
+          <div class="navbar-nav">
+            <a href="#freeCollapsible" data-toggle="collapse">
+              <h4 class="mb-0">Layout livre</h4>
+            </a>
+          </div>
+          <div id="freeCollapsible" class="collapse" data-parent="#navbarSupportedContent">
+
+            <form id="form">
+              
+              <h4 class="text-white mb-0">Sala</h4>
+              <div class="input-group mb-1">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Largura</span>
+                </div>
+                <input type="text" class="form-control param_input" id="freeRoomWidth" value="5.25">
+              </div>
+              <div class="input-group mb-1">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Comprimento</span>
+                </div>
+                  <input type="text" class="form-control param_input" id="freeRoomHeight" value="7.05">
+              </div>
+
+              <h4 class="text-white mb-0">Carteira</h4>
+              <div class="input-group mb-1">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Largura</span>
+                </div>
+                  <input type="text" class="form-control param_input" id="freeChairWidth" value="0.5">
+              </div>
+              <div class="input-group mb-1">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Comprimento</span>
+                </div>
+                  <input type="text" class="form-control param_input" id="freeChairHeight" value="0.5">
+              </div>
+              
+              <h4 class="text-white mb-0">Alunos</h4>
+              <div class="input-group mb-1">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Distância mínima</span>
+                 </div>
+                <input type="text" class="form-control param_input" id="freeMinDistance" value="1.5">
+              </div>
+
+              <h4 class="text-white mb-0">Obstáculos</h4>
+              <div class="input-group mb-1">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Quantidade</span>
+                 </div>
+                <input type="text" class="form-control param_input" id="form_num_obstaculos" value="0">
+              </div>
+            </form>
+            <a class="nav-link js-scroll-trigger" href="#result_section"><button class="btn btn-primary" id="send">Enviar</button></a>
+          </div>
+        </div>
+      </nav>
+      <!-- Page Content-->
+      <div class="container-fluid p-0">
+        <!-- About-->
+        <section class="resume-section" id="about">
+          <div class="resume-section-content">
+            <h1 class="mb-0">Como <span class="text-primary">Usar?</span></h1>
+            <p class="lead"> Escolha um dos layouts: mantendo fileiras ou livre.</p>
+            
+            <p class="lead">Preencha as dimensões da sala e da
+              cadeira seguindo o esquema abaixo. O espaço para o
+              professor encontra-se sempre <span class="font-weight-bolder">à direita</span>
+              (recomenda-se um espaço de 2m para o
+              professor). As cadeiras também estão sempre
+              voltadas para a direita.</p>
+            <div class="text-center">
+              <span class="align-middle">
+                <img class="rounded img-fluid" src="assets/img/sala.png">
+              </span>
+              <span class="align-middle">
+                <img class="rounded img-fluid" src="assets/img/cadeira.png">
+              </span>
             </div>
-        </nav>
-        <!-- Page Content-->
-        <div class="container-fluid p-0">
-            <!-- About-->
-            <section class="resume-section" id="about">
-                <div class="resume-section-content">
-                    <h1 class="mb-0">Como <span class="text-primary">Usar?</span></h1>
-                    <div class="subheading mb-5">3542 Berry Street · Cheyenne Wells, CO 80810 · (317) 585-8468 · <a href="mailto:name@email.com">name@email.com</a></div>
-                    <p class="lead mb-5">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                    <div class="social-icons">
-                        <a class="social-icon" href="#"><i class="fab fa-linkedin-in"></i></a><a class="social-icon" href="#"><i class="fab fa-github"></i></a><a class="social-icon" href="#"><i class="fab fa-twitter"></i></a><a class="social-icon" href="#"><i class="fab fa-facebook-f"></i></a>
-                    </div>
-                </div>
-            </section>
-            <hr class="m-0" />
-            <!-- About-->
-            <section class="resume-section" id="result_section">
-                <div class="resume-section-content" id="result">
-                </div>
-            </section>
-            <hr class="m-0" />
-        <!-- Bootstrap core JS-->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
-        <!-- Third party plugin JS-->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
-        <!-- Core theme JS-->
-        <script src="js/scripts.js"></script>
+            
+            <p class="lead"> Aguarde sua solução. </p>
+                  
+            <div class="social-icons">
+              <span class="social-icon"><i class="fas fa-envelope"></i> </span> <span class="text-monospace align-middle"> salaplanejada @ unifesp . br</span> <BR>
+              <a class="social-icon" href="#"><i class="fab fa-github"></i></a>
+            </div>
+          </div>
+        </section>
+        <hr class="m-0" />
+        
+        <!-- Results -->
+        <section class="resume-section" id="result_section">
+          <div class="resume-section-content" id="result">
+          </div>
+        </section>
+        <hr class="m-0" />
+        
+      </div>
+      
+      <!-- Bootstrap core JS-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
+      <!-- Third party plugin JS-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
+      <!-- Core theme JS-->
+      <script src="js/scripts.js"></script>
     </body>
 </html>
