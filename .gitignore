@@ -5,3 +5,6 @@
 __pycache__/**
 script/*.mod
 script/teste.x
+
+# Ignore configuration files
+*.ini
