@@ -11,15 +11,16 @@ def index():
 def optimizer():
 	import subprocess
 	from flask import request, send_file
+	import os
 	data = list(request.args.values())[1:-1]
 	args = [data[4]] + data[2:4] + data[0:2] + data[5:]
-        
+	print(args)
 	try:
-		process = subprocess.Popen(["script/teste.x"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+		process = subprocess.Popen(["/var/www/Classpack/script/algencan.x"], stdin=subprocess.PIPE)
 		output, error = process.communicate(('\n'.join(args)).encode('utf-8'))
 		#print("> ", output, error)
 	except Exception as e:
-		print(e, error)
+		print(e)
 		return '{0}({1})'.format(request.args.get('callback'), {'response': 100, 'error': e})
 	else:
 		import latex_converter
@@ -27,12 +28,12 @@ def optimizer():
 		import os
 		import json
 		filename = gl.glob("*"+str(process.pid)+".tex").pop()
-		latex_converter.convert_tex_document(filename)
+		process.terminate()
+		#latex_converter.convert_tex_document(filename)
 		loaded_json = json.loads(open(filename.replace(".tex", ".json"), 'r').read())
-		print(loaded_json)
+		#print(loaded_json)
 		os.remove(filename) #Removes .TEX file
 		os.remove(filename.replace(".tex", ".json")) #Removes .JSON file
-		process.terminate()
 		return '{0}({1})'.format(request.args.get('callback'), {'response': 200, 'file': filename.replace(".tex", ".pdf"), 'found_solution': str(loaded_json['found_solution']), 'number_items': loaded_json['number_items'], 'min_distance': loaded_json['min_distance'], 'solutions': len(loaded_json['solutions']), 'all_solutions': loaded_json['solutions']})
 
 
@@ -84,4 +85,4 @@ def optimize_rows():
                  'chairSpace': result["largura_corredor_horizontal"]})
 
 if __name__ == '__main__':
-	app.run()
+	app.run(host="0.0.0.0", threaded=False, processes=5)
