@@ -396,7 +396,7 @@ $("#send").click(function(){
     json_data[(i+step).toString()] = 2;
     $("#result").append('<img src="assets/img/loading.gif" id="loading"></img>');
     $.ajax({
-        url: "http://172.25.107.142:5000/optimize",
+        url: "http://200.144.93.70/a/optimize",
         type: "GET",
         data: json_data,
         crossDomain: true,
@@ -451,7 +451,7 @@ $("#send_fileiras").click(function(){
     }
     $("#result").append('<img src="assets/img/loading.gif" id="loading" class="text-center"></img>');
     $.ajax({
-        url: "http://172.25.107.142:5000/rows",
+        url: "http://200.144.93.70/a/rows",
         type: "GET",
         data: json_data,
         crossDomain: true,
@@ -527,7 +527,7 @@ $(document).ready(function(){
 /*
 function download_pdf(filename) {
     var req = new XMLHttpRequest();
-    req.open("POST", "http://172.25.107.142:5000/download", true);
+    req.open("POST", "http://200.144.92.61:443/a/download", true);
     req.responseType = "blob";
     
     req.onreadystatechange = function() {
@@ -550,7 +550,7 @@ function download_pdf(filename) {
 function download_pdf(filename){
     var req = new XMLHttpRequest();
 
-    req.open("POST", "http://172.25.107.142:5000/reports/"+filename+"/pdf", true);
+    req.open("POST", "http://172.25.107.142/a/reports/"+filename+"/pdf", true);
     req.responseType = "blob";
     req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     req.onreadystatechange = function(){

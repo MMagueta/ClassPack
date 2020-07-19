@@ -13,10 +13,13 @@ def optimizer():
 	from flask import request, send_file
 	data = list(request.args.values())[1:-1]
 	args = [data[4]] + data[2:4] + data[0:2] + data[5:]
-        
+
 	try:
-		process = subprocess.Popen(["script/bin.x"], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
+		path = "/var/www/Classpack/script/bin.x"
+		process = subprocess.Popen([path], stdin=subprocess.PIPE, stdout=subprocess.PIPE)
 		output, error = process.communicate(('\n'.join(args)).encode('utf-8'))
+		with open("/var/www/Classpack/log.txt", "w") as f:
+			f.write(path)
 		#print("> ", output, error)
 		#print("A")
 	except Exception as e:
