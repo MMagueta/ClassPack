@@ -36,12 +36,10 @@ def connect():
 
         return None
     
-    client = None
-
     try:
         
-        client = CouchDB(__DB_USERNAME, __DB_PASSWORD,
-                         url=__DB_ADDRESS + ':5984', connect=True)
+        g._client = CouchDB(__DB_USERNAME, __DB_PASSWORD,
+                            url=__DB_ADDRESS + ':5984', connect=True)
 
     except Exception as e:
 
@@ -49,17 +47,16 @@ def connect():
 
         pass
 
-    return client
 
-def disconnect(client):
+def disconnect(e=None):
     """
     Disconnect from the CouchDB server.
     """
 
-    if client is None: return
     if '_client' not in g: return
     
     g._client.disconnect()
+
 
 def _sort_obs(obstacles):
     """
@@ -92,7 +89,7 @@ def _sort_obs(obstacles):
             obstacles[i] = vmin
             obstacles[pmin] = tmp
 
-def add_and_return_user(client, email, name, institution):
+def add_and_return_user(email, name, institution):
     """Store the user and return the document.
 
     NOTE: the user is always stored, even if the email already
@@ -101,11 +98,11 @@ def add_and_return_user(client, email, name, institution):
 
     """
 
-    if client is None: return ''
+    if '_client' not in g: return ''
     
-    udb = client[DB_USR_NAME]
+    udb = g._client[DB_USR_NAME]
 
-    uid = email + ':' + sha256(str(time()).encode('latin')).hexdigest()
+    uid = sha256((email + str(time())).encode('latin')).hexdigest()
 
     user_with_id = {
         '_id': uid,
@@ -117,7 +114,8 @@ def add_and_return_user(client, email, name, institution):
     udb.create_document(user_with_id)
     
     return uid
-            
+
+
 def gen_chair_id(width, height, min_dist, ch_width, ch_height,
                  obstacles):
     """Generate unique ids for saving the results of 'chairs' problems.
@@ -133,6 +131,7 @@ def gen_chair_id(width, height, min_dist, ch_width, ch_height,
 
     return id
 
+
 def gen_row_id(width, height, min_dist, ch_width, ch_height,
                row_dist, col_dist):
     """Generate unique ids for saving the results of 'rows' problems.
@@ -145,12 +144,13 @@ def gen_row_id(width, height, min_dist, ch_width, ch_height,
 
     return id
 
-def get_chairs(client, width, height, min_dist, ch_width, ch_height,
+
+def get_chairs(width, height, min_dist, ch_width, ch_height,
                obstacles=[]):
 
-    if client is None: return None
+    if '_client' not in g: return None
 
-    db = client[DB_SOL_NAME]
+    db = g._client[DB_SOL_NAME]
 
     id = gen_chair_id(width, height, min_dist, ch_width, ch_height,
                       obstacles)
@@ -163,12 +163,13 @@ def get_chairs(client, width, height, min_dist, ch_width, ch_height,
 
     return None
 
-def save_or_update_chairs(client, width, height, min_dist, ch_width, ch_height,
+
+def save_or_update_chairs(width, height, min_dist, ch_width, ch_height,
                           solution, obstacles=[]):
 
-    if client is None: return
+    if '_client' not in g: return
     
-    db = client[DB_SOL_NAME]
+    db = g._client[DB_SOL_NAME]
 
     id = gen_chair_id(width, height, min_dist, ch_width, ch_height,
                       obstacles)

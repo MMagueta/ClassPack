@@ -29,14 +29,12 @@ def optimizer():
         
 	obstacles = list(list(float(args[7 + 3 * i + j]) for j in range(0, 3)) for i in range(0, int(args[6])))
 	
-	client = database.connect()
-
-	if client is not None: g._client = client
+	database.connect()
 
 	try:
-		loaded_json = database.get_chairs(client, float(args[1]), float(args[2]),
-						   float(args[0]), float(args[3]), float(args[4]),
-						   obstacles=obstacles)
+		loaded_json = database.get_chairs(float(args[1]), float(args[2]),
+						  float(args[0]), float(args[3]), float(args[4]),
+						  obstacles=obstacles)
 
 		if loaded_json is not None:
 
@@ -50,7 +48,6 @@ def optimizer():
 		#print("> ", output, error)
 	except Exception as e:
 		print(e, error)
-		database.disconnect(client)
 		return '{0}({1})'.format(request.args.get('callback'), {'response': 100, 'error': e})
 	else:
 		import latex_converter
@@ -67,8 +64,6 @@ def optimizer():
 
 		database.save_or_update_chairs(client, float(args[1]), float(args[2]), float(args[0]),
 					       float(args[3]), float(args[4]), loaded_json, obstacles=obstacles)
-
-		database.disconnect(client)
 
 		return '{0}({1})'.format(request.args.get('callback'), {'response': 200, 'file': filename.replace(".tex", ".pdf"), 'found_solution': str(loaded_json['found_solution']), 'number_items': loaded_json['number_items'], 'min_distance': loaded_json['min_distance'], 'solutions': len(loaded_json['solutions']), 'all_solutions': loaded_json['solutions']})
 
