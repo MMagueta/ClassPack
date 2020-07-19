@@ -1,6 +1,6 @@
 import database
 from configparser import ConfigParser
-from flask import Flask, Response, Blueprint
+from flask import Flask, Response, Blueprint, g
 from flask_cors import CORS
 
 config = ConfigParser()
@@ -9,10 +9,6 @@ config.read('cp_config.ini')
 URL_PREFIX        = config.get('ClassPack', 'url.prefix', fallback='/')
 FORTRAN_EXEC_NAME = config.get('ClassPack', 'fortran.exec.name', fallback='teste.x')
 FORTRAN_EXEC_PATH = config.get('ClassPack', 'fortran.exec.path', fallback='script')
-
-DB_USERNAME = config.get('ClassPack', 'db.username', fallback='classpack_user')
-DB_PASSWORD = config.get('Database', 'db.password', fallback='classpack_123')
-DB_ADDRESS  = config.get('Database', 'db.address', fallback='127.0.0.1')
 
 app = Flask(__name__)
 CORS(app)
@@ -29,26 +25,23 @@ def optimizer():
 	from flask import request, send_file
 	data = list(request.args.values())[1:-1]
 
-	obstacles = list(list(float(data[7 + 3 * i + j]) for j in range(0, 3)) for i in range(0, int(data[6])))
+	args = [data[4]] + data[2:4] + data[0:2] + data[5:]
+        
+	obstacles = list(list(float(args[7 + 3 * i + j]) for j in range(0, 3)) for i in range(0, int(args[6])))
 	
 	client = database.connect()
 
-	try:
+	if client is not None: g._client = client
 
-		result_tuple = database.get_chairs(client, float(data[1]), float(data[2]),
-						   float(data[0]), float(data[3]), float(data[4]),
+	try:
+		loaded_json = database.get_chairs(client, float(args[1]), float(args[2]),
+						   float(args[0]), float(args[3]), float(args[4]),
 						   obstacles=obstacles)
 
-		if result_tuple is not None:
+		if loaded_json is not None:
 
-			loaded_json = result_tuple[0]
-			pdf_filename = result_tuple[1] + '.pdf'
+			return '{0}({1})'.format(request.args.get('callback'), {'response': 200, 'file':'none.pdf', 'found_solution': str(loaded_json['found_solution']), 'number_items': loaded_json['number_items'], 'min_distance': loaded_json['min_distance'], 'solutions': len(loaded_json['solutions']), 'all_solutions': loaded_json['solutions']})
 
-			return '{0}({1})'.format(request.args.get('callback'), {'response': 200, 'file': pdf_filename, 'found_solution': str(loaded_json['found_solution']), 'number_items': loaded_json['number_items'], 'min_distance': loaded_json['min_distance'], 'solutions': len(loaded_json['solutions']), 'all_solutions': loaded_json['solutions']})
-		
-	args = [data[4]] + data[2:4] + data[0:2] + data[5:]
-        
-	try:
 		process = subprocess.Popen(
                         [FORTRAN_EXEC_PATH + '/' + FORTRAN_EXEC_NAME],
                         stdin=subprocess.PIPE, stdout=subprocess.PIPE
@@ -72,9 +65,8 @@ def optimizer():
 		os.remove(filename.replace(".tex", ".json")) #Removes .JSON file
 		process.terminate()
 
-		database.save_or_update_chairs(client, float(data[1]), float(data[2]), float(data[0]),
-					       float(data[3]), float(data[4]), loaded_json,
-					       filename.replace(".tex", ".pdf"), obstacles=obstacles)
+		database.save_or_update_chairs(client, float(args[1]), float(args[2]), float(args[0]),
+					       float(args[3]), float(args[4]), loaded_json, obstacles=obstacles)
 
 		database.disconnect(client)
 
@@ -129,6 +121,8 @@ def optimize_rows():
                  'chairSpace': result["largura_corredor_horizontal"]})
 
 app.register_blueprint(bp, url_prefix=URL_PREFIX)
+
+database.init_db(config, app)
 
 if __name__ == '__main__':
 

@@ -1,25 +1,51 @@
 from time import time
 from hashlib import sha256
 from cloudant.client import CouchDB
+from flask import g
 
 DB_SOL_NAME = 'classpack'
 DB_USR_NAME = 'users'
 DB_PRB_NAME = 'problems'
+
+__DB_USERNAME = None
+__DB_PASSWORD = None
+__DB_ADDRESS  = None
+
+
+def init_db(config, app):
+
+    global __DB_ADDRESS, __DB_PASSWORD, __DB_USERNAME
+
+    app.teardown_appcontext(disconnect)
+
+    __DB_USERNAME = config.get('ClassPack', 'db.username', fallback='classpack_user')
+    __DB_PASSWORD = config.get('Database', 'db.password')
+    __DB_ADDRESS  = config.get('Database', 'db.address', fallback='http://127.0.0.2')
+    
 
 def connect():
     """
     Conect to the CouchDB server.
     """
 
+    if __DB_ADDRESS  is None or \
+       __DB_PASSWORD is None or \
+       __DB_USERNAME is None:
+
+        print("Database not initialized.")
+
+        return None
+    
     client = None
 
     try:
         
-        # TODO: remove username and password from the code
-        client = CouchDB('classpack_user', 'classpack_123',
-                         url='http://127.0.0.2:5984', connect=True)
+        client = CouchDB(__DB_USERNAME, __DB_PASSWORD,
+                         url=__DB_ADDRESS + ':5984', connect=True)
 
-    except e:
+    except Exception as e:
+
+        print("Error when connecting to database")
 
         pass
 
@@ -31,8 +57,9 @@ def disconnect(client):
     """
 
     if client is None: return
+    if '_client' not in g: return
     
-    client.disconnect()
+    g._client.disconnect()
 
 def _sort_obs(obstacles):
     """
@@ -132,18 +159,12 @@ def get_chairs(client, width, height, min_dist, ch_width, ch_height,
 
         doc = db[id]
 
-        pdf_filename = doc['pdf_filename']
-
-        with open(pdf_filename + '.pdf', 'wb') as fp:
-
-            doc.get_attachment(pdf_filename, write_to=fp)
-
-        return doc['solution'], pdf_filename
+        return doc['solution']
 
     return None
 
 def save_or_update_chairs(client, width, height, min_dist, ch_width, ch_height,
-                          solution, pdf_filename, obstacles=[]):
+                          solution, obstacles=[]):
 
     if client is None: return
     
@@ -161,16 +182,10 @@ def save_or_update_chairs(client, width, height, min_dist, ch_width, ch_height,
             id['solution'] = solution
             olddoc.save()
 
-            with open(pdf_filename, 'rb') as fp:
-
-                olddoc.put_attachment(id['pdf_filename'], 'application/pdf',
-                                      fp.read())
             print('Updated cache')
 
     else:
 
-        rand_pdf_filename = sha256(str(time()).encode('latin')).hexdigest()
-        
         document = {
             '_id': id,
             'min_dist': min_dist,
@@ -179,16 +194,9 @@ def save_or_update_chairs(client, width, height, min_dist, ch_width, ch_height,
             'chair_width': ch_width,
             'chair_height': ch_height,
             'obstacles': obstacles,
-            'pdf_filename': rand_pdf_filename,
             'solution': solution
         }
 
         doc = db.create_document(document)
-
-        with open(pdf_filename, 'rb') as fp:
-    
-            doc.put_attachment(rand_pdf_filename,
-                               'application/pdf',
-                               fp.read())
 
         print("Added to cache")
