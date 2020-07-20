@@ -1,7 +1,8 @@
 from time import time
 from hashlib import sha256
+from random import random
 from cloudant.client import CouchDB
-from flask import g
+from flask import g, request
 
 DB_SOL_NAME = 'classpack'
 DB_USR_NAME = 'users'
@@ -22,6 +23,26 @@ def init_db(config, app):
     __DB_PASSWORD = config.get('Database', 'db.password')
     __DB_ADDRESS  = config.get('Database', 'db.address', fallback='http://127.0.0.2')
     
+
+def save_problem(json_data):
+
+    if '_client' not in g: return
+
+    db = g._client[DB_PRB_NAME]
+
+    id = sha256(str(time() + random()).encode('latin')).hexdigest()
+
+    doc = {
+        '_id': id,
+        'user_ip': request.remote_addr,
+        'user_agent': str(request.user_agent),
+        'timestamp': time()
+        }
+
+    doc.update(json_data)
+
+    db.create_document(doc)
+
 
 def connect():
     """

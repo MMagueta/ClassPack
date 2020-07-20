@@ -31,6 +31,19 @@ def optimizer():
 	
 	database.connect()
 
+	jd = {
+		'min_dist': float(data[4]),
+		'room_width': float(data[0]),
+		'room_height': float(data[1]),
+		'chair_width': float(data[2]),
+		'chair_height': float(data[3]),
+		'obstacles': obstacles,
+		'num_runs': int(data[5]),
+		'problem_type': int(data[-1])
+	}
+
+	database.save_problem(jd)
+
 	try:
 		loaded_json = database.get_chairs(float(args[1]), float(args[2]),
 						  float(args[0]), float(args[3]), float(args[4]),
@@ -109,6 +122,18 @@ def optimize_rows():
 	timestamp = time.time()
 
 	database.connect()
+
+	jd = {
+		'min_dist': float(data[6]),
+		'room_width': float(data[0]),
+		'room_height': float(data[1]),
+		'chair_width': float(data[2]),
+		'chair_height': float(data[3]),
+		'num_rows': int(data[4]),
+		'num_chairs': int(data[5])
+	}
+
+	database.save_problem(jd)
 	
 	solution = database.get_rows(float(data[0]), float(data[1]),
 				     float(data[6]),
