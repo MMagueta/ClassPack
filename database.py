@@ -133,13 +133,13 @@ def gen_chair_id(width, height, min_dist, ch_width, ch_height,
 
 
 def gen_row_id(width, height, min_dist, ch_width, ch_height,
-               row_dist, col_dist):
+               n_rows, n_chairs):
     """Generate unique ids for saving the results of 'rows' problems.
 
     """
 
     id = 'rows:' + ':'.join(
-        str(i) for i in [width, height, ch_width, ch_height, min_dist, row_dist, col_dist]
+        str(i) for i in [width, height, ch_width, ch_height, min_dist, n_rows, n_chairs]
     )
 
     return id
@@ -154,6 +154,25 @@ def get_chairs(width, height, min_dist, ch_width, ch_height,
 
     id = gen_chair_id(width, height, min_dist, ch_width, ch_height,
                       obstacles)
+    
+    if id in db:
+
+        doc = db[id]
+
+        return doc['solution']
+
+    return None
+
+
+def get_rows(width, height, min_dist, ch_width, ch_height,
+             n_rows, n_chairs):
+
+    if '_client' not in g: return None
+
+    db = g._client[DB_SOL_NAME]
+
+    id = gen_row_id(width, height, min_dist, ch_width, ch_height,
+                    n_rows, n_chairs)
     
     if id in db:
 
@@ -195,6 +214,47 @@ def save_or_update_chairs(width, height, min_dist, ch_width, ch_height,
             'chair_width': ch_width,
             'chair_height': ch_height,
             'obstacles': obstacles,
+            'solution': solution
+        }
+
+        doc = db.create_document(document)
+
+        print("Added to cache")
+
+
+def save_or_update_rows(width, height, min_dist, ch_width, ch_height,
+                        n_rows, n_chairs, solution):
+
+    if '_client' not in g: return
+    
+    db = g._client[DB_SOL_NAME]
+
+    id = gen_row_id(width, height, min_dist, ch_width, ch_height,
+                    n_rows, n_chairs)
+
+    if id in db:
+
+        olddoc = db[id]
+
+        if int(olddoc['solution']['status']) is '0' or \
+           solution['students'] > olddoc['solution']['students']:
+
+            id['solution'] = solution
+            olddoc.save()
+
+            print('Updated cache')
+
+    else:
+
+        document = {
+            '_id': id,
+            'min_dist': min_dist,
+            'room_width': width,
+            'room_height': height,
+            'chair_width': ch_width,
+            'chair_height': ch_height,
+            'number_of_chairs': n_chairs,
+            'number_of_rows': n_rows,
             'solution': solution
         }
 

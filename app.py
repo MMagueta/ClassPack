@@ -38,7 +38,16 @@ def optimizer():
 
 		if loaded_json is not None:
 
-			return '{0}({1})'.format(request.args.get('callback'), {'response': 200, 'file':'none.pdf', 'found_solution': str(loaded_json['found_solution']), 'number_items': loaded_json['number_items'], 'min_distance': loaded_json['min_distance'], 'solutions': len(loaded_json['solutions']), 'all_solutions': loaded_json['solutions']})
+			return '{0}({1})'.format(
+				request.args.get('callback'),
+				{'response': 200,
+				 'file': 'does_not_exist.pdf',
+				 'found_solution': str(loaded_json['found_solution']),
+				 'number_items': loaded_json['number_items'],
+				 'min_distance': loaded_json['min_distance'],
+				 'solutions': len(loaded_json['solutions']),
+				 'all_solutions': loaded_json['solutions']}
+			)
 
 		process = subprocess.Popen(
                         [FORTRAN_EXEC_PATH + '/' + FORTRAN_EXEC_NAME],
@@ -62,10 +71,19 @@ def optimizer():
 		os.remove(filename.replace(".tex", ".json")) #Removes .JSON file
 		process.terminate()
 
-		database.save_or_update_chairs(client, float(args[1]), float(args[2]), float(args[0]),
+		database.save_or_update_chairs(float(args[1]), float(args[2]), float(args[0]),
 					       float(args[3]), float(args[4]), loaded_json, obstacles=obstacles)
 
-		return '{0}({1})'.format(request.args.get('callback'), {'response': 200, 'file': filename.replace(".tex", ".pdf"), 'found_solution': str(loaded_json['found_solution']), 'number_items': loaded_json['number_items'], 'min_distance': loaded_json['min_distance'], 'solutions': len(loaded_json['solutions']), 'all_solutions': loaded_json['solutions']})
+		return '{0}({1})'.format(
+			request.args.get('callback'),
+			{'response': 200,
+			 'file': filename.replace(".tex", ".pdf"),
+			 'found_solution': str(loaded_json['found_solution']),
+			 'number_items': loaded_json['number_items'],
+			 'min_distance': loaded_json['min_distance'],
+			 'solutions': len(loaded_json['solutions']),
+			 'all_solutions': loaded_json['solutions']}
+		)
 
 
 @bp.route('/reports/<filename>/pdf', methods=['POST'])
@@ -86,7 +104,25 @@ def optimize_rows():
 	from flask import request
 	from latex_converter import convert_coords_map
 	import time
+
 	data = list(request.args.values())[1:-1]
+	timestamp = time.time()
+
+	database.connect()
+	
+	solution = database.get_rows(float(data[0]), float(data[1]),
+				     float(data[6]),
+				     float(data[2]), float(data[3]),
+				     int(data[4]), int(data[5]))
+
+	if solution is not None:
+
+		solution.update({'response': 200,
+				 'timestamp': timestamp})
+
+		return '{0}({1})'.format(request.args.get('callback'), solution)
+
+	
         # We have to adjust the right-oriented definition of the
         # problem to the top-oriented way that the algorithm was
         # made. Also, we artificially increase the "right" (top) part,
@@ -94,26 +130,37 @@ def optimize_rows():
         # table.
 	result = otimizar_filas(
 		float(data[1]),
-        float(data[0]) + 7 * float(data[2]) / 8,
-        float(data[3]),
-        float(data[2]),
-        int(data[5]),
-        int(data[4]),
-        float(data[6]))
-	timestamp = time.time()
+		float(data[0]) + 7 * float(data[2]) / 8,
+		float(data[3]),
+		float(data[2]),
+		int(data[5]),
+		int(data[4]),
+		float(data[6]))
 	print(result)
 	convert_coords_map(result["resposta"], timestamp)
+
+	solution = {
+		'status': result["status"],
+                'A': result["resposta"],
+                'rows': result["num_fileiras"],
+                'chairs': result["num_carteiras"],
+                'students': result["num_alunos"],
+                'rowSpace': result["largura_corredor_vertical"],
+                'chairSpace': result["largura_corredor_horizontal"]
+	}
+
+	database.save_or_update_rows(float(data[0]), float(data[1]),
+				     float(data[6]),
+				     float(data[2]), float(data[3]),
+				     int(data[4]), int(data[5]), solution)
+
+	solution.update({'response': 200,
+			 'timestamp': timestamp})
+	
 	return '{0}({1})'.format(
-                request.args.get('callback'),
-                {'response': 200,
-                 'status': result["status"],
-                 'timestamp': timestamp,
-                 'A': result["resposta"],
-                 'rows': result["num_fileiras"],
-                 'chairs': result["num_carteiras"],
-                 'students': result["num_alunos"],
-                 'rowSpace': result["largura_corredor_vertical"],
-                 'chairSpace': result["largura_corredor_horizontal"]})
+		request.args.get('callback'),
+                solution)
+
 
 app.register_blueprint(bp, url_prefix=URL_PREFIX)
 
