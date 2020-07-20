@@ -109,6 +109,8 @@ function drawChair(ctx, cw, ch, scale, px, py) {
 
 function drawOptSolution(s, move) {
 
+    drawOptSolution_Hidden(s, move)
+
     if (s == null) return;
     
     var mycanvas = document.getElementById("map");
@@ -180,7 +182,82 @@ function drawOptSolution(s, move) {
     ctx.globalAlpha = 1.0;
 }
 
+function drawOptSolution_Hidden(s, move) {
+
+    if (s == null) return;
+    
+    var mycanvas = document.getElementById("map-hidden");
+    var ctx = mycanvas.getContext("2d");
+
+    cnt = cntSolution + move;
+    
+    if (cnt < 0 || cnt >= s.all_solutions.length) return;
+
+    cntSolution += move;
+
+    const w = mycanvas.width*1;
+    const h = mycanvas.height*1;
+    
+    const salax = parseFloat($(".param_input")[0].value)*1;
+    const salay = parseFloat($(".param_input")[1].value)*1;
+    const cw = parseFloat($(".param_input")[2].value)*1;
+    const ch = parseFloat($(".param_input")[3].value)*1;
+    
+    const scale = Math.min((w - 50) / salax, (h) / salay);
+
+    clearRoom(ctx, w, h);
+    
+    drawRoomAndTeacherSpace(ctx, w, h, scale, salax, salay);
+    
+    currSol = s.all_solutions[cntSolution];
+
+    const radius = currSol.min_distance / 2.0;
+
+    const fontSize = Math.max(10, parseInt(radius * scale / 2.0));
+    
+    document.getElementById("display_distance").innerHTML = "Distância: " + Math.round(100 * 2 * radius) / 100.0;
+
+    var x, y;
+
+    for (i = 0; i < currSol.positions.length; i++) {
+
+        x = currSol.positions[i][0] * scale;
+        y = h - currSol.positions[i][1] * scale;
+        
+        ctx.globalAlpha = 0.8;
+        ctx.strokeStyle = "black";
+        ctx.lineWidth   = "1";
+        // Do not paint the chairs
+        ctx.fillStyle = "white"
+    
+        drawChair(ctx, cw, ch, scale, x, y)
+
+        ctx.globalAlpha = 0.7;
+        ctx.fillStyle = "brown";
+        ctx.font = fontSize + "px Arial";
+        tw = ctx.measureText(i + 1);
+
+        if (y - (ch * scale) / 2 < fontSize)
+            ctx.fillText(i + 1, x, y + (ch * scale) / 2);
+        else
+            ctx.fillText(i + 1, x, y - (ch * scale) / 2);
+        
+        ctx.globalAlpha = 1.0;
+
+    }
+
+    // Draw origin
+
+    ctx.globalAlpha = 0.7;
+    ctx.strokeStyle = "red";
+    ctx.font = "10px Arial";
+    ctx.strokeText("Origem", 2, h - 5);
+    ctx.globalAlpha = 1.0;
+}
+
 function drawRowSol(s) {
+
+    drawRowSol_Hidden(s);
 
     if (s == null) return;
     
@@ -206,7 +283,65 @@ function drawRowSol(s) {
 
     const scale = Math.min((w - 50) / rW, (h) / rH);
 
-    console.log(scale);
+    console.log("Scale:", scale);
+    
+    drawRoomAndTeacherSpace(ctx, w, h, scale, rW, rH);
+
+    ctx.globalAlpha = 0.8;
+    ctx.strokeStyle = "black";
+    ctx.lineWidth   = "1";
+    ctx.fillStyle   = "#BB8888";
+
+    let py = h - rH * scale + cH * scale / 2;
+
+    for (i = 0; i < solution.rows; i++) {
+
+        let px = cW * scale / 4;
+        
+        for (j = 0; j < solution.chairs; j++) {
+
+            ctx.fillStyle = "white";
+            if (solution.A[i][j] == 1) ctx.fillStyle = "black";
+
+            drawChair(ctx, cW, cH, scale, px, py);
+
+            px += (cW + cC) * scale;
+
+        }
+
+        py += (cH + cR) * scale;
+
+    }
+    
+}
+
+function drawRowSol_Hidden(s) {
+
+    if (s == null) return;
+    
+    var mycanvas = document.getElementById("map-hidden");
+    var ctx = mycanvas.getContext("2d");
+
+    const w = mycanvas.width;
+    const h = mycanvas.height;
+    
+    // Get problem data
+    let values = $(".param_input_fileiras").get().map(e => parseFloat(e.value));
+
+    let rW = values[0]*1.5;
+    let rH = values[1]*1.5;
+    let cW = values[2]*1.5;
+    let cH = values[3]*1.5;
+    let cR = solution.rowSpace*1.5;
+    let cC = solution.chairSpace*1.5;
+
+    console.log(rW + " " + rH);
+    
+    clearRoom(ctx, w, h);
+
+    const scale = Math.min((w - 50) / rW, (h) / rH);
+
+    console.log("Scale:", scale);
     
     drawRoomAndTeacherSpace(ctx, w, h, scale, rW, rH);
 
@@ -278,9 +413,7 @@ $("#send").click(function(){
                                     '<button class="btn btn-primary" onclick="downloadCoord(solution)">Baixar Coordenadas (CSV)</button></div>'
                                    );
                 $("div#summary").append('<center><h1 class="mb-0">Resultados</h1><h3 class="mb-0">Soluções encontradas: '+result["solutions"]+'</h3><h3 class="mb-0">Distância ideal calculada: '+result["min_distance"]+'</h3><h3 class="mb-0">Número de carteiras: '+result["number_items"]+'</h3></center>');
-                $("div#summary").append("<button class='btn btn-primary' id='download' onclick='download_pdf(\"" +
-                                        result["file"].replace(".pdf", "") +
-                                        "\")'>Baixar PDF</button>");
+                $("div#summary").append("<button class='btn btn-primary' id='download' onclick='download_pdf()'>Baixar PDF</button>");
 
                 solution = result;
                 cntSolution = 0;
@@ -394,7 +527,7 @@ $(document).ready(function(){
 /*
 function download_pdf(filename) {
     var req = new XMLHttpRequest();
-    req.open("POST", "http://127.0.0.1:5000/download", true);
+    req.open("POST", "http://200.144.92.61:443/a/download", true);
     req.responseType = "blob";
     
     req.onreadystatechange = function() {
@@ -412,6 +545,8 @@ function download_pdf(filename) {
     req.send(params);
 }
 */
+
+/*
 function download_pdf(filename){
     var req = new XMLHttpRequest();
 
@@ -435,6 +570,14 @@ function download_pdf(filename){
         }
     };
     req.send();
+}
+*/
+function download_pdf(filename){
+    printJS({
+        printable: 'map-hidden',
+        type: 'html',
+        style: "#map-hidden {display: block;margin: 0 auto;}"//transform: scale(2.0);margin-top:20%;}"
+    })
 }
 
 $(document).ready(function(){
