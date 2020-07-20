@@ -1,6 +1,6 @@
 import database
 from configparser import ConfigParser
-from flask import Flask, Response, Blueprint, g
+from flask import Flask, Response, Blueprint
 from flask_cors import CORS
 
 config = ConfigParser()
