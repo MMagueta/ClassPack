@@ -67,21 +67,23 @@ def optimizer():
                         stdin=subprocess.PIPE, stdout=subprocess.PIPE
                 )
 		output, error = process.communicate(('\n'.join(args)).encode('utf-8'))
+		with open("/var/www/Classpack/log.txt", "w") as f:
+			f.write(path)
 		#print("> ", output, error)
+		#print("A")
 	except Exception as e:
-		print(e, error)
+		#print(e, error)
 		return '{0}({1})'.format(request.args.get('callback'), {'response': 100, 'error': e})
 	else:
 		import latex_converter
 		import glob2 as gl
 		import os
 		import json
-		filename = gl.glob("*"+str(process.pid)+".tex").pop()
-		latex_converter.convert_tex_document(filename)
-		loaded_json = json.loads(open(filename.replace(".tex", ".json"), 'r').read())
-		print(loaded_json)
-		os.remove(filename) #Removes .TEX file
-		os.remove(filename.replace(".tex", ".json")) #Removes .JSON file
+		filename = gl.glob("*"+str(process.pid)+".json").pop()
+		#latex_converter.convert_tex_document(filename)
+		loaded_json = json.loads(open(filename, 'r').read())
+		#print(loaded_json)
+		os.remove(filename) #Removes .JSON file
 		process.terminate()
 
 		database.save_or_update_chairs(float(args[1]), float(args[2]), float(args[0]),
@@ -193,4 +195,4 @@ database.init_db(config, app)
 
 if __name__ == '__main__':
 
-	app.run()
+	app.run(host="0.0.0.0")

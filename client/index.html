@@ -5,13 +5,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Resume - Start Bootstrap Theme</title>
+        <title>Sala Planejada - UNIFESP</title>
         <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico" />
         <!-- Font Awesome icons (free version)-->
         <script src="https://use.fontawesome.com/releases/v5.13.0/js/all.js" crossorigin="anonymous"></script>
         <!-- Google fonts-->
         <link href="https://fonts.googleapis.com/css?family=Saira+Extra+Condensed:500,700" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Muli:400,400i,800,800i" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" type="text/css" href="https://printjs-4de6.kxcdn.com/print.min.css">
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
     </head>
@@ -136,8 +137,8 @@
                 <input type="text" class="form-control param_input" id="freeMinDistance" value="1.5">
               </div>
 
-              <h4 class="text-white mb-0">Obstáculos</h4>
-              <div class="input-group mb-1">
+              <h4 hidden class="text-white mb-0">Obstáculos</h4>
+              <div hidden class="input-group mb-1">
                 <div class="input-group-prepend">
                   <span class="input-group-text">Quantidade</span>
                  </div>
@@ -192,10 +193,12 @@
       
       <!-- Bootstrap core JS-->
       <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
       <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.bundle.min.js"></script>
       <!-- Third party plugin JS-->
       <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.4.1/jquery.easing.min.js"></script>
       <!-- Core theme JS-->
       <script src="js/scripts.js"></script>
+      <canvas hidden id="map-hidden" width="500" height="500"></canvas>
     </body>
 </html>
