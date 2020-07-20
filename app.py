@@ -69,8 +69,6 @@ def optimizer():
                         stdin=subprocess.PIPE, stdout=subprocess.PIPE
                 )
 		output, error = process.communicate(('\n'.join(args)).encode('utf-8'))
-		with open("/var/www/Classpack/log.txt", "w") as f:
-			f.write(path)
 		#print("> ", output, error)
 		#print("A")
 	except Exception as e:
