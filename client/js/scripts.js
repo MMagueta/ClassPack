@@ -119,92 +119,35 @@ function drawChair(ctx, cw, ch, scale, px, py) {
 
 function drawOptSolution(s, move) {
 
-    drawOptSolution_Hidden(s, move)
-
     if (s == null) return;
     
-    var mycanvas = document.getElementById("map");
-    var ctx = mycanvas.getContext("2d");
-
     cnt = cntSolution + move;
     
     if (cnt < 0 || cnt >= s.all_solutions.length) return;
 
     cntSolution += move;
 
-    const w = mycanvas.width;
-    const h = mycanvas.height;
-    
-    const salax = parseFloat($(".param_input")[0].value);
-    const salay = parseFloat($(".param_input")[1].value);
-    const cw = parseFloat($(".param_input")[2].value);
-    const ch = parseFloat($(".param_input")[3].value);
-    
-    const scale = Math.min((w - 50) / salax, (h) / salay);
+    var mycanvas = document.getElementById("map");
 
-    clearRoom(ctx, w, h);
-    
-    drawRoomAndTeacherSpace(ctx, w, h, scale, salax, salay);
-    
-    currSol = s.all_solutions[cntSolution];
+    __actuallyDrawOptSolution(mycanvas, s);
 
-    const radius = currSol.min_distance / 2.0;
+    const radius = s.all_solutions[cntSolution].min_distance / 2.0;
 
-    const fontSize = Math.max(10, parseInt(radius * scale / 2.0));
-    
     document.getElementById("display_distance").innerHTML = "Distância: " + Math.round(100 * 2 * radius) / 100.0;
 
-    var x, y;
+    // Hidden canvas for printing
+    var mycanvas = document.getElementById("map-hidden");
 
-    for (i = 0; i < currSol.positions.length; i++) {
+    __actuallyDrawOptSolution(mycanvas, s);
 
-        x = currSol.positions[i][0] * scale;
-        y = h - currSol.positions[i][1] * scale;
-        
-        ctx.globalAlpha = 0.8;
-        ctx.strokeStyle = "black";
-        ctx.lineWidth   = "1";
-        // Do not paint the chairs
-        ctx.fillStyle = "white"
-    
-        drawChair(ctx, cw, ch, scale, x, y)
-
-        ctx.globalAlpha = 0.7;
-        ctx.fillStyle = "brown";
-        ctx.font = fontSize + "px Arial";
-        tw = ctx.measureText(i + 1);
-
-        if (y - (ch * scale) / 2 < fontSize)
-            ctx.fillText(i + 1, x, y + (ch * scale) / 2);
-        else
-            ctx.fillText(i + 1, x, y - (ch * scale) / 2);
-        
-        ctx.globalAlpha = 1.0;
-
-    }
-
-    // Draw origin
-
-    ctx.globalAlpha = 0.7;
-    ctx.strokeStyle = "red";
-    ctx.font = "10px Arial";
-    ctx.strokeText("Origem", 2, h - 5);
-    ctx.globalAlpha = 1.0;
 }
 
-function drawOptSolution_Hidden(s, move) {
+/* Internal function to draw the optimization solution in the
+ * canvas. */
+function __actuallyDrawOptSolution(mycanvas, s) {
 
-    if (s == null) return;
-    
-    var mycanvas = document.getElementById("map-hidden");
     var ctx = mycanvas.getContext("2d");
-
-    cnt = cntSolution + move;
     
-    if (cnt < 0 || cnt >= s.all_solutions.length) return;
-
-    cntSolution += move;
-
     const w = mycanvas.width*1;
     const h = mycanvas.height*1;
     
@@ -225,8 +168,6 @@ function drawOptSolution_Hidden(s, move) {
 
     const fontSize = Math.max(10, parseInt(radius * scale / 2.0));
     
-    document.getElementById("display_distance").innerHTML = "Distância: " + Math.round(100 * 2 * radius) / 100.0;
-
     var x, y;
 
     for (i = 0; i < currSol.positions.length; i++) {
@@ -263,6 +204,7 @@ function drawOptSolution_Hidden(s, move) {
     ctx.font = "10px Arial";
     ctx.strokeText("Origem", 2, h - 5);
     ctx.globalAlpha = 1.0;
+
 }
 
 function drawRowSol(s) {
