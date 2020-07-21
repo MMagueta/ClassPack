@@ -41,13 +41,23 @@
     });
 })(jQuery); // End of use strict
 
+function myRound(x, p) {
+
+    const mult = Math.pow(10, p);
+
+    return Math.round(mult * x) / mult;
+
+}
+
 var solution;
 var cntSolution = 0;
 
 function downloadCoord(s) {
 
     let csvContent = "data:text/csv;charset=utf-8," 
-        + s.all_solutions[cntSolution].positions.map(e => e.join(",")).join("\n");
+        + s.all_solutions[cntSolution].positions.map(
+            e => e.map(f => myRound(f, 2)).join(",")
+        ).join("\n");
 
     var encodedUri = encodeURI(csvContent);
     window.open(encodedUri);
@@ -412,7 +422,7 @@ $("#send").click(function(){
                                     '<button class="btn btn-success" onclick="drawOptSolution(solution, +1)">&gt;</button>' +
                                     '<button class="btn btn-primary" onclick="downloadCoord(solution)">Baixar Coordenadas (CSV)</button></div>'
                                    );
-                $("div#summary").append('<center><h1 class="mb-0">Resultados</h1><h3 class="mb-0">Soluções encontradas: '+result["solutions"]+'</h3><h3 class="mb-0">Distância ideal calculada: '+result["min_distance"]+'</h3><h3 class="mb-0">Número de carteiras: '+result["number_items"]+'</h3></center>');
+                $("div#summary").append('<center><h1 class="mb-0">Resultados</h1><h3 class="mb-0">Soluções encontradas: '+result["solutions"]+'</h3><h3 class="mb-0">Distância ideal calculada: ' + myRound(result["min_distance"], 2) +'</h3><h3 class="mb-0">Número de carteiras: '+result["number_items"]+'</h3></center>');
                 $("div#summary").append("<button class='btn btn-primary' id='download' onclick='download_pdf()'>Baixar PDF</button>");
 
                 solution = result;
