@@ -10,7 +10,7 @@ def create_app(ini_file):
 	CORS(app)
 
 	config = ConfigParser()
-	config.read('cp_config.ini')
+	config.read(ini_file)
 
 	__URL_PREFIX = config.get('ClassPack', 'url.prefix', fallback='/')
 
