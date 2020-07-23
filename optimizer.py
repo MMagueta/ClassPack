@@ -8,8 +8,10 @@ __FORTRAN_EXEC_PATH = 'script'
 
 def config_optimizer(config):
 
-	FORTRAN_EXEC_NAME = config.get('ClassPack', 'fortran.exec.name', fallback='teste.x')
-	FORTRAN_EXEC_PATH = config.get('ClassPack', 'fortran.exec.path', fallback='script')
+	global __FORTRAN_EXEC_NAME, __FORTRAN_EXEC_PATH
+
+	__FORTRAN_EXEC_NAME = config.get('ClassPack', 'fortran.exec.name', fallback='teste.x')
+	__FORTRAN_EXEC_PATH = config.get('ClassPack', 'fortran.exec.path', fallback='script')
 
 
 optimizer = Blueprint('mainapp', __name__)
@@ -24,7 +26,7 @@ def optimizer_chairs():
 	from flask import request, send_file
 	import os
 
-	global __URL_PREFIX, __FORTRAN_EXEC_NAME, __FORTRAN_EXEC_PATH
+	global __FORTRAN_EXEC_NAME, __FORTRAN_EXEC_PATH
 
 	data = list(request.args.values())[1:-1]
 
