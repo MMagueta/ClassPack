@@ -35,6 +35,9 @@ def optimizer_chairs():
 
 	obstacles = list(list(float(args[7 + 3 * i + j]) for j in range(0, 3)) for i in range(0, int(args[6])))
 
+	ptype = int(data[6 + 3 * len(obstacles) + 1])
+	num_chairs = None
+
 	database.connect()
 
 	jd = {
@@ -45,15 +48,19 @@ def optimizer_chairs():
 		'chair_height': float(data[3]),
 		'obstacles': obstacles,
 		'num_runs': int(data[5]),
-		'problem_type': int(data[-1])
+		'opt_type': ptype,
 	}
+
+	if ptype == 1:
+		num_chairs       = int(data[-1])
+		jd['num_chairs'] = num_chairs
 
 	database.save_problem(jd)
 
 	try:
 		loaded_json = database.get_chairs(float(args[1]), float(args[2]),
 						  float(args[0]), float(args[3]), float(args[4]),
-						  obstacles=obstacles)
+						  ptype, obstacles=obstacles, num_chairs=num_chairs)
 
 		if loaded_json is not None:
 
@@ -91,7 +98,8 @@ def optimizer_chairs():
 		process.terminate()
 
 		database.save_or_update_chairs(float(args[1]), float(args[2]), float(args[0]),
-						   float(args[3]), float(args[4]), loaded_json, obstacles=obstacles)
+					       float(args[3]), float(args[4]), ptype, loaded_json,
+					       obstacles=obstacles, num_chairs=num_chairs)
 
 		return '{0}({1})'.format(
 			request.args.get('callback'),

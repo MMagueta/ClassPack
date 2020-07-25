@@ -138,16 +138,20 @@ def add_and_return_user(email, name, institution):
 
 
 def gen_chair_id(width, height, min_dist, ch_width, ch_height,
-                 obstacles):
+                 obstacles, ptype, num_chairs):
     """Generate unique ids for saving the results of 'chairs' problems.
 
     """
 
     _sort_obs(obstacles)
+
+    num_chairs_str = ""
+    if num_chairs is not None: num_chairs_str = str(num_chairs)
     
     id = 'chairs:' + ':'.join(
         str(i) for i in [width, height, ch_width, ch_height, min_dist] +
-        list(k for ob in obstacles for k in ob)
+        list(k for ob in obstacles for k in ob) +
+        [ptype, num_chairs_str]
     )
 
     return id
@@ -167,14 +171,14 @@ def gen_row_id(width, height, min_dist, ch_width, ch_height,
 
 
 def get_chairs(width, height, min_dist, ch_width, ch_height,
-               obstacles=[]):
+               ptype, obstacles=[], num_chairs=None):
 
     if '_client' not in g: return None
 
     db = g._client[DB_SOL_NAME]
 
     id = gen_chair_id(width, height, min_dist, ch_width, ch_height,
-                      obstacles)
+                      obstacles, ptype, num_chairs)
     
     if id in db:
 
@@ -205,14 +209,14 @@ def get_rows(width, height, min_dist, ch_width, ch_height,
 
 
 def save_or_update_chairs(width, height, min_dist, ch_width, ch_height,
-                          solution, obstacles=[]):
+                          ptype, solution, obstacles=[], num_chairs=None):
 
     if '_client' not in g: return
     
     db = g._client[DB_SOL_NAME]
 
     id = gen_chair_id(width, height, min_dist, ch_width, ch_height,
-                      obstacles)
+                      obstacles, ptype, num_chairs)
 
     if id in db:
 

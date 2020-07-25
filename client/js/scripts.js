@@ -358,8 +358,6 @@ $("#send").click(function(){
 
     }
 
-    console.log(json_data)
-    
     $("#result").append('<img src="assets/img/loading.gif" id="loading"></img>');
     $.ajax({
         url: "http://127.0.0.1:5000/a/optimize",
