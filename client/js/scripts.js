@@ -360,7 +360,7 @@ $("#send").click(function(){
 
     $("#result").append('<img src="assets/img/loading.gif" id="loading"></img>');
     $.ajax({
-        url: "http://127.0.0.1:5000/a/optimize",
+        url: "http://200.144.93.70/a/optimize",
         type: "GET",
         data: json_data,
         crossDomain: true,
@@ -415,7 +415,7 @@ $("#send_fileiras").click(function(){
     }
     $("#result").append('<img src="assets/img/loading.gif" id="loading" class="text-center"></img>');
     $.ajax({
-        url: "http://127.0.0.1:5000/a/rows",
+        url: "http://200.144.93.70/a/rows",
         type: "GET",
         data: json_data,
         crossDomain: true,
