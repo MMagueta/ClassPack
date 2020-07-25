@@ -345,10 +345,24 @@ $("#send").click(function(){
             json_data[(i+step).toString()] = values[i];
         }
     }
-    json_data[(i+step).toString()] = 2;
+
+    // Optimization type
+    optType = $("input[name=opt-options]:checked")[0].value
+    json_data[(i + step).toString()] = optType;
+    step++;
+    
+    if (optType == "1") {
+        
+        value = $("#optNumChairs")[0].value 
+        json_data[(i + step).toString()] = (value == "") ? "1" : value
+
+    }
+
+    console.log(json_data)
+    
     $("#result").append('<img src="assets/img/loading.gif" id="loading"></img>');
     $.ajax({
-        url: "http://200.144.93.70/a/optimize",
+        url: "http://127.0.0.1:5000/a/optimize",
         type: "GET",
         data: json_data,
         crossDomain: true,
@@ -403,7 +417,7 @@ $("#send_fileiras").click(function(){
     }
     $("#result").append('<img src="assets/img/loading.gif" id="loading" class="text-center"></img>');
     $.ajax({
-        url: "http://200.144.93.70/a/rows",
+        url: "http://127.0.0.1:5000/a/rows",
         type: "GET",
         data: json_data,
         crossDomain: true,
