@@ -37,10 +37,17 @@ def optimizer_chairs():
 
 	ptype = int(data[6 + 3 * len(obstacles) + 1])
 	num_chairs = None
+	if ptype == 1: num_chairs = int(data[-1])
 
-	database.connect()
-
+	problem_id = database.gen_chair_id(
+		float(args[1]), float(args[2]),
+		float(args[0]), float(args[3]), float(args[4]),
+		obstacles, ptype, num_chairs)
+        
 	jd = {
+                'type': 'chairs',
+                'user_id': '',
+                'problem_id': problem_id,
 		'min_dist': float(data[4]),
 		'room_width': float(data[0]),
 		'room_height': float(data[1]),
@@ -52,15 +59,14 @@ def optimizer_chairs():
 	}
 
 	if ptype == 1:
-		num_chairs       = int(data[-1])
 		jd['num_chairs'] = num_chairs
+
+	database.connect()
 
 	database.save_problem(jd)
 
 	try:
-		loaded_json = database.get_chairs(float(args[1]), float(args[2]),
-						  float(args[0]), float(args[3]), float(args[4]),
-						  ptype, obstacles=obstacles, num_chairs=num_chairs)
+		loaded_json = database.get_chairs(problem_id)
 
 		if loaded_json is not None:
 
@@ -97,7 +103,7 @@ def optimizer_chairs():
 		os.remove(filename) #Removes .JSON file
 		process.terminate()
 
-		database.save_or_update_chairs(float(args[1]), float(args[2]), float(args[0]),
+		database.save_or_update_chairs(problem_id, float(args[1]), float(args[2]), float(args[0]),
 					       float(args[3]), float(args[4]), ptype, loaded_json,
 					       obstacles=obstacles, num_chairs=num_chairs)
 
@@ -135,9 +141,19 @@ def optimize_rows():
 	data = list(request.args.values())[1:-1]
 	timestamp = time.time()
 
+	problem_id = database.gen_row_id(float(data[0]),
+					   float(data[1]),
+					   float(data[6]),
+					   float(data[2]),
+					   float(data[3]),
+					   int(data[4]), int(data[5]))
+
 	database.connect()
 
 	jd = {
+                'type': 'rows',
+                'user_id': '',
+                'problem_id': problem_id,
 		'min_dist': float(data[6]),
 		'room_width': float(data[0]),
 		'room_height': float(data[1]),
@@ -149,10 +165,7 @@ def optimize_rows():
 
 	database.save_problem(jd)
 
-	solution = database.get_rows(float(data[0]), float(data[1]),
-					 float(data[6]),
-					 float(data[2]), float(data[3]),
-					 int(data[4]), int(data[5]))
+	solution = database.get_rows(problem_id)
 
 	if solution is not None:
 
@@ -188,10 +201,11 @@ def optimize_rows():
 				'chairSpace': result["largura_corredor_horizontal"]
 	}
 
-	database.save_or_update_rows(float(data[0]), float(data[1]),
-					 float(data[6]),
-					 float(data[2]), float(data[3]),
-					 int(data[4]), int(data[5]), solution)
+	database.save_or_update_rows(problem_id, float(data[0]),
+				     float(data[1]), float(data[6]),
+				     float(data[2]), float(data[3]),
+				     int(data[4]), int(data[5]),
+				     solution)
 
 	solution.update({'response': 200,
 			 'timestamp': timestamp})

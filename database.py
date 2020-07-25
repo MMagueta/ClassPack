@@ -170,61 +170,50 @@ def gen_row_id(width, height, min_dist, ch_width, ch_height,
     return id
 
 
-def get_chairs(width, height, min_dist, ch_width, ch_height,
-               ptype, obstacles=[], num_chairs=None):
+def get_chairs(problem_id):
 
     if '_client' not in g: return None
 
     db = g._client[DB_SOL_NAME]
 
-    id = gen_chair_id(width, height, min_dist, ch_width, ch_height,
-                      obstacles, ptype, num_chairs)
-    
-    if id in db:
+    if problem_id in db:
 
-        doc = db[id]
+        doc = db[problem_id]
 
         return doc['solution']
 
     return None
 
 
-def get_rows(width, height, min_dist, ch_width, ch_height,
-             n_rows, n_chairs):
+def get_rows(problem_id):
 
     if '_client' not in g: return None
 
     db = g._client[DB_SOL_NAME]
 
-    id = gen_row_id(width, height, min_dist, ch_width, ch_height,
-                    n_rows, n_chairs)
-    
-    if id in db:
+    if problem_id in db:
 
-        doc = db[id]
+        doc = db[problem_id]
 
         return doc['solution']
 
     return None
 
 
-def save_or_update_chairs(width, height, min_dist, ch_width, ch_height,
+def save_or_update_chairs(problem_id, width, height, min_dist, ch_width, ch_height,
                           ptype, solution, obstacles=[], num_chairs=None):
 
     if '_client' not in g: return
     
     db = g._client[DB_SOL_NAME]
 
-    id = gen_chair_id(width, height, min_dist, ch_width, ch_height,
-                      obstacles, ptype, num_chairs)
+    if problem_id in db:
 
-    if id in db:
-
-        olddoc = db[id]
+        olddoc = db[problem_id]
 
         if solution['min_distance'] < olddoc['solution']['min_distance']:
 
-            id['solution'] = solution
+            olddoc['solution'] = solution
             olddoc.save()
 
             print('Updated cache')
@@ -232,7 +221,9 @@ def save_or_update_chairs(width, height, min_dist, ch_width, ch_height,
     else:
 
         document = {
-            '_id': id,
+            '_id': problem_id,
+            'problem_type': ptype,
+            'num_chairs': num_chairs,
             'min_dist': min_dist,
             'room_width': width,
             'room_height': height,
@@ -247,24 +238,21 @@ def save_or_update_chairs(width, height, min_dist, ch_width, ch_height,
         print("Added to cache")
 
 
-def save_or_update_rows(width, height, min_dist, ch_width, ch_height,
+def save_or_update_rows(problem_id, width, height, min_dist, ch_width, ch_height,
                         n_rows, n_chairs, solution):
 
     if '_client' not in g: return
     
     db = g._client[DB_SOL_NAME]
 
-    id = gen_row_id(width, height, min_dist, ch_width, ch_height,
-                    n_rows, n_chairs)
+    if problem_id in db:
 
-    if id in db:
-
-        olddoc = db[id]
+        olddoc = db[problem_id]
 
         if int(olddoc['solution']['status']) is '0' or \
            solution['students'] > olddoc['solution']['students']:
 
-            id['solution'] = solution
+            olddoc['solution'] = solution
             olddoc.save()
 
             print('Updated cache')
@@ -272,7 +260,7 @@ def save_or_update_rows(width, height, min_dist, ch_width, ch_height,
     else:
 
         document = {
-            '_id': id,
+            '_id': problem_id,
             'min_dist': min_dist,
             'room_width': width,
             'room_height': height,
