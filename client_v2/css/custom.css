@@ -67,3 +67,10 @@ and (min-width : 1224px) {
         max-width: 80%;
     }
 }
+
+input:valid {
+    color: #3C6650;
+}
+input:invalid {
+    color: #AD5D49;
+}

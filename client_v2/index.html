@@ -78,7 +78,7 @@
                           </div>
                           <div class="row mt-4 mb-4">
                             <div class="col-sm-12">
-                              <button class="btn btn-confirm" type="submit">Planejar</button>
+                              <button id="btnUsuarioSubmit" class="btn btn-confirm" type="submit" disabled>Planejar</button>
                             </div>
                           </div>
                         </form>
@@ -121,22 +121,22 @@
                               <p class="unifesp-blue">Dimensões da sala</p>
                               <div class="form-group ml-2">
                                 <label for="txtLarguraSala" class="unifesp-grey">Largura da sala</label>
-                                <input id="txtLarguraSala" class="form-control" type="text" placeholder="5.25">
+                                <input id="txtLarguraSala" class="form-control" type="text" placeholder="5.25" pattern="[0-9]*\.?[0-9]*" title="Inserir números inteiros ou decimais separados por ponto (.)">
                               </div>
                               <div class="form-group ml-2">
                                 <label for="txtComprimentoSala" class="unifesp-grey">Comprimento da sala</label>
-                                <input id="txtComprimentoSala" class="form-control" type="text" placeholder="7.05">
+                                <input id="txtComprimentoSala" class="form-control" type="text" placeholder="7.05" pattern="[0-9]*\.?[0-9]*" title="Inserir números inteiros ou decimais separados por ponto (.)">
                               </div>
                             </div>
                             <div class="col-sm-6">
                               <p class="unifesp-blue">Dimensões das carteiras</p>
                               <div class="form-group ml-2">
                                 <label for="txtLarguraCarteira" class="unifesp-grey">Largura da carteira</label>
-                                <input id="txtLarguraCarteira" class="form-control" type="text" placeholder="0.5">
+                                <input id="txtLarguraCarteira" class="form-control" type="text" placeholder="0.5" pattern="[0-9]*\.?[0-9]*" title="Inserir números inteiros ou decimais separados por ponto (.)">
                               </div>
                               <div class="form-group ml-2">
-                                <label for="txtLarguraCarteira" class="unifesp-grey">Comprimento da carteira</label>
-                                <input id="txtLarguraCarteira" class="form-control" type="text" placeholder="0.5">
+                                <label for="txtComprimentoCarteira" class="unifesp-grey">Comprimento da carteira</label>
+                                <input id="txtComprimentoCarteira" class="form-control" type="text" placeholder="0.5" pattern="[0-9]*\.?[0-9]*" title="Inserir números inteiros ou decimais separados por ponto (.)">
                               </div>
                             </div>
                           </div>
@@ -154,18 +154,18 @@
                             <div class="col-sm-6">
                               <div id="modoFixo" style="display: none;">
                                 <div class="form-group">
-                                  <label for="txtLarguraCarteira" class="unifesp-grey">Quantidade de fileiras de carteiras</label>
-                                  <input id="txtLarguraCarteira" class="form-control" type="text" placeholder="7">
+                                  <label for="txtQuantidadeFileiras" class="unifesp-grey">Quantidade de fileiras de carteiras</label>
+                                  <input id="txtQuantidadeFileiras" class="form-control" type="text" placeholder="7" pattern="[0-9]*" title="Inserir números inteiros">
                                 </div>
                                 <div class="form-group">
-                                  <label for="txtLarguraCarteira" class="unifesp-grey">Número de carteiras por fileira</label>
-                                  <input id="txtLarguraCarteira" class="form-control" type="text" placeholder="5">
+                                  <label for="txtQuantidadeCarteirasFileira" class="unifesp-grey">Número de carteiras por fileira</label>
+                                  <input id="txtQuantidadeCarteirasFileira" class="form-control" type="text" placeholder="5" pattern="[0-9]*" title="Inserir números inteiros">
                                 </div>
                               </div>
                               <div id="modoLivre" style="display: none;">
                                 <div class="form-group">
                                   <label for="txtDistanciaMinima" class="unifesp-grey">Distância mínima entre estudantes</label>
-                                  <input id="txtDistanciaMinima" class="form-control" type="text" placeholder="1.5">
+                                  <input id="txtDistanciaMinima" class="form-control" type="text" placeholder="1.5" pattern="[0-9]*\.?[0-9]*" title="Inserir números inteiros ou decimais separados por ponto (.)>
                                 </div>
                                 <div class="form-group">
                                   <label class="unifesp-grey">Quantidade de carteiras</label>
@@ -177,7 +177,7 @@
                                             <input id="radioInserir" class="radio-carteiras" type="radio" aria-label="Radio button para o seguido input" value="inserir">
                                           </div>
                                         </div>
-                                        <input type="text" class="form-control" aria-label="Radio button com input" placeholder="15">
+                                        <input id="txtQuantidadeCarteirasRadio" type="text" class="form-control" aria-label="Radio button com input" placeholder="15" pattern="[0-9]*" title="Inserir números inteiros" >
                                       </div>
                                     </div>
                                     <div class="col-sm-6">
@@ -197,7 +197,7 @@
                           </div>
                           <div class="row mt-4 mb-4">
                             <div class="col-sm-12">
-                              <button class="btn btn-confirm" type="submit">Calcular</button>
+                              <button id="btnCalcularSubmit" class="btn btn-confirm" type="submit" disabled>Calcular</button>
                             </div>
                           </div>
                         </form>
