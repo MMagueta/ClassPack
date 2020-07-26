@@ -11,6 +11,14 @@ html body {
     background: #33434c;
 }
 
+.unifesp-blue {
+    color: #33434C;
+}
+
+.unifesp-grey {
+    color: #727D83;
+}
+
 .btn-confirm {
     color: #F2F2F2;
     background-color: #5D866C;
