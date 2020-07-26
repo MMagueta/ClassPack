@@ -7,6 +7,21 @@ html body {
     font-family: 'Montserrat', sans-serif !important;
 }
 
+.body-background {
+    background: #33434c;
+}
+
+.btn-confirm {
+    color: #F2F2F2;
+    background-color: #5D866C;
+    border-color: #5D866C;
+}
+.btn-confirm:hover, .btn-confirm:focus, .btn-confirm:active, .btn-confirm.active, .open>.dropdown-toggle.btn-confirm {
+    color: #F2F2F2;
+    background-color: #215A36;
+    border-color: #215A36;
+}
+
 .navbar-customization {
     height: 120px;
     background-color: #295A36;
