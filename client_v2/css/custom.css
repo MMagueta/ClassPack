@@ -6,15 +6,25 @@ html body {
     height: 100%;
     font-family: 'Montserrat', sans-serif !important;
 }
+
 .navbar-customization {
     height: 120px;
     background-color: #295A36;
+}
+
+.wrapper-customization {
+    background: #295A36;
+    background: rgb(41,90,54);
+    background: linear-gradient(180deg, rgba(41,90,54,1) 0%, rgba(51,67,76,1) 100%, rgba(0,0,0,1) 100%);
+    height: calc(100% - 120px) !important;
 }
 
 .container-customization {
     background: rgb(41,90,54);
     background: linear-gradient(180deg, rgba(41,90,54,1) 0%, rgba(51,67,76,1) 100%, rgba(0,0,0,1) 100%);
     height: calc(100% - 120px) !important;
+    max-width: 70%;
+    background: rgba(0, 0, 0, 0.0) !important;
 }
 
 /* Smartphones (portrait and landscape) ----------- */
@@ -26,6 +36,13 @@ and (max-device-width : 480px) {
         font-size: 28px;
         color: #A3AEB6;
     }
+    .container-customization {
+        background: rgb(41,90,54);
+        background: linear-gradient(180deg, rgba(41,90,54,1) 0%, rgba(51,67,76,1) 100%, rgba(0,0,0,1) 100%);
+        height: calc(100% - 120px) !important;
+        max-width: 95%;
+        background: rgba(0, 0, 0, 0.0) !important;
+    }
 }
 
 /* Desktops and laptops ----------- */
@@ -34,5 +51,12 @@ and (min-width : 1224px) {
     .header-text {
         font-size: 28px;
         color: #A3AEB6;
+    }
+    .container-customization {
+        background: rgb(41,90,54);
+        background: linear-gradient(180deg, rgba(41,90,54,1) 0%, rgba(51,67,76,1) 100%, rgba(0,0,0,1) 100%);
+        height: calc(100% - 120px) !important;
+        max-width: 80%;
+        background: rgba(0, 0, 0, 0.0) !important;
     }
 }
