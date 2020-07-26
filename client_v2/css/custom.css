@@ -1,0 +1,38 @@
+html {
+    height: 100%;
+}
+
+html body {
+    height: 100%;
+    font-family: 'Montserrat', sans-serif !important;
+}
+.navbar-customization {
+    height: 120px;
+    background-color: #295A36;
+}
+
+.container-customization {
+    background: rgb(41,90,54);
+    background: linear-gradient(180deg, rgba(41,90,54,1) 0%, rgba(51,67,76,1) 100%, rgba(0,0,0,1) 100%);
+    height: calc(100% - 120px) !important;
+}
+
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen 
+and (min-device-width : 320px) 
+and (max-device-width : 480px) {
+    .header-text {
+        display: none;
+        font-size: 28px;
+        color: #A3AEB6;
+    }
+}
+
+/* Desktops and laptops ----------- */
+@media only screen 
+and (min-width : 1224px) {
+    .header-text {
+        font-size: 28px;
+        color: #A3AEB6;
+    }
+}
