@@ -22,12 +22,15 @@ $(document).ready(function() {
   $('#selectModo').change(function() {
     const podeMoverCadeiras = parseInt($(this).val())
 
-    if(podeMoverCadeiras) {
+    if(podeMoverCadeiras === 2) {
       $('#modoFixo').hide()
       $('#modoLivre').show()
-    } else {
+    } else if (podeMoverCadeiras === 1) {
       $('#modoLivre').hide()
       $('#modoFixo').show()
+    } else {
+      $('#modoLivre').hide()
+      $('#modoFixo').hide()
     }
   })
 
