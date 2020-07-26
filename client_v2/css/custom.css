@@ -19,14 +19,6 @@ html body {
     height: calc(100% - 120px) !important;
 }
 
-.container-customization {
-    background: rgb(41,90,54);
-    background: linear-gradient(180deg, rgba(41,90,54,1) 0%, rgba(51,67,76,1) 100%, rgba(0,0,0,1) 100%);
-    height: calc(100% - 120px) !important;
-    max-width: 70%;
-    background: rgba(0, 0, 0, 0.0) !important;
-}
-
 /* Smartphones (portrait and landscape) ----------- */
 @media only screen 
 and (min-device-width : 320px) 
@@ -37,11 +29,7 @@ and (max-device-width : 480px) {
         color: #A3AEB6;
     }
     .container-customization {
-        background: rgb(41,90,54);
-        background: linear-gradient(180deg, rgba(41,90,54,1) 0%, rgba(51,67,76,1) 100%, rgba(0,0,0,1) 100%);
-        height: calc(100% - 120px) !important;
         max-width: 95%;
-        background: rgba(0, 0, 0, 0.0) !important;
     }
 }
 
@@ -53,10 +41,6 @@ and (min-width : 1224px) {
         color: #A3AEB6;
     }
     .container-customization {
-        background: rgb(41,90,54);
-        background: linear-gradient(180deg, rgba(41,90,54,1) 0%, rgba(51,67,76,1) 100%, rgba(0,0,0,1) 100%);
-        height: calc(100% - 120px) !important;
         max-width: 80%;
-        background: rgba(0, 0, 0, 0.0) !important;
     }
 }
