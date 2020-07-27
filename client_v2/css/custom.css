@@ -31,6 +31,13 @@ html body {
     border-color: #215A36;
 }
 
+.btn-confirm:disabled {
+    color: #33434C;
+    background-color: #C0C5C8;
+    border-color: #C0C5C8;
+}
+
+
 .navbar-customization {
     height: 120px;
     background-color: #295A36;
