@@ -20,24 +20,19 @@ $(document).ready(function() {
   function checkCalcularFormExtra() {
     const selectedModo = parseInt($('#selectModo').val())
 
-    if(selectedModo === 2) { // Modo livre
-      console.log('aaa',($('#radioInserir').is(':checked')), $('#txtQuantidadeCarteirasRadio').val() !== '')
-      console.log('bbb',$('#radioMaxima').is(':checked'))
+    if(selectedModo) { // Modo livre
       return  $('#txtDistanciaMinima').val() !== '' &&
               (
                 ($('#radioInserir').is(':checked') && $('#txtQuantidadeCarteirasRadio').val() !== '') || 
                 $('#radioMaxima').is(':checked')
               )
-    } else if(selectedModo === 1) { // Modo fixo
-      return  $('#txtQuantidadeFileiras').val() !== '' &&
-              $('#txtQuantidadeCarteirasFileira').val() !== ''
     }
-
-    return false
+    // Modo fixo
+    return  $('#txtQuantidadeFileiras').val() !== '' &&
+            $('#txtQuantidadeCarteirasFileira').val() !== ''
   }
 
   function enableCalcularButton() {
-    console.log(checkCalcularForm(), checkCalcularFormExtra())
     if(checkCalcularForm() && checkCalcularFormExtra()) $('#btnCalcularSubmit').prop('disabled', false)
     else $('#btnCalcularSubmit').prop('disabled', true)
   }
@@ -69,22 +64,15 @@ $(document).ready(function() {
   $('#selectModo').change(function() {
     const podeMoverCadeiras = parseInt($(this).val())
 
-    if(podeMoverCadeiras === 2) { // Modo livre
+    if(podeMoverCadeiras) { // Modo livre
       $('#modoFixo').hide()
       $('#modoLivre').show()
 
       $('#txtQuantidadeFileiras,#txtQuantidadeCarteirasFileira').val('')
-    } else if (podeMoverCadeiras === 1) { // Modo Fixo
+    } else { // Modo Fixo
       $('#modoLivre').hide()
       $('#modoFixo').show()
 
-      $('#txtDistanciaMinima,#txtQuantidadeCarteirasRadio').val('')
-      $('#radioInserir,#radioMaxima').prop("checked", false)
-    } else {
-      $('#modoLivre').hide()
-      $('#modoFixo').hide()
-
-      $('#txtQuantidadeFileiras,#txtQuantidadeCarteirasFileira').val('')
       $('#txtDistanciaMinima,#txtQuantidadeCarteirasRadio').val('')
       $('#radioInserir,#radioMaxima').prop("checked", false)
     }

@@ -24,6 +24,7 @@ html body {
     background-color: #5D866C;
     border-color: #5D866C;
 }
+
 .btn-confirm:hover, .btn-confirm:focus, .btn-confirm:active, .btn-confirm.active, .open>.dropdown-toggle.btn-confirm {
     color: #F2F2F2;
     background-color: #215A36;
@@ -42,10 +43,7 @@ html body {
     height: calc(100% - 120px) !important;
 }
 
-/* Smartphones (portrait and landscape) ----------- */
-@media only screen 
-and (min-device-width : 320px) 
-and (max-device-width : 480px) {
+@media only screen and (max-width: 768px) {
     .header-text {
         display: none;
         font-size: 28px;
@@ -54,11 +52,13 @@ and (max-device-width : 480px) {
     .container-customization {
         max-width: 95%;
     }
+    .margin-left-adjust {
+        margin-left: 0 !important;
+    }
 }
 
-/* Desktops and laptops ----------- */
 @media only screen 
-and (min-width : 1224px) {
+and (min-width : 768px) {
     .header-text {
         font-size: 28px;
         color: #A3AEB6;
@@ -66,11 +66,28 @@ and (min-width : 1224px) {
     .container-customization {
         max-width: 80%;
     }
+    .margin-left-adjust {
+        margin-left: 1.5rem !important;
+    }
 }
 
 input:valid {
     color: #3C6650;
 }
+
 input:invalid {
     color: #AD5D49;
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #C0C5C8 !important;
+    opacity: 1;
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: #C0C5C8 !important;
+}
+  
+::-ms-input-placeholder { /* Microsoft Edge */
+    color: #C0C5C8 !important;
 }
