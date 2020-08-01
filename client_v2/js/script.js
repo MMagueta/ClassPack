@@ -1,10 +1,10 @@
+let solution;
+let cntSolution = 0;
+
 function myRound(x, p) {
   const mult = Math.pow(10, p);
   return Math.round(mult * x) / mult;
 }
-
-let solution;
-let cntSolution = 0;
 
 function downloadCoord(s) {
   const csvContent = "data:text/csv;charset=utf-8," + s.all_solutions[cntSolution].positions.map(e => e.map(f => myRound(f, 2)).join(",")).join("\n");
@@ -89,7 +89,7 @@ function __actuallyDrawOptSolution(mycanvas, s) {
   const w = mycanvas.width*1;
   const h = mycanvas.height*1;
   
-  const salax =  parseFloat($('#txtLarguraSala').val())// parseFloat($(".param_input")[0].value)*1;
+  const salax =  parseFloat($('#txtLarguraSala').val())
   const salay = parseFloat($('#txtComprimentoSala').val())
   const cw = parseFloat($('#txtLarguraCarteira').val())
   const ch = parseFloat($('#txtComprimentoCarteira').val())
@@ -146,15 +146,12 @@ function drawRowSol(s) {
   const w = mycanvas.width;
   const h = mycanvas.height;
   
-  // Get problem data
-  let values = $(".param_input_fileiras").get().map(e => parseFloat(e.value));
-
-  let rW = values[0];
-  let rH = values[1];
-  let cW = values[2];
-  let cH = values[3];
-  let cR = solution.rowSpace;
-  let cC = solution.chairSpace;
+  const rW = parseFloat($('#txtLarguraSala').val())
+  const rH = parseFloat($('#txtComprimentoSala').val())
+  const cW = parseFloat($('#txtLarguraCarteira').val())
+  const cH = parseFloat($('#txtComprimentoCarteira').val())
+  const cR = solution.rowSpace;
+  const cC = solution.chairSpace;
 
   clearRoom(ctx, w, h);
 
@@ -192,15 +189,12 @@ function drawRowSol_Hidden(s) {
   const w = mycanvas.width;
   const h = mycanvas.height;
   
-  // Get problem data
-  let values = $(".param_input_fileiras").get().map(e => parseFloat(e.value));
-
-  let rW = values[0]*1.5;
-  let rH = values[1]*1.5;
-  let cW = values[2]*1.5;
-  let cH = values[3]*1.5;
-  let cR = solution.rowSpace*1.5;
-  let cC = solution.chairSpace*1.5;
+  const rW = parseFloat($('#txtLarguraSala').val()) * 1.5
+  const rH = parseFloat($('#txtComprimentoSala').val()) * 1.5
+  const cW = parseFloat($('#txtLarguraCarteira').val()) * 1.5
+  const cH = parseFloat($('#txtComprimentoCarteira').val()) * 1.5
+  const cR = solution.rowSpace*1.5;
+  const cC = solution.chairSpace*1.5;
 
   clearRoom(ctx, w, h);
 
@@ -230,8 +224,8 @@ function drawRowSol_Hidden(s) {
 }
 
 function prepareResultsSection() {
-  $("#result").empty()
   solution = null
+  $("#result").empty()
   $("#result").append('<div id="summary" class="text-center"></div>')
   $("#sectionSeparator").show()
   $("#sectionResults").show()
