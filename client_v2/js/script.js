@@ -226,24 +226,22 @@ function drawRowSol_Hidden(s) {
 function prepareResultsSection() {
   solution = null
   $("#result").empty()
-  $("#result").append('<div id="summary" class="text-center"></div>')
+  $("#result").append('<div id="summary" class="col-sm-12 col-lg-6 mt-4"></div>')
   $("#sectionSeparator").show()
   $("#sectionResults").show()
   $("#result").append('<img src="assets/img/loading.gif" id="loading"></img>');
 }
 
 function drawFixedLayout(result) {
-  $("#result").append('<div class="row"><canvas id="map" width="300" height="300">Por favor, use um navegador que suporte HTML5.</canvas></div>')
   $("div#summary").
       append(`
-        <center>
-          <h1 class="mb-0">Resultados</h1>
-          <h3 class="mb-0">Fileiras: ${result.rows}</h3>
-          <h3 class="mb-0">Cadeiras: ${result.chairs}</h3>
-          <h3 class="mb-0">Número de estudantes: ${result.students}</h3>
-        </center>`
-      )
-  $("div#summary").append("<button class='btn btn-primary' id='download' onclick='download_pdf()'>Baixar PDF</button>")
+          <h2 class="margin-left-adjust">Resultados</h1>
+          <h4 class="mt-1 margin-left-adjust">Fileiras: ${result.rows}</h3>
+          <h4 class="mt-1 margin-left-adjust">Cadeiras: ${result.chairs}</h3>
+          <h4 class="mt-1 margin-left-adjust">Número de estudantes: ${result.students}</h3>
+      `)
+  $("div#summary").append("<button class='btn btn-confirm mt-4 margin-left-adjust' id='download' onclick='download_pdf()'>Baixar PDF</button>")
+  $("#result").append('<div class="col-sm-12 col-lg-6 mt-4"><canvas id="map" width="300" height="300">Por favor, use um navegador que suporte HTML5.</canvas></div>')
 
   solution = result // Sets the solution to the global variable
   drawRowSol(solution) // Draw the solution to canvas
@@ -255,10 +253,10 @@ function drawFreeLayout(result) {
   $("#result").append(` <div class="row">
                           <button class="btn btn-success" onclick="drawOptSolution(solution, -1)">&lt;</button>
                           <button class="btn btn-success" onclick="drawOptSolution(solution, +1)">&gt;</button>
-                          <button class="btn btn-primary" onclick="downloadCoord(solution)">Baixar Coordenadas (CSV)</button>
+                          <button class="btn btn-confirm" onclick="downloadCoord(solution)">Baixar Coordenadas (CSV)</button>
                         </div>`);
   $("div#summary").append(`<center><h1 class="mb-0">Resultados</h1><h3 class="mb-0">Soluções encontradas: ${result["solutions"]}</h3><h3 class="mb-0">Distância ideal calculada: ${myRound(result["min_distance"], 2)}</h3><h3 class="mb-0">Número de carteiras: ${result["number_items"]}</h3></center>`)
-  $("div#summary").append("<button class='btn btn-primary' id='download' onclick='download_pdf()'>Baixar PDF</button>")
+  $("div#summary").append("<button class='btn btn-confirm' id='download' onclick='download_pdf()'>Baixar PDF</button>")
 
   solution = result
   cntSolution = 0
@@ -303,7 +301,6 @@ $(document).ready(function() {
     if(selectedModo) { // Modo livre
       return  ($('#radioInserir').is(':checked') && $('#txtQuantidadeCarteirasRadio').val() !== '') || 
               $('#radioMaxima').is(':checked')
-              
     }
     // Modo fixo
     return  $('#txtQuantidadeFileiras').val() !== '' &&
