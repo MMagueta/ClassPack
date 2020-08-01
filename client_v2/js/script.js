@@ -229,6 +229,60 @@ function drawRowSol_Hidden(s) {
   }
 }
 
+function prepareResultsSection() {
+  $("#result").empty()
+  solution = null
+  $("#result").append('<div id="summary" class="text-center"></div>')
+  $("#sectionSeparator").show()
+  $("#sectionResults").show()
+  $("#result").append('<img src="assets/img/loading.gif" id="loading"></img>');
+}
+
+function drawFixedLayout(result) {
+  $("#result").append('<div class="row"><canvas id="map" width="300" height="300">Por favor, use um navegador que suporte HTML5.</canvas></div>')
+  $("div#summary").
+      append(`
+        <center>
+          <h1 class="mb-0">Resultados</h1>
+          <h3 class="mb-0">Fileiras: ${result.rows}</h3>
+          <h3 class="mb-0">Cadeiras: ${result.chairs}</h3>
+          <h3 class="mb-0">Número de estudantes: ${result.students}</h3>
+        </center>`
+      )
+  $("div#summary").append("<button class='btn btn-primary' id='download' onclick='download_pdf()'>Baixar PDF</button>")
+
+  solution = result // Sets the solution to the global variable
+  drawRowSol(solution) // Draw the solution to canvas
+}
+
+function drawFreeLayout(result) {
+  $("#result").append('<div class="row" id="display_distance"></div>')
+  $("#result").append('<div class="row"><canvas id="map" width="300" height="300">Por favor, use um navegador que suporte HTML5.</canvas></div>')
+  $("#result").append(` <div class="row">
+                          <button class="btn btn-success" onclick="drawOptSolution(solution, -1)">&lt;</button>
+                          <button class="btn btn-success" onclick="drawOptSolution(solution, +1)">&gt;</button>
+                          <button class="btn btn-primary" onclick="downloadCoord(solution)">Baixar Coordenadas (CSV)</button>
+                        </div>`);
+  $("div#summary").append(`<center><h1 class="mb-0">Resultados</h1><h3 class="mb-0">Soluções encontradas: ${result["solutions"]}</h3><h3 class="mb-0">Distância ideal calculada: ${myRound(result["min_distance"], 2)}</h3><h3 class="mb-0">Número de carteiras: ${result["number_items"]}</h3></center>`)
+  $("div#summary").append("<button class='btn btn-primary' id='download' onclick='download_pdf()'>Baixar PDF</button>")
+
+  solution = result
+  cntSolution = 0
+  drawOptSolution(solution, 0)
+}
+
+function errorHandler() {
+  $("#loading").remove()
+  $("#result").append(`
+    <div class="alert alert-danger alert-dismissible fade show">
+      Erro! Verifique as informações inseridas dados. Caso ocorra novamente, envie um email para <b>salaplanejada@unifesp.br</b>.
+      <button type="button" class="close" data-dismiss="alert">
+        &times;
+      </button>
+    </div>`
+  )
+}
+
 $(document).ready(function() {
   function checkUsuarioForm() {
     return  $('#txtNome').val() !== '' &&
@@ -245,18 +299,17 @@ $(document).ready(function() {
     return  $('#txtLarguraSala').val() !== '' &&
             $('#txtComprimentoSala').val() !== '' &&
             $('#txtLarguraCarteira').val() !== '' &&
-            $('#txtComprimentoCarteira').val() !== ''
+            $('#txtComprimentoCarteira').val() !== '' &&
+            $('#txtDistanciaMinima').val() !== ''
   }
 
   function checkCalcularFormExtra() {
     const selectedModo = parseInt($('#selectModo').val())
 
     if(selectedModo) { // Modo livre
-      return  $('#txtDistanciaMinima').val() !== '' &&
-              (
-                ($('#radioInserir').is(':checked') && $('#txtQuantidadeCarteirasRadio').val() !== '') || 
-                $('#radioMaxima').is(':checked')
-              )
+      return  ($('#radioInserir').is(':checked') && $('#txtQuantidadeCarteirasRadio').val() !== '') || 
+              $('#radioMaxima').is(':checked')
+              
     }
     // Modo fixo
     return  $('#txtQuantidadeFileiras').val() !== '' &&
@@ -330,141 +383,64 @@ $(document).ready(function() {
   $("#frmCalcular").submit(function(e) {
     e.preventDefault()
 
+    prepareResultsSection()
+    
     const selectedModo = parseInt($('#selectModo').val())
 
     if(selectedModo) { // Modo livre
-      $("#result").empty()
-      solution = null
-      
-      $("#result").append('<div id="summary" class="text-center"></div>')
-      $("#sectionSeparator").show()
-      $("#sectionResults").show()
-      
-      var values = $(".param_input").map(function() {
-          return this.value
-      })
-      json_data = {}
-      var step = 1;
-      for (var i = 0 ; i < values.length; i++) {
-        if(i == 5){
-          json_data[(i+1).toString()] = "100"
-          json_data[(i+2).toString()] = values[i]
-          step++
-        }else{
-          json_data[(i+step).toString()] = values[i]
-        }
+      const selectedRadio = $("input[name=radio-options]:checked").val()
+      const data = {
+        1: $("#txtLarguraSala").val(),
+        2: $("#txtComprimentoSala").val(),
+        3: $("#txtLarguraCarteira").val(),
+        4: $("#txtComprimentoCarteira").val(),
+        5: $("#txtDistanciaMinima").val(),
+        6: "100",
+        7: "0",
+        8: selectedRadio,
       }
-  
-      // Optimization type
-      optType = $("input[name=radio-options]:checked")[0].value
-      json_data[(i + step).toString()] = optType;
-      step++;
-      
-      if (optType == "1") {
-        value = $("#txtQuantidadeCarteirasRadio").val()
-        json_data[(i + step).toString()] = (value == "") ? "1" : value
-      }
-      console.log('jsonData',json_data)
-      $("#result").append('<img src="assets/img/loading.gif" id="loading"></img>');
+      if (selectedRadio == "1") data[9] = $("#txtQuantidadeCarteirasRadio").val()
+
       $.ajax({
         url: "http://200.144.93.70/a/optimize",
         type: "GET",
-        data: json_data,
+        data,
         crossDomain: true,
         dataType: 'jsonp',
         // set the request header authorization to the bearer token that is generated
         success: function(result) {
-          console.log('res',result)
-          
           $("#loading").remove()
-          if(result["found_solution"] == "True") {
-            $("#result").append('<div class="row" id="display_distance"></div>')
-            $("#result").append('<div class="row"><canvas id="map" width="300" height="300">Por favor, use um navegador que suporte HTML5.</canvas></div>')
-            $("#result").append('<div class="row"><button class="btn btn-success" onclick="drawOptSolution(solution, -1)">&lt;</button>' +
-                                '<button class="btn btn-success" onclick="drawOptSolution(solution, +1)">&gt;</button>' +
-                                '<button class="btn btn-primary" onclick="downloadCoord(solution)">Baixar Coordenadas (CSV)</button></div>'
-                                );
-            $("div#summary").append('<center><h1 class="mb-0">Resultados</h1><h3 class="mb-0">Soluções encontradas: '+result["solutions"]+'</h3><h3 class="mb-0">Distância ideal calculada: ' + myRound(result["min_distance"], 2) +'</h3><h3 class="mb-0">Número de carteiras: '+result["number_items"]+'</h3></center>')
-            $("div#summary").append("<button class='btn btn-primary' id='download' onclick='download_pdf()'>Baixar PDF</button>")
 
-            solution = result
-            cntSolution = 0
-            drawOptSolution(solution, 0)
-          }else{
-            $("div#summary").append('<center><h1 class="mb-0">Resultados</h1><h3 class="mb-0">Soluções encontradas: Nenhuma</h3></center>')
-          }
+          if(result["found_solution"] == "True") drawFreeLayout(result)
+          else $("div#summary").append('<center><h1 class="mb-0">Resultados</h1><h3 class="mb-0">Soluções encontradas: Nenhuma</h3></center>')
         },
-        error: function(request, status, error) {
-          $("#loading").remove();
-          $("#result").append(
-              '<div class="alert alert-danger alert-dismissible fade show">' +
-                  'Erro! Verifique seus dados. Caso ocorra novamente, entre em contato com o site.' +
-                  '<button type="button" class="close" data-dismiss="alert">' +
-                  '&times;</button> </div>'
-          )
-        },
+        error: errorHandler
       })
     } else { // Modo fixo
-      $("#result").empty()
-      solution = null
-      
-      $("#result").append('<div id="summary" class="text-center"></div>')
-
-      $("#sectionSeparator").show()
-      $("#sectionResults").show()
-
-      var values = $(".param_input_fileiras").map(function() {
-          return this.value;
-      })
-      json_data = {};
-      for (var i = 0 ; i < values.length; i++){
-          json_data[(i+1).toString()] = values[i];
+      const data = {
+        1: $("#txtLarguraSala").val(),
+        2: $("#txtComprimentoSala").val(),
+        3: $("#txtLarguraCarteira").val(),
+        4: $("#txtComprimentoCarteira").val(),
+        5: $("#txtQuantidadeFileiras").val(),
+        6: $("#txtQuantidadeCarteirasFileira").val(),
+        7: $("#txtDistanciaMinima").val(),
       }
-      console.log(json_data)
-      $("#result").append('<img src="assets/img/loading.gif" id="loading" class="text-center"></img>')
+      
       $.ajax({
         url: "http://200.144.93.70/a/rows",
         type: "GET",
-        data: json_data,
+        data,
         crossDomain: true,
         dataType: 'jsonp',
         // set the request header authorization to the bearer token that is generated
         success: function(result) {
-          console.log('res',result)
-
           $("#loading").remove()
 
-          if (result.status) {
-            $("#result").append('<div class="row"><canvas id="map" width="300" height="300">Por favor, use um navegador que suporte HTML5.</canvas></div>')
-            // Summary
-            $("div#summary").
-                append('<center><h1 class="mb-0">Resultados</h1>' +
-                        '<h3 class="mb-0">Fileiras: ' + result.rows + '</h3>' +
-                        '<h3 class="mb-0">Cadeiras: ' + result.chairs + '</h3>' +
-                        '<h3 class="mb-0">Número de estudantes: ' + result.students + '</h3></center>')
-            $("div#summary").append(
-                "<button class='btn btn-primary' id='download' " +
-                    "onclick='download_pdf(\"" +
-                    result["timestamp"] + "\")'>Baixar PDF</button>"
-            )
-
-            // Set the solution to the global variable
-            solution = result
-            // Draw the solution to canvas
-            drawRowSol(solution)
-          } else {
-            $("div#summary").append('<center><h1 class="mb-0">Resultados</h1><h3 class="mb-0">Não há solução ótima</h3></center>')
-          }
+          if (result.status) drawFixedLayout(result)
+          else $("div#summary").append('<center><h1 class="mb-0">Resultados</h1><h3 class="mb-0">Não há solução ótima</h3></center>')
         },
-        error: function(error) {
-          $("#loading").remove()
-          $("#result").append(
-              '<div class="alert alert-danger alert-dismissible fade show">' +
-                  'Erro! Verifique seus dados. Caso ocorra novamente, entre em contato com o site.' +
-                  '<button type="button" class="close" data-dismiss="alert">' +
-                  '&times;</button> </div>'
-          )
-        },
+        error: errorHandler
       })
     }
   })

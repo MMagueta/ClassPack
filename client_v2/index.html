@@ -7,12 +7,13 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Salas Planejadas - Unifesp</title>
+  <title>Sala Planejada - UNIFESP</title>
 
   <!-- Icon -->
   <link rel="icon" type="image/x-icon" href="assets/icon/favicon.ico">
   <!-- Bootstrap core CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/octicons/8.5.0/build.css" integrity="sha512-oXqkIy/+iqrHrpoTwFkSLZJpNwoYn9e77QtCNzBi+Jb6uJgTtcdHVy0C+nEpeUfC3fxSbydPxLG+ndikNVvrdQ==" crossorigin="anonymous" />
   <link rel="stylesheet" href="css/custom.css">
   <!-- Font -->
   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@500&display=swap" rel="stylesheet">
@@ -38,7 +39,7 @@
         <div class="col-lg-12">
           <div class="card" style="background: #F2F2F2">
             <div class="card-body">
-              <div id="firstPage">
+              <!-- <div id="firstPage">
                 <div class="row">
                   <div class="col-sm-12 col-lg-5 mb-4">
                     <div class="row">
@@ -86,8 +87,8 @@
                     </div>
                   </div>
                 </div>
-              </div>
-              <div id="secondPage" style="display:none;">
+              </div> -->
+              <div id="secondPage">
                 <section>
                   <div class="row">
                     <div class="col-sm-12 col-lg-5">
@@ -151,6 +152,10 @@
                                     <option value="1">Sim</option>
                                   </select>
                                 </div>
+                                <div class="form-group">
+                                  <label for="txtDistanciaMinima" class="unifesp-blue">Distância mínima entre estudantes (m)</label>
+                                  <input id="txtDistanciaMinima" class="form-control param_input_fileiras param_input" type="text" placeholder="1.5" pattern="[0-9]*\.?[0-9]*" title="Inserir números inteiros ou decimais separados por ponto (.)">
+                                </div>
                               </div>
                               <div class="col-sm-6">
                                 <div id="modoFixo" style="display: none;">
@@ -191,10 +196,6 @@
                                       </div>
                                     </div>
                                   </div>
-                                </div>
-                                <div class="form-group">
-                                  <label for="txtDistanciaMinima" class="unifesp-grey">Distância mínima entre estudantes (m)</label>
-                                  <input id="txtDistanciaMinima" class="form-control param_input_fileiras param_input" type="text" placeholder="1.5" pattern="[0-9]*\.?[0-9]*" title="Inserir números inteiros ou decimais separados por ponto (.)">
                                 </div>
                                 <div hidden class="form-group">
                                   <label for="txtObstaculos" class="unifesp-grey">Obstáculos</label>
