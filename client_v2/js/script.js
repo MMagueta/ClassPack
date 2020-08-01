@@ -3,22 +3,17 @@ function myRound(x, p) {
   return Math.round(mult * x) / mult;
 }
 
-var solution;
-var cntSolution = 0;
+let solution;
+let cntSolution = 0;
 
 function downloadCoord(s) {
-  let csvContent = "data:text/csv;charset=utf-8," 
-      + s.all_solutions[cntSolution].positions.map(
-          e => e.map(f => myRound(f, 2)).join(",")
-      ).join("\n");
-
-  var encodedUri = encodeURI(csvContent);
+  const csvContent = "data:text/csv;charset=utf-8," + s.all_solutions[cntSolution].positions.map(e => e.map(f => myRound(f, 2)).join(",")).join("\n");
+  const encodedUri = encodeURI(csvContent);
   window.open(encodedUri);
 }
 
 function clearRoom(ctx, w, h) {
   ctx.clearRect(0, 0, w, h);
-
   ctx.fillStyle = "#fff";
   ctx.fillRect(0, 0, w, h);
 }
@@ -44,17 +39,12 @@ function drawRoomAndTeacherSpace(ctx, w, h, scale, salax, salay) {
 
 function drawChair(ctx, cw, ch, scale, px, py) {
   // The chair: 2/3 of ch and 1/4 of cw
-  ctx.fillRect(px - (cw / 8) * scale, py - (ch / 3) * scale, 
-                 cw * scale / 4, (2 * ch)  * scale / 3);
-  
-  ctx.strokeRect(px - (cw / 8) * scale, py - (ch / 3) * scale, 
-                 cw * scale / 4, (2 * ch)  * scale / 3);
+  ctx.fillRect(px - (cw / 8) * scale, py - (ch / 3) * scale, cw * scale / 4, (2 * ch)  * scale / 3);
+  ctx.strokeRect(px - (cw / 8) * scale, py - (ch / 3) * scale, cw * scale / 4, (2 * ch)  * scale / 3);
 
   // The table: ch and 3/4 of cw
-  ctx.fillRect(px + (ch / 8) * scale, py - (ch / 2) * scale,
-                 cw * 3 * scale / 4, ch * scale);
-  ctx.strokeRect(px + (ch / 8) * scale, py - (ch / 2) * scale,
-                 cw * 3 * scale / 4, ch * scale);
+  ctx.fillRect(px + (ch / 8) * scale, py - (ch / 2) * scale, cw * 3 * scale / 4, ch * scale);
+  ctx.strokeRect(px + (ch / 8) * scale, py - (ch / 2) * scale, cw * 3 * scale / 4, ch * scale);
 }
 
 /*
@@ -64,7 +54,7 @@ has to be obtained by the optimization packing strategy.
 */
 
 function drawOptSolution(s, move) {
-  if (s == null) return;
+  if (!s) return;
   
   cnt = cntSolution + move;
   
@@ -72,24 +62,29 @@ function drawOptSolution(s, move) {
 
   cntSolution += move;
 
-  var mycanvas = document.getElementById("map");
-
-  __actuallyDrawOptSolution(mycanvas, s);
+  const canvas = document.getElementById("map");
+  __actuallyDrawOptSolution(canvas, s);
 
   const radius = s.all_solutions[cntSolution].min_distance / 2.0;
-
   document.getElementById("display_distance").innerHTML = "Distância: " + Math.round(100 * 2 * radius) / 100.0;
 
   // Hidden canvas for printing
-  var mycanvas = document.getElementById("map-hidden");
+  const hiddenCanvas = document.getElementById("map-hidden");
+  __actuallyDrawOptSolution(hiddenCanvas, s);
+}
 
-  __actuallyDrawOptSolution(mycanvas, s);
+function download_pdf(filename){
+  printJS({
+      printable: 'map-hidden',
+      type: 'html',
+      style: "#map-hidden {display: block;margin: 0 auto;}"//transform: scale(2.0);margin-top:20%;}"
+  })
 }
 
 /* Internal function to draw the optimization solution in the
 * canvas. */
 function __actuallyDrawOptSolution(mycanvas, s) {
-  var ctx = mycanvas.getContext("2d");
+  const ctx = mycanvas.getContext("2d");
   
   const w = mycanvas.width*1;
   const h = mycanvas.height*1;
@@ -102,20 +97,16 @@ function __actuallyDrawOptSolution(mycanvas, s) {
   const scale = Math.min((w - 50) / salax, (h) / salay);
 
   clearRoom(ctx, w, h);
-  
   drawRoomAndTeacherSpace(ctx, w, h, scale, salax, salay);
   
   currSol = s.all_solutions[cntSolution];
 
   const radius = currSol.min_distance / 2.0;
-
   const fontSize = Math.max(10, parseInt(radius * scale / 2.0));
   
-  var x, y;
-
-  for (i = 0; i < currSol.positions.length; i++) {
-    x = currSol.positions[i][0] * scale;
-    y = h - currSol.positions[i][1] * scale;
+  for (let i = 0; i < currSol.positions.length; i++) {
+    const x = currSol.positions[i][0] * scale;
+    const y = h - currSol.positions[i][1] * scale;
     
     ctx.globalAlpha = 0.8;
     ctx.strokeStyle = "black";
@@ -130,10 +121,8 @@ function __actuallyDrawOptSolution(mycanvas, s) {
     ctx.font = fontSize + "px Arial";
     tw = ctx.measureText(i + 1);
 
-    if (y - (ch * scale) / 2 < fontSize)
-      ctx.fillText(i + 1, x, y + (ch * scale) / 2);
-    else
-      ctx.fillText(i + 1, x, y - (ch * scale) / 2);
+    if (y - (ch * scale) / 2 < fontSize) ctx.fillText(i + 1, x, y + (ch * scale) / 2);
+    else ctx.fillText(i + 1, x, y - (ch * scale) / 2);
     
     ctx.globalAlpha = 1.0;
   }
@@ -149,10 +138,10 @@ function __actuallyDrawOptSolution(mycanvas, s) {
 function drawRowSol(s) {
   drawRowSol_Hidden(s);
 
-  if (s == null) return;
+  if (!s) return;
   
-  var mycanvas = document.getElementById("map");
-  var ctx = mycanvas.getContext("2d");
+  const mycanvas = document.getElementById("map");
+  const ctx = mycanvas.getContext("2d");
 
   const w = mycanvas.width;
   const h = mycanvas.height;
@@ -167,14 +156,9 @@ function drawRowSol(s) {
   let cR = solution.rowSpace;
   let cC = solution.chairSpace;
 
-  console.log(rW + " " + rH);
-  
   clearRoom(ctx, w, h);
 
   const scale = Math.min((w - 50) / rW, (h) / rH);
-
-  console.log("Scale:", scale);
-  
   drawRoomAndTeacherSpace(ctx, w, h, scale, rW, rH);
 
   ctx.globalAlpha = 0.8;
@@ -184,18 +168,15 @@ function drawRowSol(s) {
 
   let py = h - rH * scale + cH * scale / 2;
 
-  for (i = 0; i < solution.rows; i++) {
+  for (let i = 0; i < solution.rows; i++) {
     let px = cW * scale / 4;
     
-    for (j = 0; j < solution.chairs; j++) {
+    for (let j = 0; j < solution.chairs; j++) {
+        ctx.fillStyle = "white"
+        if (solution.A[i][j] == 1) ctx.fillStyle = "black"
 
-        ctx.fillStyle = "white";
-        if (solution.A[i][j] == 1) ctx.fillStyle = "black";
-
-        drawChair(ctx, cW, cH, scale, px, py);
-
+        drawChair(ctx, cW, cH, scale, px, py)
         px += (cW + cC) * scale;
-
     }
 
     py += (cH + cR) * scale;
@@ -203,11 +184,10 @@ function drawRowSol(s) {
 }
 
 function drawRowSol_Hidden(s) {
-
-  if (s == null) return;
+  if (!s) return;
   
-  var mycanvas = document.getElementById("map-hidden");
-  var ctx = mycanvas.getContext("2d");
+  const mycanvas = document.getElementById("map-hidden");
+  const ctx = mycanvas.getContext("2d");
 
   const w = mycanvas.width;
   const h = mycanvas.height;
@@ -222,14 +202,9 @@ function drawRowSol_Hidden(s) {
   let cR = solution.rowSpace*1.5;
   let cC = solution.chairSpace*1.5;
 
-  console.log(rW + " " + rH);
-  
   clearRoom(ctx, w, h);
 
   const scale = Math.min((w - 50) / rW, (h) / rH);
-
-  console.log("Scale:", scale);
-  
   drawRoomAndTeacherSpace(ctx, w, h, scale, rW, rH);
 
   ctx.globalAlpha = 0.8;
@@ -239,25 +214,19 @@ function drawRowSol_Hidden(s) {
 
   let py = h - rH * scale + cH * scale / 2;
 
-  for (i = 0; i < solution.rows; i++) {
-
+  for (let i = 0; i < solution.rows; i++) {
       let px = cW * scale / 4;
       
-      for (j = 0; j < solution.chairs; j++) {
-
+      for (let j = 0; j < solution.chairs; j++) {
           ctx.fillStyle = "white";
           if (solution.A[i][j] == 1) ctx.fillStyle = "black";
 
           drawChair(ctx, cW, cH, scale, px, py);
-
           px += (cW + cC) * scale;
-
       }
 
       py += (cH + cR) * scale;
-
   }
-  
 }
 
 $(document).ready(function() {
@@ -364,23 +333,25 @@ $(document).ready(function() {
     const selectedModo = parseInt($('#selectModo').val())
 
     if(selectedModo) { // Modo livre
-      $("#result").empty();
-      solution = null;
+      $("#result").empty()
+      solution = null
       
-      $("#result").append('<div id="summary" class="text-center"></div>');
-      $("#sectionResults").show();
+      $("#result").append('<div id="summary" class="text-center"></div>')
+      $("#sectionSeparator").show()
+      $("#sectionResults").show()
+      
       var values = $(".param_input").map(function() {
-          return this.value;
+          return this.value
       })
-      json_data = {};
+      json_data = {}
       var step = 1;
       for (var i = 0 ; i < values.length; i++) {
         if(i == 5){
-          json_data[(i+1).toString()] = "100";
-          json_data[(i+2).toString()] = values[i];
-          step++;
+          json_data[(i+1).toString()] = "100"
+          json_data[(i+2).toString()] = values[i]
+          step++
         }else{
-          json_data[(i+step).toString()] = values[i];
+          json_data[(i+step).toString()] = values[i]
         }
       }
   
@@ -403,21 +374,22 @@ $(document).ready(function() {
         dataType: 'jsonp',
         // set the request header authorization to the bearer token that is generated
         success: function(result) {
-          //console.log(result);
-          $("#loading").remove();
-          if(result["found_solution"] == "True"){
-            $("#result").append('<div class="row" id="display_distance"></div>');
-            $("#result").append('<div class="row"><canvas id="map" width="300" height="300">Por favor, use um navegador que suporte HTML5.</canvas></div>');
+          console.log('res',result)
+          
+          $("#loading").remove()
+          if(result["found_solution"] == "True") {
+            $("#result").append('<div class="row" id="display_distance"></div>')
+            $("#result").append('<div class="row"><canvas id="map" width="300" height="300">Por favor, use um navegador que suporte HTML5.</canvas></div>')
             $("#result").append('<div class="row"><button class="btn btn-success" onclick="drawOptSolution(solution, -1)">&lt;</button>' +
                                 '<button class="btn btn-success" onclick="drawOptSolution(solution, +1)">&gt;</button>' +
                                 '<button class="btn btn-primary" onclick="downloadCoord(solution)">Baixar Coordenadas (CSV)</button></div>'
                                 );
-            $("div#summary").append('<center><h1 class="mb-0">Resultados</h1><h3 class="mb-0">Soluções encontradas: '+result["solutions"]+'</h3><h3 class="mb-0">Distância ideal calculada: ' + myRound(result["min_distance"], 2) +'</h3><h3 class="mb-0">Número de carteiras: '+result["number_items"]+'</h3></center>');
-            $("div#summary").append("<button class='btn btn-primary' id='download' onclick='download_pdf()'>Baixar PDF</button>");
+            $("div#summary").append('<center><h1 class="mb-0">Resultados</h1><h3 class="mb-0">Soluções encontradas: '+result["solutions"]+'</h3><h3 class="mb-0">Distância ideal calculada: ' + myRound(result["min_distance"], 2) +'</h3><h3 class="mb-0">Número de carteiras: '+result["number_items"]+'</h3></center>')
+            $("div#summary").append("<button class='btn btn-primary' id='download' onclick='download_pdf()'>Baixar PDF</button>")
 
-            solution = result;
-            cntSolution = 0;
-            drawOptSolution(solution, 0);
+            solution = result
+            cntSolution = 0
+            drawOptSolution(solution, 0)
           }else{
             $("div#summary").append('<center><h1 class="mb-0">Resultados</h1><h3 class="mb-0">Soluções encontradas: Nenhuma</h3></center>')
           }
@@ -429,16 +401,19 @@ $(document).ready(function() {
                   'Erro! Verifique seus dados. Caso ocorra novamente, entre em contato com o site.' +
                   '<button type="button" class="close" data-dismiss="alert">' +
                   '&times;</button> </div>'
-          );
+          )
         },
-      });
+      })
     } else { // Modo fixo
-      $("#result").empty();
-      solution = null;
+      $("#result").empty()
+      solution = null
       
-      $("#result").append('<div id="summary" class="text-center"></div>');
-      $("#sectionResults").show();
-      var values = $(".param_input_fileiras").map(function(){
+      $("#result").append('<div id="summary" class="text-center"></div>')
+
+      $("#sectionSeparator").show()
+      $("#sectionResults").show()
+
+      var values = $(".param_input_fileiras").map(function() {
           return this.value;
       })
       json_data = {};
@@ -446,7 +421,7 @@ $(document).ready(function() {
           json_data[(i+1).toString()] = values[i];
       }
       console.log(json_data)
-      $("#result").append('<img src="assets/img/loading.gif" id="loading" class="text-center"></img>');
+      $("#result").append('<img src="assets/img/loading.gif" id="loading" class="text-center"></img>')
       $.ajax({
         url: "http://200.144.93.70/a/rows",
         type: "GET",
@@ -455,31 +430,34 @@ $(document).ready(function() {
         dataType: 'jsonp',
         // set the request header authorization to the bearer token that is generated
         success: function(result) {
-          $("#loading").remove();
+          console.log('res',result)
+
+          $("#loading").remove()
+
           if (result.status) {
-            $("#result").append('<div class="row"><canvas id="map" width="300" height="300">Por favor, use um navegador que suporte HTML5.</canvas></div>');
+            $("#result").append('<div class="row"><canvas id="map" width="300" height="300">Por favor, use um navegador que suporte HTML5.</canvas></div>')
             // Summary
             $("div#summary").
                 append('<center><h1 class="mb-0">Resultados</h1>' +
                         '<h3 class="mb-0">Fileiras: ' + result.rows + '</h3>' +
                         '<h3 class="mb-0">Cadeiras: ' + result.chairs + '</h3>' +
-                        '<h3 class="mb-0">Número de estudantes: ' + result.students + '</h3></center>');
+                        '<h3 class="mb-0">Número de estudantes: ' + result.students + '</h3></center>')
             $("div#summary").append(
                 "<button class='btn btn-primary' id='download' " +
                     "onclick='download_pdf(\"" +
                     result["timestamp"] + "\")'>Baixar PDF</button>"
-            );
+            )
 
             // Set the solution to the global variable
-            solution = result;
+            solution = result
             // Draw the solution to canvas
-            drawRowSol(solution);
+            drawRowSol(solution)
           } else {
-            $("div#summary").append('<center><h1 class="mb-0">Resultados</h1><h3 class="mb-0">Não há solução ótima</h3></center>');
+            $("div#summary").append('<center><h1 class="mb-0">Resultados</h1><h3 class="mb-0">Não há solução ótima</h3></center>')
           }
         },
         error: function(error) {
-          $("#loading").remove();
+          $("#loading").remove()
           $("#result").append(
               '<div class="alert alert-danger alert-dismissible fade show">' +
                   'Erro! Verifique seus dados. Caso ocorra novamente, entre em contato com o site.' +
