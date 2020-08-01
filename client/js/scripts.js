@@ -357,7 +357,7 @@ $("#send").click(function(){
         json_data[(i + step).toString()] = (value == "") ? "1" : value
 
     }
-
+    console.log('jsonData',json_data)
     $("#result").append('<img src="assets/img/loading.gif" id="loading"></img>');
     $.ajax({
         url: "http://200.144.93.70/a/optimize",
