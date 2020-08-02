@@ -288,8 +288,8 @@ function drawFreeLayout(result) {
 function errorHandler() {
   $("#loading").remove()
   $("#result").append(`
-    <div class="alert alert-danger alert-dismissible fade show">
-      Erro! Verifique as informações inseridas dados. Caso ocorra novamente, envie um email para <b>salaplanejada@unifesp.br</b>.
+    <div class="alert alert-danger alert-dismissible fade show margin-left-adjust">
+      Erro! Verifique as informações inseridas. Caso ocorra novamente, envie um email para <b>salaplanejada@unifesp.br</b>.
       <button type="button" class="close" data-dismiss="alert">
         &times;
       </button>
