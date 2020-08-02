@@ -57,8 +57,22 @@ function drawOptSolution(s, move) {
   if (!s) return
   
   cnt = cntSolution + move
-  
-  if (cnt < 0 || cnt >= s.all_solutions.length) return
+
+  if (cnt < 0) {
+    $("#prevSolution").prop('disabled', true)
+    return
+  }
+
+  if (cnt >= s.all_solutions.length) {
+    $("#nextSolution").prop('disabled', true)
+    return
+  }
+
+  $("#prevSolution").prop('disabled', false)
+  $("#nextSolution").prop('disabled', false)
+
+  if(cnt === 0) $("#prevSolution").prop('disabled', true)
+  if(cnt === s.all_solutions.length-1) $("#nextSolution").prop('disabled', true)
 
   cntSolution += move
 
@@ -253,12 +267,15 @@ function drawFreeLayout(result) {
   $("div#summary").append("<button class='btn btn-confirm mt-4 margin-left-adjust' id='download' onclick='download_pdf()'>Baixar PDF</button>")
 
   $("#result").append('<div id="freeLayoutImage" class="col-sm-12 col-lg-6 mt-4 mb-4"></div>')
-  $("#freeLayoutImage").append('<div class="row" id="displayDistance"></div>')
-  $("#freeLayoutImage").append('<div class="row"><canvas id="map" width="300" height="300">Por favor, use um navegador que suporte HTML5.</canvas></div>')
   $("#freeLayoutImage").append(`
     <div class="row">
-      <button class="btn btn-success" onclick="drawOptSolution(solution, -1)">&lt;</button>
-      <button class="btn btn-success" onclick="drawOptSolution(solution, +1)">&gt;</button>
+      <button id="prevSolution" class="btn btn-confirm" style="border-radius: 5px 0px 0px 5px" onclick="drawOptSolution(solution, -1)">&lt;</button>
+      <canvas id="map" width="300" height="300">Por favor, use um navegador que suporte HTML5.</canvas>
+      <button id="nextSolution" class="btn btn-confirm" style="border-radius: 0px 5px 5px 0px" onclick="drawOptSolution(solution, +1)">&gt;</button>
+    </div>`
+  )
+  $("#freeLayoutImage").append(`
+    <div class="row mt-2">
       <button class="btn btn-confirm" onclick="downloadCoord(solution)">Baixar Coordenadas (CSV)</button>
     </div>
   `)
