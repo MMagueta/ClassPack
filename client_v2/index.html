@@ -25,10 +25,7 @@
   <!-- Navigation -->
   <nav class="navbar navbar-customization">
     <div class="container" style="display:flex; justify-content:space-around">
-      <a class="navbar-brand" href="#">
-        <img src="assets/img/unifesp_logo.png" width="210" height="92" alt="Logo Unifesp" loading="lazy">
-      </a>
-      <p class="text-uppercase header-text">Universidade Federal de São Paulo</p>
+      <p class="text-uppercase header-text">Sala Planejada</p>
     </div>
   </nav>
   
@@ -44,7 +41,14 @@
                   <div class="col-sm-12 col-lg-5 mb-4">
                     <div class="row">
                       <div class="col-sm-12 col-lg-12">
-                        <h4 class="margin-left-adjust mt-2 unifesp-blue">Planejador de salas</h4>
+                        <h4 class="margin-left-adjust mt-2 unifesp-blue">
+                          Planejador de salas
+                          <a href="#" data-toggle="modal" data-target="#modalAbout" class="unifesp-blue">
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-info-circle-fill ml-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                              <path fill-rule="evenodd" d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM8 5.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+                            </svg>
+                          </a>
+                        </h4>
                       </div>
                       <div class="col-sm-12 col-lg-12">
                         <p class="margin-left-adjust mt-4 text-justify unifesp-blue">A volta às aulas presenciais, mesmo que parcialmente, começam a ser planejadas por governos municipais, estaduais e reitores de universidades. Dentre as medidas que serão adotadas para minimizar o risco de contágio dos alunos e professores pelo coronavírus está o distanciamento entre as carteiras nas salas de aula. Através dessa aplicação, a partir de alguns parâmetros de entrada, é fornecida a disposição ótima para distribuição das carteiras na sala de aula especificada.</p>
@@ -87,20 +91,21 @@
                     </div>
                   </div>
                 </div>
-              </div> -->
+              </div>
+              <div id="secondPage" style="display: none;"> -->
               <div id="secondPage">
                 <section>
                   <div class="row">
                     <div class="col-sm-12 col-lg-5">
                       <div class="row">
                         <div class="col-sm-12 col-lg-12">
-                          <h4 class="margin-left-adjust mt-2 unifesp-blue">
-                            Planejador de salas
-                            <a href="#" data-toggle="modal" data-target="#modalAbout" class="unifesp-blue">
+                          <h4 class="margin-left-adjust mt-2">
+                            Instruções
+                            <!-- <a href="#" data-toggle="modal" data-target="#modalAbout" class="unifesp-blue">
                               <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-info-circle-fill ml-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM8 5.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
                               </svg>
-                            </a>
+                            </a> -->
                           </h4>
                         </div>
                         <div class="col-sm-12 col-lg-12">
@@ -115,6 +120,13 @@
                               <img class="rounded img-fluid" src="assets/img/carteira.png" alt="Descrição da carteira">
                             </div>
                           </div>
+                        </div>
+                        <div class="col-sm-6 col-lg-6 mt-2 mb-2">
+                          <a id="sobre" href="#" data-toggle="modal" data-target="#modalAbout">
+                            <h4 class="margin-left-adjust mt-2">
+                              Sobre o projeto
+                            </h4>
+                          </a>
                         </div>
                       </div>
                     </div>
