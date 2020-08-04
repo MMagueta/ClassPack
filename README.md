@@ -1,0 +1,2 @@
+# Sala Planejada
+No contexto da COVID-19 a volta às aulas presenciais está sendo planejada por gestores educacionais. Dentre as medidas que serão adotadas para minimizar o risco de contágio dos alunos e professores pelo coronavírus está o distanciamento entre as carteiras nas salas de aula. Nossa contribuição consiste no desenvolvimento de um aplicativo web de livre acesso para auxiliar este planejamento.
