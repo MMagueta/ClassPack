@@ -152,10 +152,10 @@ function drawRowSol(s) {
   if (!s) return
 
   const visibleCanvas = document.getElementById("map")
-  __actuallyDrawRowSol(visibleCanvas, s)
+  __actuallyDrawRowSolution(visibleCanvas, s)
 
   const hiddenCanvas = document.getElementById("map-hidden")
-  __actuallyDrawRowSol(hiddenCanvas, s)
+  __actuallyDrawRowSolution(hiddenCanvas, s)
   
   // const mycanvas = document.getElementById("map")
   // const ctx = mycanvas.getContext("2d")
@@ -216,7 +216,6 @@ function __actuallyDrawRowSolution(mycanvas, s) {
   const scale = Math.min((w - 50) / rW, (h) / rH)
   drawRoomAndTeacherSpace(ctx, w, h, scale, rW, rH)
 
-  ctx.globalAlpha = 0.8
   ctx.strokeStyle = "black"
   ctx.lineWidth   = "1"
   ctx.fillStyle   = "#BB8888"
@@ -227,11 +226,15 @@ function __actuallyDrawRowSolution(mycanvas, s) {
     let px = cW * scale / 4
     
     for (let j = 0; j < solution.chairs; j++) {
-        ctx.fillStyle = "black"
-        if (solution.A[i][j] == 1) ctx.fillStyle = "white"
+      ctx.fillStyle = "black"
+      ctx.globalAlpha = 0.5
+      if (solution.A[i][j] == 1) {
+        ctx.fillStyle = "white"
+        ctx.globalAlpha = 0.8
+      }
 
-        drawChair(ctx, cW, cH, scale, px, py)
-        px += (cW + cC) * scale
+      drawChair(ctx, cW, cH, scale, px, py)
+      px += (cW + cC) * scale
     }
 
     py += (cH + cR) * scale
