@@ -390,8 +390,8 @@ $(document).ready(function() {
         success: function(result) {
           $("#loading").remove()
 
-          if(result["found_solution"] == "True") drawFreeLayout(result)
-          else $("div#summary").append('<center><h1 class="mb-0">Resultados</h1><h3 class="mb-0">Soluções encontradas: Nenhuma</h3></center>')
+          if(result["found_solution"]) drawFreeLayout(result)
+          else $("div#summary").append('<center><h1 class="mb-0">Resultados</h1>Não foi possível encontrar uma solução com os dados informados: o problema é muito grande ou não há solução. Caso seu problema seja complexo, entre em contato com <b>salaplanejada@unifesp.br</b></center>')
         },
         error: errorHandler
       })

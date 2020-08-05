@@ -1,3 +1,4 @@
+import json
 import database
 from flask import Blueprint
 
@@ -70,15 +71,24 @@ def optimizer_chairs():
 
 		if loaded_json is not None:
 
+			json_return = {'response': 200,
+				       'found_solution': loaded_json['found_solution']}
+
+			if json_return['found_solution']:
+
+				json_return.update({
+					'file': 'does_not_exist.pdf',
+					'found_solution': str(loaded_json['found_solution']),
+					'number_items': loaded_json['number_items'],
+					'min_distance': loaded_json['min_distance'],
+					'solutions': len(loaded_json['solutions']),
+					'all_solutions': loaded_json['solutions']
+				})
+
+
 			return '{0}({1})'.format(
 				request.args.get('callback'),
-				{'response': 200,
-				 'file': 'does_not_exist.pdf',
-				 'found_solution': str(loaded_json['found_solution']),
-				 'number_items': loaded_json['number_items'],
-				 'min_distance': loaded_json['min_distance'],
-				 'solutions': len(loaded_json['solutions']),
-				 'all_solutions': loaded_json['solutions']}
+				json.dumps(json_return)
 			)
 
 		process = subprocess.Popen(
@@ -95,7 +105,6 @@ def optimizer_chairs():
 		import latex_converter
 		import glob2 as gl
 		import os
-		import json
 		filename = gl.glob("*"+str(process.pid)+".json").pop()
 		#latex_converter.convert_tex_document(filename)
 		loaded_json = json.loads(open(filename, 'r').read())
@@ -107,15 +116,24 @@ def optimizer_chairs():
 					       float(args[3]), float(args[4]), ptype, loaded_json,
 					       obstacles=obstacles, num_chairs=num_chairs)
 
+		json_return = {'response': 200,
+			       'found_solution': loaded_json['found_solution']}
+		
+		if json_return['found_solution']:
+
+			json_return.update({
+				'file': filename.replace(".tex", ".pdf"),
+				'found_solution': str(loaded_json['found_solution']),
+				'number_items': loaded_json['number_items'],
+				'min_distance': loaded_json['min_distance'],
+				'solutions': len(loaded_json['solutions']),
+				'all_solutions': loaded_json['solutions']
+			})
+
+		
 		return '{0}({1})'.format(
 			request.args.get('callback'),
-			{'response': 200,
-			 'file': filename.replace(".tex", ".pdf"),
-			 'found_solution': str(loaded_json['found_solution']),
-			 'number_items': loaded_json['number_items'],
-			 'min_distance': loaded_json['min_distance'],
-			 'solutions': len(loaded_json['solutions']),
-			 'all_solutions': loaded_json['solutions']}
+			json.dumps(json_return)
 		)
 
 
