@@ -147,11 +147,58 @@ function __actuallyDrawOptSolution(mycanvas, s) {
 }
 
 function drawRowSol(s) {
-  drawRowSol_Hidden(s)
+  //drawRowSol_Hidden(s)
 
   if (!s) return
+
+  const visibleCanvas = document.getElementById("map")
+  __actuallyDrawRowSol(visibleCanvas, s)
+
+  const hiddenCanvas = document.getElementById("map-hidden")
+  __actuallyDrawRowSol(hiddenCanvas, s)
   
-  const mycanvas = document.getElementById("map")
+  // const mycanvas = document.getElementById("map")
+  // const ctx = mycanvas.getContext("2d")
+
+  // const w = mycanvas.width
+  // const h = mycanvas.height
+  
+  // const rW = parseFloat($('#txtLarguraSala').val())
+  // const rH = parseFloat($('#txtComprimentoSala').val())
+  // const cW = parseFloat($('#txtLarguraCarteira').val())
+  // const cH = parseFloat($('#txtComprimentoCarteira').val())
+  // const cR = solution.rowSpace
+  // const cC = solution.chairSpace
+
+  // clearRoom(ctx, w, h)
+
+  // const scale = Math.min((w - 50) / rW, (h) / rH)
+  // drawRoomAndTeacherSpace(ctx, w, h, scale, rW, rH)
+
+  // ctx.globalAlpha = 0.8
+  // ctx.strokeStyle = "black"
+  // ctx.lineWidth   = "1"
+  // ctx.fillStyle   = "#BB8888"
+
+  // let py = h - rH * scale + cH * scale / 2
+
+  // for (let i = 0; i < solution.rows; i++) {
+  //   let px = cW * scale / 4
+    
+  //   for (let j = 0; j < solution.chairs; j++) {
+  //       ctx.fillStyle = "black"
+  //       if (solution.A[i][j] == 1) ctx.fillStyle = "white"
+
+  //       drawChair(ctx, cW, cH, scale, px, py)
+  //       px += (cW + cC) * scale
+  //   }
+
+  //   py += (cH + cR) * scale
+  // }
+}
+
+function __actuallyDrawRowSolution(mycanvas, s) {
+
   const ctx = mycanvas.getContext("2d")
 
   const w = mycanvas.width
@@ -180,8 +227,8 @@ function drawRowSol(s) {
     let px = cW * scale / 4
     
     for (let j = 0; j < solution.chairs; j++) {
-        ctx.fillStyle = "white"
-        if (solution.A[i][j] == 1) ctx.fillStyle = "black"
+        ctx.fillStyle = "black"
+        if (solution.A[i][j] == 1) ctx.fillStyle = "white"
 
         drawChair(ctx, cW, cH, scale, px, py)
         px += (cW + cC) * scale
@@ -191,48 +238,48 @@ function drawRowSol(s) {
   }
 }
 
-function drawRowSol_Hidden(s) {
-  if (!s) return
+// function drawRowSol_Hidden(s) {
+//   if (!s) return
   
-  const mycanvas = document.getElementById("map-hidden")
-  const ctx = mycanvas.getContext("2d")
+//   const mycanvas = document.getElementById("map-hidden")
+//   const ctx = mycanvas.getContext("2d")
 
-  const w = mycanvas.width
-  const h = mycanvas.height
+//   const w = mycanvas.width
+//   const h = mycanvas.height
   
-  const rW = parseFloat($('#txtLarguraSala').val()) * 1.5
-  const rH = parseFloat($('#txtComprimentoSala').val()) * 1.5
-  const cW = parseFloat($('#txtLarguraCarteira').val()) * 1.5
-  const cH = parseFloat($('#txtComprimentoCarteira').val()) * 1.5
-  const cR = solution.rowSpace*1.5
-  const cC = solution.chairSpace*1.5
+//   const rW = parseFloat($('#txtLarguraSala').val()) * 1.5
+//   const rH = parseFloat($('#txtComprimentoSala').val()) * 1.5
+//   const cW = parseFloat($('#txtLarguraCarteira').val()) * 1.5
+//   const cH = parseFloat($('#txtComprimentoCarteira').val()) * 1.5
+//   const cR = solution.rowSpace*1.5
+//   const cC = solution.chairSpace*1.5
 
-  clearRoom(ctx, w, h)
+//   clearRoom(ctx, w, h)
 
-  const scale = Math.min((w - 50) / rW, (h) / rH)
-  drawRoomAndTeacherSpace(ctx, w, h, scale, rW, rH)
+//   const scale = Math.min((w - 50) / rW, (h) / rH)
+//   drawRoomAndTeacherSpace(ctx, w, h, scale, rW, rH)
 
-  ctx.globalAlpha = 0.8
-  ctx.strokeStyle = "black"
-  ctx.lineWidth   = "1"
-  ctx.fillStyle   = "#BB8888"
+//   ctx.globalAlpha = 0.8
+//   ctx.strokeStyle = "black"
+//   ctx.lineWidth   = "1"
+//   ctx.fillStyle   = "#BB8888"
 
-  let py = h - rH * scale + cH * scale / 2
+//   let py = h - rH * scale + cH * scale / 2
 
-  for (let i = 0; i < solution.rows; i++) {
-      let px = cW * scale / 4
+//   for (let i = 0; i < solution.rows; i++) {
+//       let px = cW * scale / 4
       
-      for (let j = 0; j < solution.chairs; j++) {
-          ctx.fillStyle = "white"
-          if (solution.A[i][j] == 1) ctx.fillStyle = "black"
+//       for (let j = 0; j < solution.chairs; j++) {
+//           ctx.fillStyle = "black"
+//           if (solution.A[i][j] == 1) ctx.fillStyle = "white"
 
-          drawChair(ctx, cW, cH, scale, px, py)
-          px += (cW + cC) * scale
-      }
+//           drawChair(ctx, cW, cH, scale, px, py)
+//           px += (cW + cC) * scale
+//       }
 
-      py += (cH + cR) * scale
-  }
-}
+//       py += (cH + cR) * scale
+//   }
+// }
 
 function prepareResultsSection() {
   solution = null
