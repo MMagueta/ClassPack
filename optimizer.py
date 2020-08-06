@@ -1,6 +1,7 @@
 import json
 import database
 from flask import Blueprint
+from flask_jwt import jwt_required, current_identity
 
 
 __FORTRAN_EXEC_NAME = 'teste.x'
@@ -17,11 +18,29 @@ def config_optimizer(config):
 
 optimizer = Blueprint('mainapp', __name__)
 
-@optimizer.route('/')
-def index():
-	return "Index"
+@optimizer.route('/user')
+@jwt_required()
+def create_user():
+
+	from flask import request
+	email = request.args.get('email')
+	name  = request.args.get('name')
+	institution = request.args.get('institution')
+
+	if email and not str.isspace(email) and \
+	   name and not str.isspace(name) and \
+	   institution and not str.isspace(institution):
+	
+		database.add_and_return_user(str(current_identity),
+					     email, name, institution)
+
+		return 'OK', 200
+
+	return 'Error', 500
+
 
 @optimizer.route('/optimize')
+@jwt_required()
 def optimizer_chairs():
 	import subprocess
 	from flask import request, send_file
@@ -149,6 +168,7 @@ def download(filename):
 	return '{0}({1})'.format(request.args.get('callback'), {'response': 404})
 
 @optimizer.route('/rows')
+@jwt_required()
 def optimize_rows():
 	from otimizador_filas import otimizar_filas
 	from flask import jsonify

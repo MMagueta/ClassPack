@@ -18,7 +18,8 @@ def init_db(config, app):
     global __DB_ADDRESS, __DB_PASSWORD, __DB_USERNAME
 
     app.teardown_appcontext(disconnect)
-
+    app.before_request(connect)
+    
     __DB_USERNAME = config.get('ClassPack', 'db.username', fallback='classpack_user')
     __DB_PASSWORD = config.get('Database', 'db.password')
     __DB_ADDRESS  = config.get('Database', 'db.address', fallback='http://127.0.0.2')
@@ -110,7 +111,8 @@ def _sort_obs(obstacles):
             obstacles[i] = vmin
             obstacles[pmin] = tmp
 
-def add_and_return_user(email, name, institution):
+
+def add_and_return_user(uid, email, name, institution):
     """Store the user and return the document.
 
     NOTE: the user is always stored, even if the email already
@@ -119,11 +121,9 @@ def add_and_return_user(email, name, institution):
 
     """
 
-    if '_client' not in g: return ''
+    if '_client' not in g: return
     
     udb = g._client[DB_USR_NAME]
-
-    uid = sha256((email + str(time())).encode('latin')).hexdigest()
 
     user_with_id = {
         '_id': uid,
@@ -133,8 +133,6 @@ def add_and_return_user(email, name, institution):
     }
 
     udb.create_document(user_with_id)
-    
-    return uid
 
 
 def gen_chair_id(width, height, min_dist, ch_width, ch_height,
