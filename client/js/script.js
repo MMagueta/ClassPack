@@ -217,7 +217,21 @@ function drawFixedLayout(result) {
     <h4 class="mt-1 margin-left-adjust">Número de estudantes: ${result.students}</h4>
   `)
   $("div#summary").append("<button class='btn btn-confirm mt-4 margin-left-adjust' id='download' onclick='download_pdf()'>Baixar PDF</button>")
-  $("#result").append('<div class="col-sm-12 col-lg-6 mt-4 mb-4"><canvas id="map" width="300" height="300">Por favor, use um navegador que suporte HTML5.</canvas></div>')
+  $("#result").append(`
+    <div class="col-sm-12 col-lg-6 mt-4 mb-4">
+    <canvas id="map"
+       width="${60 + parseFloat($(txtLarguraSala).val()) * Math.min((300 - 50) / parseFloat($(txtLarguraSala).val()), (300) / parseFloat($(txtComprimentoSala).val()))}"
+       height="${parseFloat($(txtComprimentoSala).val()) * Math.min((300 - 50) / parseFloat($(txtLarguraSala).val()), (300) / parseFloat($(txtComprimentoSala).val()))}">
+    Por favor, use um navegador que suporte HTML5.</canvas></div>
+  `)
+
+  $("#mapHiddenPlacement").append(`
+      <canvas hidden id="map-hidden"
+         width="${60 + parseFloat($(txtLarguraSala).val()) * Math.min((500 - 50) / parseFloat($(txtLarguraSala).val()), (500) / parseFloat($(txtComprimentoSala).val()))}"
+         height="${parseFloat($(txtComprimentoSala).val()) * Math.min((500 - 50) / parseFloat($(txtLarguraSala).val()), (500) / parseFloat($(txtComprimentoSala).val()))}">
+        Por favor, use um navegador que suporte HTML5.
+      </canvas>
+  `)
 
   solution = result // Sets the solution to the global variable
   drawRowSol(solution) // Draw the solution to canvas
@@ -236,7 +250,11 @@ function drawFreeLayout(result) {
   $("#freeLayoutImage").append(`
     <div class="row">
       <button id="prevSolution" class="btn btn-confirm" style="border-radius: 5px 0px 0px 5px" onclick="drawOptSolution(solution, -1)">&lt;</button>
-      <canvas id="map" width="300" height="300">Por favor, use um navegador que suporte HTML5.</canvas>
+      <canvas id="map"
+         width="${60 + parseFloat($(txtLarguraSala).val()) * Math.min((300 - 50) / parseFloat($(txtLarguraSala).val()), (300) / parseFloat($(txtComprimentoSala).val()))}"
+         height="${parseFloat($(txtComprimentoSala).val()) * Math.min((300 - 50) / parseFloat($(txtLarguraSala).val()), (300) / parseFloat($(txtComprimentoSala).val()))}">
+        Por favor, use um navegador que suporte HTML5.
+      </canvas>
       <button id="nextSolution" class="btn btn-confirm" style="border-radius: 0px 5px 5px 0px" onclick="drawOptSolution(solution, +1)">&gt;</button>
     </div>`
   )
@@ -246,6 +264,14 @@ function drawFreeLayout(result) {
     </div>
   `)
 
+  $("#mapHiddenPlacement").append(`
+      <canvas hidden id="map-hidden"
+         width="${60 + parseFloat($(txtLarguraSala).val()) * Math.min((500 - 50) / parseFloat($(txtLarguraSala).val()), (500) / parseFloat($(txtComprimentoSala).val()))}"
+         height="${parseFloat($(txtComprimentoSala).val()) * Math.min((500 - 50) / parseFloat($(txtLarguraSala).val()), (500) / parseFloat($(txtComprimentoSala).val()))}">
+        Por favor, use um navegador que suporte HTML5.
+      </canvas>
+  `)
+    
   solution = result
   cntSolution = 0
   drawOptSolution(solution, 0)
