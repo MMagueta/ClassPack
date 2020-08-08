@@ -1,7 +1,8 @@
 from configparser import ConfigParser
-from flask import Flask
+from flask import Flask, jsonify
 from flask_cors import CORS
 
+# JWT necessary class and functions
 
 class User():
 
@@ -9,7 +10,7 @@ class User():
 		self.id = id
 
 
-def authenticate(nouser, nopass):
+def authenticate(access_id, nopass):
 
 	from uuid import uuid4
 	return User(str(uuid4()))
@@ -18,6 +19,13 @@ def authenticate(nouser, nopass):
 def identity(payload):
 
 	return payload['identity']
+
+
+def response_handler(access_token, identity):
+	return jsonify({
+		'access_token': access_token.decode('utf-8'),
+                'accessid': identity.id
+	})
 
 
 # Factory
@@ -35,11 +43,11 @@ def create_app(ini_file):
 
 	app.config['SECRET_KEY'] = __SECRET_KEY
 	app.config['JWT_AUTH_URL_RULE'] = __URL_PREFIX + '/authuser'
-	app.config['JWT_AUTH_USERNAME_KEY'] = 'nouser'
+	app.config['JWT_AUTH_USERNAME_KEY'] = 'accessid'
 	app.config['JWT_AUTH_PASSWORD_KEY'] = 'nopass'
 
 	from datetime import timedelta
-	app.config['JWT_EXPIRATION_DELTA'] = timedelta(__JWT_EXPIRATION)
+	app.config['JWT_EXPIRATION_DELTA'] = timedelta(minutes=__JWT_EXPIRATION)
 
 	from optimizer import optimizer, config_optimizer
 	config_optimizer(config)
@@ -49,7 +57,8 @@ def create_app(ini_file):
 	init_db(config, app)
 
 	from flask_jwt import JWT
-	JWT(app, authenticate, identity)
+	jwt = JWT(app, authenticate, identity)
+	jwt.auth_response_handler(response_handler)
 
 	return app
 
