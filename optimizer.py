@@ -38,7 +38,7 @@ def optimizer_chairs():
 
 	ptype = int(data[6 + 3 * len(obstacles) + 1])
 	num_chairs = None
-	if ptype == 1: num_chairs = int(data[-1])
+	if ptype == 1 or ptype == 3: num_chairs = int(data[-1])
 
 	problem_id = database.gen_chair_id(
 		float(args[1]), float(args[2]),
@@ -59,7 +59,7 @@ def optimizer_chairs():
 		'opt_type': ptype,
 	}
 
-	if ptype == 1:
+	if ptype == 1 or ptype == 3:
 		jd['num_chairs'] = num_chairs
 
 	database.connect()
