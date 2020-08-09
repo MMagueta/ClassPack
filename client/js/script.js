@@ -406,6 +406,13 @@ $(document).ready(function() {
       }
       if (selectedRadio == "1") data[9] = $("#txtQuantidadeCarteirasRadio").val()
 
+      // Better way to do this?
+      const wantRows = $("#checkDesejaFileiras:checked").length > 0
+      if (wantRows) {
+        if (selectedRadio == "1") data[8] = "3"
+        else data[8] = "4"
+      }
+
       $.ajax({
         url: "http://200.144.93.70/a/optimize",
         type: "GET",
