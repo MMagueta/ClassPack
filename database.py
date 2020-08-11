@@ -112,12 +112,19 @@ def _sort_obs(obstacles):
             obstacles[pmin] = tmp
 
 
+def get_user(uid):
+
+    if '_client' not in g: return None
+    
+    udb = g._client[DB_USR_NAME]
+
+    if uid not in udb: return None
+
+    return udb[uid]
+
+
 def add_and_return_user(uid, email, name, institution):
     """Store the user and return the document.
-
-    NOTE: the user is always stored, even if the email already
-    exists. This solves the problem of wrong email addresses and
-    different information. Also, avoids the need for passwords.
 
     """
 
@@ -129,7 +136,8 @@ def add_and_return_user(uid, email, name, institution):
         '_id': uid,
         'email': email,
         'name': name,
-        'institution': institution
+        'institution': institution,
+        'problems': []
     }
 
     udb.create_document(user_with_id)

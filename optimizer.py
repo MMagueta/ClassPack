@@ -48,7 +48,10 @@ def optimizer_chairs():
 
 	global __FORTRAN_EXEC_NAME, __FORTRAN_EXEC_PATH
 
+	user_id = str(current_identity)
+
 	data = list(request.args.values())[1:-1]
+	print(data)
 
 	args = [data[4]] + data[2:4] + data[0:2] + data[5:]
 	print(args)
@@ -66,7 +69,7 @@ def optimizer_chairs():
         
 	jd = {
                 'type': 'chairs',
-                'user_id': '',
+                'user_id': user_id,
                 'problem_id': problem_id,
 		'min_dist': float(data[4]),
 		'room_width': float(data[0]),
@@ -81,9 +84,12 @@ def optimizer_chairs():
 	if ptype == 1:
 		jd['num_chairs'] = num_chairs
 
-	database.connect()
-
 	database.save_problem(jd)
+
+	user = database.get_user(user_id)
+	if user is not None and 'problems' in user:
+		user['problems'].append(problem_id)
+		user.save()
 
 	try:
 		loaded_json = database.get_chairs(problem_id)
@@ -149,7 +155,6 @@ def optimizer_chairs():
 				'all_solutions': loaded_json['solutions']
 			})
 
-		
 		return '{0}({1})'.format(
 			request.args.get('callback'),
 			json.dumps(json_return)
@@ -176,6 +181,8 @@ def optimize_rows():
 	from latex_converter import convert_coords_map
 	import time
 
+	user_id = str(current_identity)
+
 	data = list(request.args.values())[1:-1]
 	timestamp = time.time()
 
@@ -186,11 +193,9 @@ def optimize_rows():
 					   float(data[3]),
 					   int(data[4]), int(data[5]))
 
-	database.connect()
-
 	jd = {
                 'type': 'rows',
-                'user_id': '',
+                'user_id': user_id,
                 'problem_id': problem_id,
 		'min_dist': float(data[6]),
 		'room_width': float(data[0]),
@@ -202,6 +207,11 @@ def optimize_rows():
 	}
 
 	database.save_problem(jd)
+
+	user = database.get_user(user_id)
+	if user is not None and 'problems' in user:
+		user['problems'].append(problem_id)
+		user.save()
 
 	solution = database.get_rows(problem_id)
 

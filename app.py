@@ -1,19 +1,36 @@
 from configparser import ConfigParser
 from flask import Flask, jsonify
 from flask_cors import CORS
+from re import compile
+
+
+# Patter to math UUIDs
+__uuid_matcher = compile('[\w]{8}-[\w]{4}-[\w]{4}-[\w]{4}-[\w]{12}')
+
 
 # JWT necessary class and functions
 
 class User():
 
-	def __init__(self, id):
+	def __init__(self, id, name=None, inst=None):
 		self.id = id
+		self.name = name
+		self.inst = inst
 
 
 def authenticate(access_id, nopass):
 
-	from uuid import uuid4
-	return User(str(uuid4()))
+	if __uuid_matcher.match(access_id) is not None:
+
+		from database import get_user
+		doc = get_user(access_id)
+
+		return User(access_id, doc['name'], doc['institution'])
+
+	else:
+
+		from uuid import uuid4
+		return User(str(uuid4()))
 
 
 def identity(payload):
@@ -21,10 +38,14 @@ def identity(payload):
 	return payload['identity']
 
 
+# Handler to return information in addition to the JWT token. If the
+# user already exists in the database, return the information.
 def response_handler(access_token, identity):
 	return jsonify({
 		'access_token': access_token.decode('utf-8'),
-                'accessid': identity.id
+                'accessid': identity.id,
+		'name': identity.name,
+		'institution': identity.inst
 	})
 
 
@@ -57,8 +78,9 @@ def create_app(ini_file):
 	init_db(config, app)
 
 	from flask_jwt import JWT
-	jwt = JWT(app, authenticate, identity)
-	jwt.auth_response_handler(response_handler)
+	with app.app_context():
+		jwt = JWT(app, authenticate, identity)
+		jwt.auth_response_handler(response_handler)
 
 	return app
 
