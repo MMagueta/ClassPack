@@ -820,14 +820,7 @@ subroutine drawsol(nite,W,H,n,nmem,x,solfile)
   integer :: i,j
   real(kind=8) :: scale,radius
 
-  ! MODIFICADO PARA SAIDA TEX COM PID
-  character(len=15) :: fmt
-  character(len=15) :: file_name
-  fmt = '(I8.8)'
-  write(file_name, fmt) getpid()
-  file_name=trim(file_name)//'.tex'
-  open(unit=10,file=file_name)
-  ! MODIFICADO PARA SAIDA TEX COM PID
+  open(unit=10,file=solfile)
 
   write(10,01)
 
@@ -911,14 +904,7 @@ subroutine tojson(n,nmem,x,nite,W,H,solfile,foundsol)
   ! LOCAL SCALARS
   integer :: i,j
 
-  ! MODIFICADO PARA SAIDA JSON COM PID
-  character(len=15) :: fmt
-  character(len=15) :: file_name
-  fmt = '(I8.8)'
-  write(file_name, fmt) getpid()
-  file_name=trim(file_name)//'.json'
-  open(unit=10,file=file_name)
-  ! MODIFICADO PARA SAIDA JSON COM PID
+  open(unit=10,file=solfile)
 
   if ( .not. foundsol ) then
      write(10,22)
@@ -2055,9 +2041,9 @@ subroutine generate_x(x, n, W, H, ch, cw, A)
 
   !dist_t = MAXVAL(Pdist_t)
   do i = 1,6
-     aux = Pdist_t(1,i)
+     aux = Pdist_t(alfa,i)
      lin(i) = 1
-     do j = 1,A                                      !***Pode ser de alfa até omega?
+     do j = alfa,omega                                      !***Pode ser de alfa até omega?
         if(Pdist_t(j,i) > aux)then
            aux = Pdist_t(j,i)
            lin(i) = j                         !***adicionei
@@ -2065,8 +2051,6 @@ subroutine generate_x(x, n, W, H, ch, cw, A)
      end do
      dist_t(1,i) = aux
   end do
-
-
 
   dist = MAXVAL(dist_t)
 
