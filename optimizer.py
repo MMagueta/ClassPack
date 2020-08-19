@@ -112,8 +112,8 @@ def optimizer_chairs():
 		os.remove(filename) #Removes .JSON file
 		process.terminate()
 
-		database.save_or_update_chairs(problem_id, float(args[1]), float(args[2]), float(args[0]),
-					       float(args[3]), float(args[4]), ptype, loaded_json,
+		database.save_or_update_chairs(problem_id, jd['room_width'], jd['room_height'], jd['min_dist'],
+					       jd['chair_width'], jd['chair_height'], ptype, loaded_json,
 					       obstacles=obstacles, num_chairs=num_chairs)
 
 		json_return = {'response': 200,
