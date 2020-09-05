@@ -1,6 +1,8 @@
 let solution
 let cntSolution = 0
 
+let _jwtToken
+
 function myRound(x, p) {
   const mult = Math.pow(10, p)
   return Math.round(mult * x) / mult
@@ -309,6 +311,7 @@ $(document).ready(function() {
     $('#firstPage').hide()
     $('#secondPage').show()
 
+    // First request: requests JWT token
     $.ajax({
       type: "POST",
       url: "http://127.0.0.1:5000/a/authuser",
@@ -320,16 +323,15 @@ $(document).ready(function() {
       crossDomain: true,
       
       success: function(data) {
-        let jwtToken = data['access_token']
+        _jwtToken = data['access_token']
         uuid = data['accessid']
         alert('Seu UUID eh ' + uuid)
 
+        // Second request: save data to server and receive user UUID
         $.ajax({
           type: "GET",
           url: "http://127.0.0.1:5000/a/user",
-          headers: {
-            "Authorization": "JWT " + jwtToken
-          },
+          headers: {"Authorization": "JWT " + _jwtToken},
           data: {
             name: $("#txtNome").val(),
             email: $("#txtEmail").val(),
@@ -407,12 +409,13 @@ $(document).ready(function() {
       if (selectedRadio == "1") data[9] = $("#txtQuantidadeCarteirasRadio").val()
 
       $.ajax({
-        url: "http://200.144.93.70/a/optimize",
+        url: "http://127.0.0.1:5000/a/optimize",
         type: "GET",
         data,
         crossDomain: true,
         dataType: 'jsonp',
         // set the request header authorization to the bearer token that is generated
+        headers: {"Authorization": "JWT " + _jwtToken},
         success: function(result) {
           $("#loading").remove()
 
@@ -433,12 +436,13 @@ $(document).ready(function() {
       }
       
       $.ajax({
-        url: "http://200.144.93.70/a/rows",
+        url: "http://127.0.0.1:5000/a/rows",
         type: "GET",
+        // set the request header authorization to the bearer token that is generated
+        headers: {"Authorization": "JWT " + _jwtToken},
         data,
         crossDomain: true,
         dataType: 'jsonp',
-        // set the request header authorization to the bearer token that is generated
         success: function(result) {
           $("#loading").remove()
 
