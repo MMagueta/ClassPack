@@ -305,23 +305,49 @@ $(document).ready(function() {
   })
 
   $('#frmUsuario').submit(function(e) {
-    e.preventDefault()
     
     $('#firstPage').hide()
     $('#secondPage').show()
 
-    // $('#firstPage').show()
-    // $('#secondPage').show()
-    // var url = form.attr('action')
-    
-    // $.ajax({
-    //   type: "POST",
-    //   url: url,
-    //   data: form.serialize(),
-    //   success: function(data) {
-    //       alert(data)
-    //   }
-    // })
+    $.ajax({
+      type: "POST",
+      url: "http://127.0.0.1:5000/a/authuser",
+      data: JSON.stringify({
+        "accessid": "0",
+        "nopass": "0"
+      }),
+      contentType: "application/json",
+      crossDomain: true,
+      
+      success: function(data) {
+        let jwtToken = data['access_token']
+        uuid = data['accessid']
+        alert('Seu UUID eh ' + uuid)
+
+        $.ajax({
+          type: "GET",
+          url: "http://127.0.0.1:5000/a/user",
+          headers: {
+            "Authorization": "JWT " + jwtToken
+          },
+          data: {
+            name: $("#txtNome").val(),
+            email: $("#txtEmail").val(),
+            institution: $("#txtInstituicao").val()
+          },
+          crossDomain: true,
+
+          error: function(jqXRH, textStatus, errorThrown) {
+            console.error("Error when creating user (" +
+                          textStatus + "): " + errorThrown)
+          }
+        })
+        
+      }
+    })
+
+    e.preventDefault()
+
   })
 
   $('#selectModo').change(function() {
