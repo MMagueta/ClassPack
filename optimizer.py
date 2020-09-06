@@ -50,7 +50,7 @@ def optimizer_chairs():
 
 	user_id = str(current_identity)
 
-	data = list(request.args.values())[1:-1]
+	data = list(request.args.values())
 	print(data)
 
 	args = [data[4]] + data[2:4] + data[0:2] + data[5:]
@@ -111,10 +111,7 @@ def optimizer_chairs():
 				})
 
 
-			return '{0}({1})'.format(
-				request.args.get('callback'),
-				json.dumps(json_return)
-			)
+			return json_return
 
 		process = subprocess.Popen(
 						[__FORTRAN_EXEC_PATH + '/' + __FORTRAN_EXEC_NAME],
@@ -125,7 +122,7 @@ def optimizer_chairs():
 		#print("A")
 	except Exception as e:
 		print(e)
-		return '{0}({1})'.format(request.args.get('callback'), {'response': 100, 'error': e})
+		return str(e), 100
 	else:
 		import latex_converter
 		import glob2 as gl
@@ -155,10 +152,7 @@ def optimizer_chairs():
 				'all_solutions': loaded_json['solutions']
 			})
 
-		return '{0}({1})'.format(
-			request.args.get('callback'),
-			json.dumps(json_return)
-		)
+		return json_return
 
 
 @optimizer.route('/reports/<filename>/pdf', methods=['POST'])
@@ -183,7 +177,7 @@ def optimize_rows():
 
 	user_id = str(current_identity)
 
-	data = list(request.args.values())[1:-1]
+	data = list(request.args.values())
 	timestamp = time.time()
 
 	problem_id = database.gen_row_id(float(data[0]),
@@ -220,7 +214,7 @@ def optimize_rows():
 		solution.update({'response': 200,
 				 'timestamp': timestamp})
 
-		return '{0}({1})'.format(request.args.get('callback'), solution)
+		return solution
 
 
 		# We have to adjust the right-oriented definition of the
@@ -258,6 +252,4 @@ def optimize_rows():
 	solution.update({'response': 200,
 			 'timestamp': timestamp})
 
-	return '{0}({1})'.format(
-		request.args.get('callback'),
-				solution)
+	return solution

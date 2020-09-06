@@ -314,7 +314,7 @@ $(document).ready(function() {
     // First request: requests JWT token
     $.ajax({
       type: "POST",
-      url: "http://127.0.0.1:5000/a/authuser",
+      url: "http://200.144.93.70/a/authuser",
       data: JSON.stringify({
         "accessid": "0",
         "nopass": "0"
@@ -330,7 +330,7 @@ $(document).ready(function() {
         // Second request: save data to server and receive user UUID
         $.ajax({
           type: "GET",
-          url: "http://127.0.0.1:5000/a/user",
+          url: "http://200.144.93.70/a/user",
           headers: {"Authorization": "JWT " + _jwtToken},
           data: {
             name: $("#txtNome").val(),
@@ -409,11 +409,11 @@ $(document).ready(function() {
       if (selectedRadio == "1") data[9] = $("#txtQuantidadeCarteirasRadio").val()
 
       $.ajax({
-        url: "http://127.0.0.1:5000/a/optimize",
+        url: "http://200.144.93.70/a/optimize",
         type: "GET",
         data,
         crossDomain: true,
-        dataType: 'jsonp',
+        dataType: 'json',
         // set the request header authorization to the bearer token that is generated
         headers: {"Authorization": "JWT " + _jwtToken},
         success: function(result) {
@@ -436,13 +436,13 @@ $(document).ready(function() {
       }
       
       $.ajax({
-        url: "http://127.0.0.1:5000/a/rows",
+        url: "http://200.144.93.70/a/rows",
         type: "GET",
         // set the request header authorization to the bearer token that is generated
         headers: {"Authorization": "JWT " + _jwtToken},
         data,
         crossDomain: true,
-        dataType: 'jsonp',
+        dataType: 'json',
         success: function(result) {
           $("#loading").remove()
 
