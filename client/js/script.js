@@ -265,6 +265,29 @@ function errorHandler() {
   )
 }
 
+function showUUID(uuid) {
+
+    $("#modalShowUUID").append(`
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">${uuid}</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="container">
+            <p>Guarde este código e use-o no login caso deseje ver a lista de problemas já resolvidos ou caso não queira esperar o seu problema ser resolvido em caso de haver fila de espera.</p>
+          </div>
+        </div>
+      </div>
+    </div>`
+   )
+
+  $("#modalShowUUID").modal()
+}
+
 $(document).ready(function() {
   function checkUsuarioForm() {
     return  $('#txtNome').val() !== '' &&
@@ -275,6 +298,15 @@ $(document).ready(function() {
   $('#txtNome,#txtInstituicao,#txtEmail').keyup(function(e) {
     if(checkUsuarioForm()) $('#btnUsuarioSubmit').prop('disabled', false)
     else $('#btnUsuarioSubmit').prop('disabled', true)
+  })
+
+  function checkUsuarioUUIDForm() {
+    return $('#txtUUID').val() !== ''
+  }
+  
+  $('#txtUUID').keyup(function(e) {
+    if(checkUsuarioUUIDForm()) $('#btnUUIDSubmit').prop('disabled', false)
+    else $('#btnUUIDSubmit').prop('disabled', true)
   })
 
   function checkCalcularForm() {
@@ -324,8 +356,7 @@ $(document).ready(function() {
       
       success: function(data) {
         _jwtToken = data['access_token']
-        uuid = data['accessid']
-        alert('Seu UUID eh ' + uuid)
+        const _uuid = data['accessid']
 
         // Second request: save data to server and receive user UUID
         $.ajax({
@@ -338,6 +369,10 @@ $(document).ready(function() {
             institution: $("#txtInstituicao").val()
           },
           crossDomain: true,
+
+          success: function(data) {
+            showUUID(_uuid)
+          },
 
           error: function(jqXRH, textStatus, errorThrown) {
             console.error("Error when creating user (" +
@@ -352,6 +387,39 @@ $(document).ready(function() {
 
   })
 
+  $('#frmUsuarioUUID').submit(function(e) {
+    
+    const _uuid = $('#txtUUID').val()
+
+    // First request: requests JWT token
+    $.ajax({
+      type: "POST",
+      url: "http://127.0.0.1:5000/a/authuser",
+      data: JSON.stringify({
+        "accessid": _uuid,
+        "nopass": "0"
+      }),
+      contentType: "application/json",
+      crossDomain: true,
+      
+      success: function(data) {
+        _jwtToken = data['access_token']
+
+        $('#firstPage').hide()
+        $('#secondPage').show()
+
+        alert("Bem vinda(o) " + data['name'] + "!")
+
+      },
+
+      error: function(jqXRH, textStatus, errorThrown) {
+        alert("Problemas para localizar o token: ("
+              + errorThrown)
+      }
+      
+    })
+  })
+  
   $('#selectModo').change(function() {
     const podeMoverCadeiras = parseInt($(this).val())
 

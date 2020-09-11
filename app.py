@@ -25,7 +25,9 @@ def authenticate(access_id, nopass):
 		from database import get_user
 		doc = get_user(access_id)
 
-		return User(access_id, doc['name'], doc['institution'])
+		if doc is not None:
+
+			return User(access_id, doc['name'], doc['institution'])
 
 	else:
 

@@ -65,37 +65,65 @@
                       </div>
                     </div>
                   </div>
-                  <div class="col-sm-12 col-lg-7">
+                  <div id="frmAccordion" class="col-sm-12 col-lg-7">
                     <div class="row">
+                      <!-- Ask for user data -->
+                      <a href="#" data-toggle="collapse" data-target="#userData">
+                        <div class="col-sm-12 col-lg-12">
+                          <h4 class="margin-left-adjust mt-2 unifesp-blue">Informe seus dados</h4>
+                        </div>
+                      </a>
                       <div class="col-sm-12 col-lg-12">
-                        <h4 class="margin-left-adjust mt-2 unifesp-blue">Informe seus dados</h4>
+                        <div id="userData" class="collapse show" data-parent="#frmAccordion">
+                          <form id="frmUsuario" class="margin-left-adjust">
+                            <div class="form-row mt-4">
+                              <div class="form-group col-sm-8">
+                                <label for="txtNome" class="unifesp-grey">Nome</label>
+                                <input id="txtNome" class="form-control" type="text" placeholder="Informe seu nome">
+                              </div>
+                            </div>
+                            <div class="form-row">
+                              <div class="form-group col-sm-8">
+                                <label for="txtInstituicao" class="unifesp-grey">Instituição</label>
+                                <input id="txtInstituicao" class="form-control" type="text" placeholder="Informe sua instituição">
+                              </div>
+                            </div>
+                            <div class="form-row">
+                              <div class="form-group col-sm-8">
+                                <label for="txtEmail" class="unifesp-grey">Email</label>
+                                <input id="txtEmail" class="form-control" type="email" placeholder="Informe seu email">
+                              </div>
+                            </div>
+                            <div class="row mt-4 mb-4">
+                              <div class="col-sm-12">
+                                <button id="btnUsuarioSubmit" class="btn btn-confirm" type="submit" disabled>Planejar</button>
+                              </div>
+                            </div>
+                          </form>
+                        </div>
                       </div>
+                      <!-- Ask for UUID -->
+                      <a href="#" data-toggle="collapse" data-target="#userUUID">
+                        <div class="col-sm-12 col-lg-12">
+                          <h4 class="margin-left-adjust mt-2 unifesp-blue">Tenho um código de acesso</h4>
+                        </div>
+                      </a>
                       <div class="col-sm-12 col-lg-12">
-                        <form id="frmUsuario" class="margin-left-adjust">
-                          <div class="form-row mt-4">
-                            <div class="form-group col-sm-8">
-                              <label for="txtNome" class="unifesp-grey">Nome</label>
-                              <input id="txtNome" class="form-control" type="text" placeholder="Informe seu nome">
+                        <div id="userUUID" class="collapse" data-parent="#frmAccordion">
+                          <form id="frmUsuarioUUID" class="margin-left-adjust">
+                            <div class="form-row mt-4">
+                              <div class="form-group col-sm-8">
+                                <label for="txtUUID" class="unifesp-grey">Código de acesso</label>
+                                <input id="txtUUID" class="form-control" pattern="[\w]{8}-[\w]{4}-[\w]{4}-[\w]{4}-[\w]{12}" title="Um código de acesso é formado por letras e números separados por hífen: XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX" type="text" placeholder="XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX" required>
+                              </div>
                             </div>
-                          </div>
-                          <div class="form-row">
-                            <div class="form-group col-sm-8">
-                              <label for="txtInstituicao" class="unifesp-grey">Instituição</label>
-                              <input id="txtInstituicao" class="form-control" type="text" placeholder="Informe sua instituição">
+                            <div class="row mt-4 mb-4">
+                              <div class="col-sm-12">
+                                <button id="btnUUIDSubmit" class="btn btn-confirm" type="submit" disabled>Planejar</button>
+                              </div>
                             </div>
-                          </div>
-                          <div class="form-row">
-                            <div class="form-group col-sm-8">
-                              <label for="txtEmail" class="unifesp-grey">Email</label>
-                              <input id="txtEmail" class="form-control" type="email" placeholder="Informe seu email">
-                            </div>
-                          </div>
-                          <div class="row mt-4 mb-4">
-                            <div class="col-sm-12">
-                              <button id="btnUsuarioSubmit" class="btn btn-confirm" type="submit" disabled>Planejar</button>
-                            </div>
-                          </div>
-                        </form>
+                          </form>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -382,6 +410,10 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- Modal to show the user UUID and explanation -->
+  <div id="modalShowUUID" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalShowUUIDLabel" aria-hidden="true">
   </div>
 
   <!-- Bootstrap core JavaScript -->
