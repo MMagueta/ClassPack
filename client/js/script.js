@@ -265,27 +265,27 @@ function errorHandler() {
   )
 }
 
-function showUUID(uuid) {
+function showInfo(head, body) {
 
-    $("#modalShowUUID").append(`
+    $("#modalShowInfo").append(`
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title">${uuid}</h4>
+          <h4 class="modal-title">${head}</h4>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
           <div class="container">
-            <p>Guarde este código e use-o no login caso deseje ver a lista de problemas já resolvidos ou caso não queira esperar o seu problema ser resolvido em caso de haver fila de espera.</p>
+            ${body}
           </div>
         </div>
       </div>
     </div>`
    )
 
-  $("#modalShowUUID").modal()
+  $("#modalShowInfo").modal()
 }
 
 $(document).ready(function() {
@@ -338,6 +338,9 @@ $(document).ready(function() {
     enableCalcularButton()
   })
 
+  /* This part obtains a valid JWT token and also tries to add the
+   * user to the database. It also receives an access code, so that
+   * the user does not need to fill the form again. */
   $('#frmUsuario').submit(function(e) {
     
     $('#firstPage').hide()
@@ -371,7 +374,7 @@ $(document).ready(function() {
           crossDomain: true,
 
           success: function(data) {
-            showUUID(_uuid)
+            showInfo(_uuid, '<p>Guarde este código e use-o no login caso deseje ver a lista de problemas já resolvidos ou caso não queira esperar o seu problema ser resolvido em caso de haver fila de espera.</p>')
           },
 
           error: function(jqXRH, textStatus, errorThrown) {
@@ -380,13 +383,21 @@ $(document).ready(function() {
           }
         })
         
+      },
+
+      error: function(jqXRH, textStatus, errorThrown) {
+        showInfo('Erro - ' + errorThrown,
+                 '<p>Problemas de autorização. Favor tentar novamente ou entrar em contato com os administradores.</p>')
       }
+      
     })
 
     e.preventDefault()
 
   })
 
+  /* This part concerns the validation of an access code previously
+   * given to the user. */
   $('#frmUsuarioUUID').submit(function(e) {
     
     const _uuid = $('#txtUUID').val()
@@ -408,13 +419,14 @@ $(document).ready(function() {
         $('#firstPage').hide()
         $('#secondPage').show()
 
-        alert("Bem vinda(o) " + data['name'] + "!")
+        // TODO: remove this and add name properly
+        console.info("Bem vinda(o) " + data['name'] + "!")
 
       },
 
       error: function(jqXRH, textStatus, errorThrown) {
-        alert("Problemas para localizar o token: ("
-              + errorThrown)
+        showInfo('Erro - ' + errorThrown,
+                 '<p>Problemas para localizar o código: ' + _uuid + '.</p>')
       }
       
     })
