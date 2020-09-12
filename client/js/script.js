@@ -405,7 +405,7 @@ $(document).ready(function() {
     // First request: requests JWT token
     $.ajax({
       type: "POST",
-      url: "http://127.0.0.1:5000/a/authuser",
+      url: "http://200.144.93.70/a/authuser",
       data: JSON.stringify({
         "accessid": _uuid,
         "nopass": "0"
