@@ -343,6 +343,8 @@ $(document).ready(function() {
    * the user does not need to fill the form again. */
   $('#frmUsuario').submit(function(e) {
     
+    e.preventDefault()
+
     $('#firstPage').hide()
     $('#secondPage').show()
 
@@ -392,14 +394,14 @@ $(document).ready(function() {
       
     })
 
-    e.preventDefault()
-
   })
 
   /* This part concerns the validation of an access code previously
    * given to the user. */
   $('#frmUsuarioUUID').submit(function(e) {
     
+    e.preventDefault()
+
     const _uuid = $('#txtUUID').val()
 
     // First request: requests JWT token
