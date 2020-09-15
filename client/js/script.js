@@ -374,7 +374,7 @@ $(document).ready(function() {
           crossDomain: true,
 
           success: function(data) {
-            showInfo(_uuid, '<p>Guarde este código e use-o no login caso deseje ver a lista de problemas já resolvidos ou caso não queira esperar o seu problema ser resolvido em caso de haver fila de espera.</p>')
+            showInfo(_uuid, '<p>Este código poderá ser utilizado na tela de login, não sendo necessário inserir suas informações novamente. No futuro, será possível consultar os problemas já resolvidos através dessa chave de acesso.</p>')
           },
 
           error: function(jqXRH, textStatus, errorThrown) {
