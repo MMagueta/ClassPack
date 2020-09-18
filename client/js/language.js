@@ -1,6 +1,51 @@
 
 let arrayLang = {
     "pt": {
+        "project_title": "Sala Planejada - UNIFESP",
+        "project_name": "Sala Planejada",
+        "room_planner": "Planejador de salas",
+
+        "project_desc_1": "A volta às aulas presenciais, mesmo que parcialmente, começam a ser planejadas por governos municipais, estaduais e reitores de universidades. Dentre as medidas que serão adotadas para minimizar o risco de contágio dos alunos e professores pelo coronavírus está o distanciamento entre as carteiras nas salas de aula. Através dessa aplicação, a partir de alguns parâmetros de entrada, é fornecida a disposição ótima para distribuição das carteiras na sala de aula especificada.",
+        "project_desc_2": "Para sabermos o quanto a aplicação tem sido utilizada, solicitamos que sejam informados seu nome, instituição da qual faz parte e seu email. Caso já tenha um código de acesso, acesse através da opção 'Tenho um código de acesso'.",
+
+        "inform_data": "Informe seus dados",
+
+        "have_access_code": "Tenho um código de acesso",
+
+        "name_text": "Nome",
+        "name_placeholder": "Informe seu nome",
+
+        "inst_text": "Instituição",
+        "inst_placeholder": "Informe sua instituição",
+
+        "email_text": "Email",
+        "email_placeholder": "Informe seu email",
+
+        "plan_button": "Planejar",
+
+        "auth_problem": "Problemas de autorização. Favor tentar novamente ou entrar em contato com os administradores.",
+
+        "user_reminder": "Este código poderá ser utilizado na tela de login, não sendo necessário inserir suas informações novamente. No futuro, será possível consultar os problemas já resolvidos através dessa chave de acesso.",
+
+        "no_solution": "Não foi possível encontrar uma solução com os dados informados: o problema é muito grande ou não há solução. Caso seu problema seja complexo, entre em contato com salaplanejada@unifesp.br",
+
+        "error_1": "Erro! Verifique as informações inseridas. Caso ocorra novamente, envie um email para salaplanejada@unifesp.br",
+
+        "no_optimal_solution": "Não há solução ótima",
+
+        "solutions_found": "Soluções encontradas:",
+
+        "ideal_dist_calc": "Distância ideal calculada:",
+
+        "desks_qty_text": "Número de carteiras:",
+
+        "rows": "Fileiras",
+        "desks": "Cadeiras",
+        "student_qty": "Número de estudantes",
+
+
+
+
         "instruction_title": "Instruções",
         "instruction_desc": "Preencha as dimensões da sala e da carteira seguindo o esquema abaixo. O espaço para o professor encontra-se sempre à direita (recomenda-se um espaço de 2 metros para o professor). As carteiras também estão sempre voltadas para a direita.",
         "about_label": "Sobre o projeto",
@@ -92,37 +137,99 @@ let arrayLang = {
                         do PRONEX-Otimização, financiado pela FAPERJ e CNPq.`
     },
     "en": {
-        "instruction_title": "Instruções",
-        "instruction_desc": "Preencha as dimensões da sala e da carteira seguindo o esquema abaixo. O espaço para o professor encontra-se sempre à direita (recomenda-se um espaço de 2 metros para o professor). As carteiras também estão sempre voltadas para a direita.",
-        "about_label": "Sobre o projeto",
-        "form_title": "Planeje a distribuição dos alunos de acordo com sua sala",
+        "project_title": "",
+        "project_name": "",
+        "room_planner": "",
+
+        "project_desc_1": "",
+        "project_desc_2": "",
+
+        "inform_data": "",
+
+        "have_access_code": "I have an access code",
+
+        "name_text": "Name",
+        "name_placeholder": "Enter your name",
+
+        "inst_text": "Institution",
+        "inst_placeholder": "Enter your institution name",
+
+        "email_text": "Email",
+        "email_placeholder": "Enter your email",
+
+        "plan_button": "Start planning",
+
+        "auth_problem": "Problemas de autorização. Favor tentar novamente ou entrar em contato com os administradores.",
+
+        "user_reminder": "",
+
+        "no_solution": "",
+
+        "error_1": "",
+
+        "no_optimal_solution": "There is no optimal solution",
+
+        "solutions_found": "Solutions found:",
+
+        "ideal_dist_calc": "Calculated ideal distance:",
+
+        "desks_qty_text": "Number of student desks:",
+
+        "rows": "Rows",
+        "desks": "Chairs",
+        "student_qty": "Students quantity",
+
+
         
-        "room_dimensions": "Dimensões da sala",
-        "room_width": "Largura da sala (m)",
-        "room_length": "Comprimento da sala (m)",
 
-        "desk_dimensions": "Dimensões das carteiras",
-        "desk_width": "Largura da carteira (m)",
-        "desk_length": "Comprimento da carteira (m)",
-
-        "number_tooltip": "Inserir números inteiros ou decimais separados por ponto (.)",
-        "integer_tooltip": "Inserir números inteiros",
-
-        "can_move": "Você pode mover suas carteiras?",
-        "choose_option": "Escolha uma opção",
-
-        "no": "Não",
-        "yes": "Sim",
-
-        "minimum_distance": "Distância mínima entre estudantes (m)",
+        "instruction_title": "Instructions",
+        "instruction_desc": "",
+        "about_label": "About the project",
+        "form_title": "",
         
-        "rows_qty": "Quantidade de fileiras de carteiras",
-        "desks_per_row": "Número de carteiras por fileira",
+        "room_dimensions": "Room dimensions",
+        "room_width": "Room width (m)",
+        "room_length": "Room length (m)",
 
-        "desks_qty": "Quantidade de carteiras",
-        "maximum": "ccccccccccccc",
-        "solution_row": "Soaaairas"
+        "desk_dimensions": "Desk dimensions",
+        "desk_width": "Desk width (m)",
+        "desk_length": "Desk length (m)",
 
+        "number_tooltip": "Insert whole numbers or decimals separated by periods (.)",
+        "integer_tooltip": "Insert whole numbers",
+
+        "can_move": "",
+        "choose_option": "Choose an option",
+
+        "can_move_meaning": "",
+        "can_move_desc": ``,
+
+        "no": "No",
+        "yes": "Yes",
+
+        "minimum_distance": "Minimum distance between students (m)",
+        
+        "rows_qty": "",
+        "desks_per_row": "",
+
+        "desks_qty": "",
+        "maximum": "",
+        "solution_row": "",
+        
+        "calculate_button": "Calculate",
+
+        "about_text_1": ``,
+        "about_text_2": ``,
+        "about_text_3": ``,
+        "about_text_4": ``,
+        "about_text_5": ``,
+        "about_unifesp": "",
+        "about_ifsp": "",
+        "about_uem": "",
+        "about_members": "",
+        "about_institutions": "",
+        "about_extra_1": ``,
+        "about_extra_2": ``
     }
 }
 
