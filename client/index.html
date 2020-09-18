@@ -35,6 +35,10 @@
   <nav class="navbar navbar-customization">
     <div class="container" style="display:flex; justify-content:space-around">
       <p class="text-uppercase header-text">Sala Planejada</p>
+      <select id="selectLang">
+        <option value="pt">Português</option>
+        <option value="en">Inglês</option>
+      </select>
     </div>
   </nav>
   
@@ -108,12 +112,12 @@
                     <div class="col-sm-12 col-lg-5">
                       <div class="row">
                         <div class="col-sm-12 col-lg-12">
-                          <h4 class="margin-left-adjust mt-2">
+                          <h4 class="margin-left-adjust mt-2 lang" key="instruction_title">
                             Instruções
                           </h4>
                         </div>
                         <div class="col-sm-12 col-lg-12">
-                          <p class="margin-left-adjust mt-4 text-justify unifesp-blue">Preencha as dimensões da sala e da carteira seguindo o esquema abaixo. O espaço para o professor encontra-se sempre à direita (recomenda-se um espaço de 2 metros para o professor). As carteiras também estão sempre voltadas para a direita.</p>
+                          <p class="margin-left-adjust mt-4 text-justify unifesp-blue lang" key="instruction_desc">Preencha as dimensões da sala e da carteira seguindo o esquema abaixo. O espaço para o professor encontra-se sempre à direita (recomenda-se um espaço de 2 metros para o professor). As carteiras também estão sempre voltadas para a direita.</p>
                         </div>
                         <div class="col-sm-12 col-lg-12">
                           <div class="row margin-left-adjust mt-4 mb-4" style="background: white;">
@@ -125,9 +129,9 @@
                             </div>
                           </div>
                         </div>
-                        <div class="col-sm-6 col-lg-6 mt-2 mb-2">
+                        <div class="col-sm-12 col-lg-12 mt-2 mb-2">
                           <a id="sobre" href="#" data-toggle="modal" data-target="#modalAbout">
-                            <h4 class="margin-left-adjust mt-2">
+                            <h4 class="margin-left-adjust mt-2 lang" key="about_label">
                               Sobre o projeto
                             </h4>
                           </a>
@@ -137,38 +141,38 @@
                     <div class="col-sm-12 col-lg-7">
                       <div class="row">
                         <div class="col-sm-12 col-lg-12">
-                          <h4 class="margin-left-adjust mt-2 unifesp-blue">Planeje a distribuição dos alunos de acordo com sua sala</h4>
+                          <h4 class="margin-left-adjust mt-2 unifesp-blue lang" key="form_title">Planeje a distribuição dos alunos de acordo com sua sala</h4>
                         </div>
                         <div class="col-sm-12 col-lg-12">
                           <form id="frmCalcular" class="margin-left-adjust">
                             <div class="row mt-4">
                               <div class="col-sm-6">
-                                <p class="unifesp-blue">Dimensões da sala</p>
+                                <p class="unifesp-blue lang" key="room_dimensions">Dimensões da sala</p>
                                 <div class="form-group ml-2">
-                                  <label for="txtLarguraSala" class="unifesp-grey">Largura da sala (m)</label>
-                                  <input id="txtLarguraSala" class="form-control" type="text" placeholder="5.25" pattern="[0-9]*\.?[0-9]*" title="Inserir números inteiros ou decimais separados por ponto (.)">
+                                  <label for="txtLarguraSala" class="unifesp-grey lang" key="room_width">Largura da sala (m)</label>
+                                  <input id="txtLarguraSala" class="form-control lang-title" key="number_tooltip" type="text" placeholder="5.25" pattern="[0-9]*\.?[0-9]*" title="Inserir números inteiros ou decimais separados por ponto (.)">
                                 </div>
                                 <div class="form-group ml-2">
-                                  <label for="txtComprimentoSala" class="unifesp-grey">Comprimento da sala (m)</label>
-                                  <input id="txtComprimentoSala" class="form-control" type="text" placeholder="7.05" pattern="[0-9]*\.?[0-9]*" title="Inserir números inteiros ou decimais separados por ponto (.)">
+                                  <label for="txtComprimentoSala" class="unifesp-grey lang" key="room_length">Comprimento da sala (m)</label>
+                                  <input id="txtComprimentoSala" class="form-control lang-title" key="number_tooltip" type="text" placeholder="7.05" pattern="[0-9]*\.?[0-9]*" title="Inserir números inteiros ou decimais separados por ponto (.)">
                                 </div>
                               </div>
                               <div class="col-sm-6">
-                                <p class="unifesp-blue">Dimensões das carteiras</p>
+                                <p class="unifesp-blue lang" key="desk_dimensions">Dimensões das carteiras</p>
                                 <div class="form-group ml-2">
-                                  <label for="txtLarguraCarteira" class="unifesp-grey">Largura da carteira (m)</label>
-                                  <input id="txtLarguraCarteira" class="form-control" type="text" placeholder="0.5" pattern="[0-9]*\.?[0-9]*" title="Inserir números inteiros ou decimais separados por ponto (.)">
+                                  <label for="txtLarguraCarteira" class="unifesp-grey lang" key="desk_width">Largura da carteira (m)</label>
+                                  <input id="txtLarguraCarteira" class="form-control lang-title" key="number_tooltip" type="text" placeholder="0.5" pattern="[0-9]*\.?[0-9]*" title="Inserir números inteiros ou decimais separados por ponto (.)">
                                 </div>
                                 <div class="form-group ml-2">
-                                  <label for="txtComprimentoCarteira" class="unifesp-grey">Comprimento da carteira (m)</label>
-                                  <input id="txtComprimentoCarteira" class="form-control" type="text" placeholder="0.5" pattern="[0-9]*\.?[0-9]*" title="Inserir números inteiros ou decimais separados por ponto (.)">
+                                  <label for="txtComprimentoCarteira" class="unifesp-grey lang" key="desk_length">Comprimento da carteira (m)</label>
+                                  <input id="txtComprimentoCarteira" class="form-control lang-title" key="number_tooltip" type="text" placeholder="0.5" pattern="[0-9]*\.?[0-9]*" title="Inserir números inteiros ou decimais separados por ponto (.)">
                                 </div>
                               </div>
                             </div>
                             <div class="row mt-4">
                               <div class="col-sm-6">
                                 <div class="form-group">
-                                  <label for="selectModo" class="unifesp-blue">Você pode mover suas carteiras?
+                                  <label for="selectModo" class="unifesp-blue lang" key="can_move">Você pode mover suas carteiras?
                                     <a href="#" data-toggle="modal" data-target="#modalCanMove" class="unifesp-blue">
                                       <svg width="1.2em" height="1.2em" viewBox="0 0 16 16" class="bi bi-info-circle-fill ml-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                         <path fill-rule="evenodd" d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412l-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM8 5.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
@@ -176,30 +180,30 @@
                                     </a>
                                   </label>
                                   <select class="form-control" id="selectModo">
-                                    <option disabled selected="selected">Escolha uma opção</option>
-                                    <option value="0">Não</option>
-                                    <option value="1">Sim</option>
+                                    <option disabled selected="selected" class="lang" key="choose_option">Escolha uma opção</option>
+                                    <option value="0" class="lang" key="no">Não</option>
+                                    <option value="1" class="lang" key="yes">Sim</option>
                                   </select>
                                 </div>
                                 <div class="form-group">
-                                  <label for="txtDistanciaMinima" class="unifesp-blue">Distância mínima entre estudantes (m)</label>
-                                  <input id="txtDistanciaMinima" class="form-control" type="text" placeholder="1.5" pattern="[0-9]*\.?[0-9]*" title="Inserir números inteiros ou decimais separados por ponto (.)">
+                                  <label for="txtDistanciaMinima" class="unifesp-blue lang" key="minimum_distance">Distância mínima entre estudantes (m)</label>
+                                  <input id="txtDistanciaMinima" class="form-control lang-title" key="number_tooltip" type="text" placeholder="1.5" pattern="[0-9]*\.?[0-9]*" title="Inserir números inteiros ou decimais separados por ponto (.)">
                                 </div>
                               </div>
                               <div class="col-sm-6">
                                 <div id="modoFixo" style="display: none;">
                                   <div class="form-group">
-                                    <label for="txtQuantidadeFileiras" class="unifesp-grey">Quantidade de fileiras de carteiras</label>
-                                    <input id="txtQuantidadeFileiras" class="form-control" type="text" placeholder="7" pattern="[0-9]*" title="Inserir números inteiros">
+                                    <label for="txtQuantidadeFileiras" class="unifesp-grey lang" key="rows_qty">Quantidade de fileiras de carteiras</label>
+                                    <input id="txtQuantidadeFileiras" class="form-control lang-title" key="integer_tooltip" type="text" placeholder="7" pattern="[0-9]*" title="Inserir números inteiros">
                                   </div>
                                   <div class="form-group">
-                                    <label for="txtQuantidadeCarteirasFileira" class="unifesp-grey">Número de carteiras por fileira</label>
-                                    <input id="txtQuantidadeCarteirasFileira" class="form-control" type="text" placeholder="5" pattern="[0-9]*" title="Inserir números inteiros">
+                                    <label for="txtQuantidadeCarteirasFileira" class="unifesp-grey lang" key="desks_per_row">Número de carteiras por fileira</label>
+                                    <input id="txtQuantidadeCarteirasFileira" class="form-control lang-title" key="integer_tooltip" type="text" placeholder="5" pattern="[0-9]*" title="Inserir números inteiros">
                                   </div>
                                 </div>
                                 <div id="modoLivre" style="display: none;">
                                   <div class="form-group">
-                                    <label class="unifesp-grey">Quantidade de carteiras</label>
+                                    <label class="unifesp-grey lang" key="desks_qty">Quantidade de carteiras</label>
                                     <div class="row">
                                       <div class="col-sm-12 col-md-12 col-lg-8">
                                         <div class="input-group">
@@ -208,7 +212,7 @@
                                               <input id="radioInserir" name="radio-options" class="radio-carteiras" type="radio" aria-label="Radio button para o seguido input" value="1">
                                             </div>
                                           </div>
-                                          <input id="txtQuantidadeCarteirasRadio" type="text" class="form-control" aria-label="Radio button com input" placeholder="15" pattern="[0-9]*" title="Inserir números inteiros" >
+                                          <input id="txtQuantidadeCarteirasRadio" type="text" class="form-control lang-title" key="integer_tooltip" aria-label="Radio button com input" placeholder="15" pattern="[0-9]*" title="Inserir números inteiros" >
                                         </div>
                                       </div>
                                     </div>
@@ -220,7 +224,7 @@
                                               <input id="radioMaxima" name="radio-options" class="radio-carteiras" type="radio" aria-label="Radio button para o seguido input" value="2">
                                             </div>
                                           </div>
-                                          <input type="text" class="form-control" aria-label="Radio button com input" value="Máxima" disabled>
+                                          <input type="text" class="form-control lang-value" key="maximum" aria-label="Radio button com input" value="Máxima" disabled>
                                         </div>
                                       </div>
                                     </div>
@@ -230,7 +234,7 @@
                                       <div class="col-sm-12 col-md-12 col-lg-8">
                                         <div class="form-check">
                                           <label class="form-check-label unifesp-grey">
-                                            <input id="checkDesejaFileiras" type="checkbox" class="form-check-input" value=""> Solução em fileiras
+                                            <input id="checkDesejaFileiras" type="checkbox" class="form-check-input" value=""> <p class="lang" key="solution_row">Solução em fileiras</p>
                                           </label>
                                         </div>
                                       </div>
@@ -241,7 +245,7 @@
                             </div>
                             <div class="row mt-4 mb-4">
                               <div class="col-sm-12">
-                                <button id="btnCalcularSubmit" class="btn btn-confirm" type="submit" disabled>Calcular</button>
+                                <button id="btnCalcularSubmit" class="btn btn-confirm lang" key="calculate_button" type="submit" disabled>Calcular</button>
                               </div>
                             </div>
                           </form>
@@ -266,14 +270,14 @@
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
-          <h3 class="modal-title">Sobre o projeto</h3>
+          <h3 class="modal-title lang" key="about_label">Sobre o projeto</h3>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
           <div class="container">
-            <p>
+            <p class="lang" key="about_text_1">
               No contexto da COVID-19 a volta às aulas presenciais está sendo
               planejada por gestores educacionais. Dentre as medidas que serão
               adotadas para minimizar o risco de contágio dos alunos e
@@ -282,7 +286,7 @@
               desenvolvimento de um aplicativo web de livre acesso para
               auxiliar este planejamento.
             </p>
-            <p>
+            <p class="lang" key="about_text_2">
               Na nossa ferramenta, o gestor define a dimensão de sua sala, o
               layout por fileiras ou não e a distância mínima entre os
               estudantes ou a quantidade de estudantes na sala. A partir
@@ -290,7 +294,7 @@
               maior número de alunos na sala ou o maior distanciamento
               possível entre os estudantes.
             </p>
-            <p>
+            <p class="lang" key="about_text_3">
               Para cada solução encontrada no aplicativo, a atenção volta-se
               para a transposição do resultado obtido computacionalmente para
               a realidade da sala de aula. Dessa forma, o aplicativo produz
@@ -299,7 +303,7 @@
               um mapa de lotação nos casos em que não há opção de alterar a
               disposição em fileiras.
             </p>
-            <p>
+            <p class="lang" key="about_text_4">
               É interessante ressaltar que, embora nosso foco seja voltado
               para o planejamento de salas de aulas, os recursos desenvolvidos
               podem ser utilizados em vários outros contextos. Por exemplo, a
@@ -307,7 +311,7 @@
               restaurantes, cadeiras em salas de espera de hospitais, entre
               outros.
             </p>
-            <p>
+            <p class="lang" key="about_text_5">
               Por fim, ressaltamos que esta ferramenta não resolve outros
               problemas inerentes ao fluxo da volta às aulas, que constituem
               variáveis igualmente fundamentais para garantir a segurança de
@@ -316,10 +320,10 @@
               necessário um planejamento adequado do contexto mais geral.
             </p>
             <hr class="mt-4">
-            <h3 class="mb-4">Integrantes</h3>
+            <h3 class="mb-4 lang" key="about_members">Integrantes</h3>
             <table class="table table-bordered mt-4">
               <thead class="thead-light">
-                <tr> <th>Universidade Federal de São Paulo</th></tr>
+                <tr><th class="lang" key="about_unifesp">Universidade Federal de São Paulo</th></tr>
               </thead>
               <tbody>
                 <tr><td>BUENO, Luís Felipe**</td></tr>
@@ -333,33 +337,33 @@
                 <tr><td>YANASSE, Horacio H.*</td></tr>
               </tbody>
               <thead class="thead-light">
-                <tr><th>Instituto Federal de Educação, Ciência e Tecnologia de São Paulo</th></tr>
+                <tr><th class="lang" key="about_ifsp">Instituto Federal de Educação, Ciência e Tecnologia de São Paulo</th></tr>
               </thead>
               <tbody>
                 <tr><td>BORTOLETE, J. C.</td></tr>
                 <tr><td>SANTOS, Thiago S.</td></tr>
               </tbody>
               <thead class="thead-light">
-                <tr><th>Universidade Estadual de Maringá</th></tr>
+                <tr><th class="lang" key="about_uem">Universidade Estadual de Maringá</th></tr>
               </thead>
               <tbody>
                 <tr><td>SOBRAL, Francisco N. C.</td></tr>
               </tbody>
             </table>
-            <p>
+            <p class="lang" key="about_extra_1">
               * Participantes do projeto temático da FAPESP, "Problemas de
               corte, empacotamento, dimensionamento de lotes, programação da
               produção, roteamento e localização e suas integrações em
               contextos industriais e logísticos", processo número
               2016/01860-1.
             </p>
-            <p>
+            <p class="lang" key="about_extra_2">
               ** Participante do projeto temático da FAPESP, "Métodos
               Computacionais de Otimização", processo número 2018/24293-0 e
               do PRONEX-Otimização, financiado pela FAPERJ e CNPq.
             </p>
             <hr class="mt-4">
-            <h3 class="mb-4">Instituições</h3>
+            <h3 class="mb-4 lang" key="about_institutions">Instituições</h3>
             <div class="row mt-4 mb-4">
               <div class="col-sm-12 col-md-4 col-lg-4">
                 <img src="assets/img/unifesp_logo_3.jpeg" width="100%" alt="Logo Unifesp">
@@ -382,18 +386,18 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title">O que isso quer dizer?</h4>
+          <h4 class="modal-title lang" key="can_move_meaning">O que isso quer dizer?</h4>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
         <div class="modal-body">
           <div class="container">
-            <p>Escolha a opção <b>não</b> caso a sala tenha cadeiras
+            <p class="lang" key="can_move_meaning">Escolha a opção 'não' caso a sala tenha cadeiras
             fixas em fileiras, não sendo possível configurá-las de uma
             forma livre. Dessa maneira, a aplicação irá indicar a
             distribuição dos estudantes pela sala. Caso elas sejam
-            móveis, selecione a opção <b>sim</b>, e serão indicadas
+            móveis, selecione a opção 'sim', e serão indicadas
             possíveis distribuições de carteiras para acomodar os
             estudantes, respeitando sempre a distância mínima
             fornecida (recomenda-se que seja de ao menos 1 metro e
@@ -410,6 +414,7 @@
   <script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
   
   <!-- Custom -->
+  <script src="js/language.js"></script>
   <script src="js/script.js"></script>
   <div id="mapHiddenPlacement"></id>
 </body>
