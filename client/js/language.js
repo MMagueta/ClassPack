@@ -285,6 +285,19 @@ $('#selectLang').change(function() {
     $(".lang-value").each(function(index, element) {
         $(this).attr('value', langDict[$(this).attr("key")])
     })
+
+
+    if(getLanguage() === 'en') {
+        $("#imgCarteira").attr("src", "assets/img/carteira-en.png");
+        $("#imgCarteira").attr("alt", "Chair description");
+        $("#imgSala").attr("src", "assets/img/sala-en.png");
+        $("#imgSala").attr("alt", "Room description");
+    } else {
+        $("#imgCarteira").attr("src", "assets/img/carteira.png");
+        $("#imgCarteira").attr("alt", "Descrição da carteira");
+        $("#imgSala").attr("src", "assets/img/sala.png");
+        $("#imgSala").attr("alt", "Descrição da sala");
+    }
 })
 
 $(document).ready(function() {
