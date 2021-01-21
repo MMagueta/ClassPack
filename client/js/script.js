@@ -211,25 +211,25 @@ function prepareResultsSection() {
 
 function drawFixedLayout(result) {
   $("div#summary"). append(`
-    <h2 class="margin-left-adjust">Resultados</h2>
-    <h4 class="mt-1 margin-left-adjust">Fileiras: ${result.rows}</h4>
-    <h4 class="mt-1 margin-left-adjust">Cadeiras: ${result.chairs}</h4>
-    <h4 class="mt-1 margin-left-adjust">Número de estudantes: ${result.students}</h4>
+    <h2 class="margin-left-adjust">Results</h2>
+    <h4 class="mt-1 margin-left-adjust">Rows: ${result.rows}</h4>
+    <h4 class="mt-1 margin-left-adjust">Chairs: ${result.chairs}</h4>
+    <h4 class="mt-1 margin-left-adjust">Students quantity: ${result.students}</h4>
   `)
-  $("div#summary").append("<button class='btn btn-confirm mt-4 margin-left-adjust' id='download' onclick='download_pdf()'>Baixar PDF</button>")
+  $("div#summary").append("<button class='btn btn-confirm mt-4 margin-left-adjust' id='download' onclick='download_pdf()'>Download PDF</button>")
   $("#result").append(`
     <div class="col-sm-12 col-lg-6 mt-4 mb-4">
     <canvas id="map"
        width="${60 + parseFloat($(txtLarguraSala).val()) * Math.min((300 - 50) / parseFloat($(txtLarguraSala).val()), (300) / parseFloat($(txtComprimentoSala).val()))}"
        height="${parseFloat($(txtComprimentoSala).val()) * Math.min((300 - 50) / parseFloat($(txtLarguraSala).val()), (300) / parseFloat($(txtComprimentoSala).val()))}">
-    Por favor, use um navegador que suporte HTML5.</canvas></div>
+       Please, use a browser that supports HTML5.</canvas></div>
   `)
 
   $("#mapHiddenPlacement").append(`
       <canvas hidden id="map-hidden"
          width="${60 + parseFloat($(txtLarguraSala).val()) * Math.min((500 - 50) / parseFloat($(txtLarguraSala).val()), (500) / parseFloat($(txtComprimentoSala).val()))}"
          height="${parseFloat($(txtComprimentoSala).val()) * Math.min((500 - 50) / parseFloat($(txtLarguraSala).val()), (500) / parseFloat($(txtComprimentoSala).val()))}">
-        Por favor, use um navegador que suporte HTML5.
+         Please, use a browser that supports HTML5.
       </canvas>
   `)
 
@@ -239,12 +239,12 @@ function drawFixedLayout(result) {
 
 function drawFreeLayout(result) {
   $("div#summary"). append(`
-    <h2 class="margin-left-adjust">Resultados</h2>
-    <h4 class="mt-1 margin-left-adjust">Soluções encontradas: ${result["solutions"]}</h4>
-    <h4 class="mt-1 margin-left-adjust">Distância ideal calculada: ${myRound(result["min_distance"], 2)}</h4>
-    <h4 class="mt-1 margin-left-adjust">Número de carteiras: ${result["number_items"]}</h4>
+    <h2 class="margin-left-adjust">Results</h2>
+    <h4 class="mt-1 margin-left-adjust">Solutions found: ${result["solutions"]}</h4>
+    <h4 class="mt-1 margin-left-adjust">Calculated ideal distance: ${myRound(result["min_distance"], 2)}</h4>
+    <h4 class="mt-1 margin-left-adjust">Number of student desks: ${result["number_items"]}</h4>
   `)
-  $("div#summary").append("<button class='btn btn-confirm mt-4 margin-left-adjust' id='download' onclick='download_pdf()'>Baixar PDF</button>")
+  $("div#summary").append("<button class='btn btn-confirm mt-4 margin-left-adjust' id='download' onclick='download_pdf()'>Download PDF</button>")
 
   $("#result").append('<div id="freeLayoutImage" class="col-sm-12 col-lg-6 mt-4 mb-4"></div>')
   $("#freeLayoutImage").append(`
@@ -253,14 +253,14 @@ function drawFreeLayout(result) {
       <canvas id="map"
          width="${60 + parseFloat($(txtLarguraSala).val()) * Math.min((300 - 50) / parseFloat($(txtLarguraSala).val()), (300) / parseFloat($(txtComprimentoSala).val()))}"
          height="${parseFloat($(txtComprimentoSala).val()) * Math.min((300 - 50) / parseFloat($(txtLarguraSala).val()), (300) / parseFloat($(txtComprimentoSala).val()))}">
-        Por favor, use um navegador que suporte HTML5.
+         Please, use a browser that supports HTML5.
       </canvas>
       <button id="nextSolution" class="btn btn-confirm" style="border-radius: 0px 5px 5px 0px" onclick="drawOptSolution(solution, +1)">&gt;</button>
     </div>`
   )
   $("#freeLayoutImage").append(`
     <div class="row mt-2">
-      <button class="btn btn-confirm" onclick="downloadCoord(solution)">Baixar Coordenadas (CSV)</button>
+      <button class="btn btn-confirm" onclick="downloadCoord(solution)">Download coordinates(CSV)</button>
     </div>
   `)
 
@@ -268,7 +268,7 @@ function drawFreeLayout(result) {
       <canvas hidden id="map-hidden"
          width="${60 + parseFloat($(txtLarguraSala).val()) * Math.min((500 - 50) / parseFloat($(txtLarguraSala).val()), (500) / parseFloat($(txtComprimentoSala).val()))}"
          height="${parseFloat($(txtComprimentoSala).val()) * Math.min((500 - 50) / parseFloat($(txtLarguraSala).val()), (500) / parseFloat($(txtComprimentoSala).val()))}">
-        Por favor, use um navegador que suporte HTML5.
+         Please, use a browser that supports HTML5.
       </canvas>
   `)
     
@@ -281,7 +281,7 @@ function errorHandler() {
   $("#loading").remove()
   $("#result").append(`
     <div class="alert alert-danger alert-dismissible fade show margin-left-adjust">
-      Erro! Verifique as informações inseridas. Caso ocorra novamente, envie um email para <b>salaplanejada@unifesp.br</b>.
+    Error! Check the information entered. If it happens again, send an email to salaplanejada@unifesp.br.</b>.
       <button type="button" class="close" data-dismiss="alert">
         &times;
       </button>
@@ -424,7 +424,7 @@ $(document).ready(function() {
           $("#loading").remove()
 
           if(result["found_solution"]) drawFreeLayout(result)
-          else $("div#summary").append('<center><h1 class="mb-0">Resultados</h1>Não foi possível encontrar uma solução com os dados informados: o problema é muito grande ou não há solução. Caso seu problema seja complexo, entre em contato com <b>salaplanejada@unifesp.br</b></center>')
+          else $("div#summary").append('<center><h1 class="mb-0">Results</h1>It was not possible to find a solution with the informed data: it is a major problem or the issue has no solution. If your problem is complex, contact salaplanejada@unifesp.br.</b></center>')
         },
         error: errorHandler
       })
@@ -450,7 +450,7 @@ $(document).ready(function() {
           $("#loading").remove()
 
           if (result.status) drawFixedLayout(result)
-          else $("div#summary").append('<center><h1 class="mb-0">Resultados</h1><h3 class="mb-0">Não há solução ótima</h3></center>')
+          else $("div#summary").append('<center><h1 class="mb-0">Results</h1><h3 class="mb-0">There is no optimal solution</h3></center>')
         },
         error: errorHandler
       })
