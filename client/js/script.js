@@ -289,6 +289,86 @@ function errorHandler() {
   )
 }
 
+function drawFixedLayoutEng(result) {
+  $("div#summary"). append(`
+    <h2 class="margin-left-adjust">Results</h2>
+    <h4 class="mt-1 margin-left-adjust">Rows: ${result.rows}</h4>
+    <h4 class="mt-1 margin-left-adjust">Chairs: ${result.chairs}</h4>
+    <h4 class="mt-1 margin-left-adjust">Students quantity: ${result.students}</h4>
+  `)
+  $("div#summary").append("<button class='btn btn-confirm mt-4 margin-left-adjust' id='download' onclick='download_pdf()'>Download PDF</button>")
+  $("#result").append(`
+    <div class="col-sm-12 col-lg-6 mt-4 mb-4">
+    <canvas id="map"
+       width="${60 + parseFloat($(txtLarguraSala).val()) * Math.min((300 - 50) / parseFloat($(txtLarguraSala).val()), (300) / parseFloat($(txtComprimentoSala).val()))}"
+       height="${parseFloat($(txtComprimentoSala).val()) * Math.min((300 - 50) / parseFloat($(txtLarguraSala).val()), (300) / parseFloat($(txtComprimentoSala).val()))}">
+       Please, use a browser that supports HTML5.</canvas></div>
+  `)
+
+  $("#mapHiddenPlacement").append(`
+      <canvas hidden id="map-hidden"
+         width="${60 + parseFloat($(txtLarguraSala).val()) * Math.min((500 - 50) / parseFloat($(txtLarguraSala).val()), (500) / parseFloat($(txtComprimentoSala).val()))}"
+         height="${parseFloat($(txtComprimentoSala).val()) * Math.min((500 - 50) / parseFloat($(txtLarguraSala).val()), (500) / parseFloat($(txtComprimentoSala).val()))}">
+         Please, use a browser that supports HTML5.
+      </canvas>
+  `)
+
+  solution = result // Sets the solution to the global variable
+  drawRowSol(solution) // Draw the solution to canvas
+}
+
+function drawFreeLayoutEng(result) {
+  $("div#summary"). append(`
+    <h2 class="margin-left-adjust">Results</h2>
+    <h4 class="mt-1 margin-left-adjust">Solutions found: ${result["solutions"]}</h4>
+    <h4 class="mt-1 margin-left-adjust">Calculated ideal distance: ${myRound(result["min_distance"], 2)}</h4>
+    <h4 class="mt-1 margin-left-adjust">Number of student desks: ${result["number_items"]}</h4>
+  `)
+  $("div#summary").append("<button class='btn btn-confirm mt-4 margin-left-adjust' id='download' onclick='download_pdf()'>Download PDF</button>")
+
+  $("#result").append('<div id="freeLayoutImage" class="col-sm-12 col-lg-6 mt-4 mb-4"></div>')
+  $("#freeLayoutImage").append(`
+    <div class="row">
+      <button id="prevSolution" class="btn btn-confirm" style="border-radius: 5px 0px 0px 5px" onclick="drawOptSolution(solution, -1)">&lt;</button>
+      <canvas id="map"
+         width="${60 + parseFloat($(txtLarguraSala).val()) * Math.min((300 - 50) / parseFloat($(txtLarguraSala).val()), (300) / parseFloat($(txtComprimentoSala).val()))}"
+         height="${parseFloat($(txtComprimentoSala).val()) * Math.min((300 - 50) / parseFloat($(txtLarguraSala).val()), (300) / parseFloat($(txtComprimentoSala).val()))}">
+         Please, use a browser that supports HTML5.
+      </canvas>
+      <button id="nextSolution" class="btn btn-confirm" style="border-radius: 0px 5px 5px 0px" onclick="drawOptSolution(solution, +1)">&gt;</button>
+    </div>`
+  )
+  $("#freeLayoutImage").append(`
+    <div class="row mt-2">
+      <button class="btn btn-confirm" onclick="downloadCoord(solution)">Download coordinates(CSV)</button>
+    </div>
+  `)
+
+  $("#mapHiddenPlacement").append(`
+      <canvas hidden id="map-hidden"
+         width="${60 + parseFloat($(txtLarguraSala).val()) * Math.min((500 - 50) / parseFloat($(txtLarguraSala).val()), (500) / parseFloat($(txtComprimentoSala).val()))}"
+         height="${parseFloat($(txtComprimentoSala).val()) * Math.min((500 - 50) / parseFloat($(txtLarguraSala).val()), (500) / parseFloat($(txtComprimentoSala).val()))}">
+         Please, use a browser that supports HTML5.
+      </canvas>
+  `)
+    
+  solution = result
+  cntSolution = 0
+  drawOptSolution(solution, 0)
+}
+
+function errorHandlerEng() {
+  $("#loading").remove()
+  $("#result").append(`
+    <div class="alert alert-danger alert-dismissible fade show margin-left-adjust">
+    Error! Check the information entered. If it happens again, send an email to salaplanejada@unifesp.br.</b>.
+      <button type="button" class="close" data-dismiss="alert">
+        &times;
+      </button>
+    </div>`
+  )
+}
+
 $(document).ready(function() {
   function checkUsuarioForm() {
     return  $('#txtNome').val() !== '' &&
@@ -423,10 +503,22 @@ $(document).ready(function() {
         success: function(result) {
           $("#loading").remove()
 
-          if(result["found_solution"]) drawFreeLayout(result)
-          else $("div#summary").append('<center><h1 class="mb-0">Resultados</h1>Não foi possível encontrar uma solução com os dados informados: o problema é muito grande ou não há solução. Caso seu problema seja complexo, entre em contato com <b>salaplanejada@unifesp.br</b></center>')
+          if(localStorage.getItem("language") === 'en') {
+            if(result["found_solution"]) drawFreeLayoutEng(result)
+            else $("div#summary").append('<center><h1 class="mb-0">Results</h1>It was not possible to find a solution with the informed data: it is a major problem or the issue has no solution. If your problem is complex, contact salaplanejada@unifesp.br.</b></center>')
+          } else {
+            if(result["found_solution"]) drawFreeLayout(result)
+            else $("div#summary").append('<center><h1 class="mb-0">Resultados</h1>Não foi possível encontrar uma solução com os dados informados: o problema é muito grande ou não há solução. Caso seu problema seja complexo, entre em contato com <b>salaplanejada@unifesp.br</b></center>')
+          }
+
         },
-        error: errorHandler
+        error: function() {
+          if(localStorage.getItem("language") === 'en') {
+            errorHandlerEng()
+          } else {
+            errorHandler()
+          }
+        }
       })
     } else { // Modo fixo
       const data = {
@@ -449,10 +541,21 @@ $(document).ready(function() {
         success: function(result) {
           $("#loading").remove()
 
-          if (result.status) drawFixedLayout(result)
-          else $("div#summary").append('<center><h1 class="mb-0">Resultados</h1><h3 class="mb-0">Não há solução ótima</h3></center>')
+          if(localStorage.getItem("language") === 'en') {
+            if (result.status) drawFixedLayoutEng(result)
+            else $("div#summary").append('<center><h1 class="mb-0">Results</h1><h3 class="mb-0">There is no optimal solution</h3></center>')
+          } else {
+            if (result.status) drawFixedLayout(result)
+            else $("div#summary").append('<center><h1 class="mb-0">Resultados</h1><h3 class="mb-0">Não há solução ótima</h3></center>')
+          }
         },
-        error: errorHandler
+        error: function() {
+          if(localStorage.getItem("language") === 'en') {
+            errorHandlerEng()
+          } else {
+            errorHandler()
+          }
+        }
       })
     }
   })
