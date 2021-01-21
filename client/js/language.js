@@ -136,17 +136,19 @@ let arrayLang = {
                         Computacionais de Otimização", processo número 2018/24293-0 e
                         do PRONEX-Otimização, financiado pela FAPERJ e CNPq.`
     },
+
+
     "en": {
-        "project_title": "",
-        "project_name": "",
-        "room_planner": "",
+        "project_title": "Planned Room - UNIFESP",
+        "project_name": "Planned Room",
+        "room_planner": "Room Planner",
 
-        "project_desc_1": "",
-        "project_desc_2": "",
+        "project_desc_1": "The return of presencial classes, even if partially, are beginning to be planned by municipal and state governments and university rectors. Among the measures that will be adopted to minimize the risk of contagion of students and teachers by the coronavirus, is the distance between desks in classrooms. Through this measure, from some input parameters, it is provided an optimal distribution of desks in each specified classroom. ",
+        "project_desc_2": "To find out how much this application has been used, we request to be informed of your name, institution and email address. If you already have an access code, access through the option ‘I have an access code’.",
 
-        "inform_data": "",
+        "inform_data": "Enter your data",
 
-        "have_access_code": "I have an access code",
+        "have_access_code": "I have an access code",//Não foi encontrado no index.htm e nem no script.js
 
         "name_text": "Name",
         "name_placeholder": "Enter your name",
@@ -159,13 +161,13 @@ let arrayLang = {
 
         "plan_button": "Start planning",
 
-        "auth_problem": "Problemas de autorização. Favor tentar novamente ou entrar em contato com os administradores.",
+        "auth_problem": "Authorization problems. Please try again or contact the administrators. ",//Não foi encontrado no index.htm e nem no script.js
 
-        "user_reminder": "",
+        "user_reminder": "This code can be used in the login screen, it is not necessary to enter your information again. In the future, it will be possible to consult the problems already solved through this access key.",//Não foi encontrado no index.htm e nem no script.js
 
-        "no_solution": "",
+        "no_solution": "It was not possible to find a solution with the informed data: it is a major problem or the issue has no solution. If your problem is complex, contact salaplanejada@unifesp.br.", 
 
-        "error_1": "",
+        "error_1": "Error! Check the information entered. If it happens again, send an email to salaplanejada@unifesp.br.",
 
         "no_optimal_solution": "There is no optimal solution",
 
@@ -183,9 +185,9 @@ let arrayLang = {
         
 
         "instruction_title": "Instructions",
-        "instruction_desc": "",
+        "instruction_desc": "Fill in the dimensions of the room and desk, following the diagram below.  The space for the teacher is always on the right (a space of 2 meters for the teacher is recommended).  The desks also are always right-facing. ",
         "about_label": "About the project",
-        "form_title": "",
+        "form_title": "Plan the distribution of students based on your classroom.",
         
         "room_dimensions": "Room dimensions",
         "room_width": "Room width (m)",
@@ -198,38 +200,65 @@ let arrayLang = {
         "number_tooltip": "Insert whole numbers or decimals separated by periods (.)",
         "integer_tooltip": "Insert whole numbers",
 
-        "can_move": "",
+        "can_move": "Can you move your desks?",
         "choose_option": "Choose an option",
 
-        "can_move_meaning": "",
-        "can_move_desc": ``,
+        "can_move_meaning": "What does that mean?",
+        "can_move_desc": `Choose the option ‘no’ if the room has fixed chairs in 
+                          rows,not being possible to configure them in a free way. 
+                          That way, the application will indicate the distribution of students
+                          around the room. If they are mobile, choose the option ‘yes’, then the
+                          application will indicate possible desks distributions to accommodate 
+                          students, always respecting the minimum distance (it is recommended 
+                          that the distance be at least a meter and a half).`, 
 
         "no": "No",
         "yes": "Yes",
 
         "minimum_distance": "Minimum distance between students (m)",
         
-        "rows_qty": "",
-        "desks_per_row": "",
+        "rows_qty": "Quantity of rows of desks",
+        "desks_per_row": "Number of desks per rows",
 
-        "desks_qty": "",
-        "maximum": "",
-        "solution_row": "",
+        "desks_qty": "Desks quantity",
+        "maximum": "Maximum",
+        "solution_row": "Solution in rows",
         
         "calculate_button": "Calculate",
 
-        "about_text_1": ``,
-        "about_text_2": ``,
-        "about_text_3": ``,
-        "about_text_4": ``,
-        "about_text_5": ``,
-        "about_unifesp": "",
-        "about_ifsp": "",
-        "about_uem": "",
-        "about_members": "",
-        "about_institutions": "",
-        "about_extra_1": ``,
-        "about_extra_2": ``
+        "about_text_1": `In context of COVID-19, the return of presencial classes are being planned 
+                         by education managers. Among the measures that will be adopted to minimize 
+                         the risk of students and teachers contagion by the coronavirus, is the distance 
+                         between desks in classrooms. Our contribution consists in a free web app to 
+                         help with planning. `,
+        "about_text_2": `In our tool, the manager defines the dimension of the classroom, layout by 
+                         rows or not and  the minimum distance between students or the quantity of 
+                         students in the classroom. From these parameters, the app provides an optimal 
+                         distribution: higher permitted number of students in the room or higher possible 
+                         distance between the students. `,
+        "about_text_3": `For any solution found in the app, the attention turns to the transposition of 
+                         the computationally obtained result for the reality of the classroom. In that way, 
+                         the app produces a list of instructions on how to perform the optimal distribution  
+                         of desks, in cases that it is possible to move the desks, and a map of maximum capacity, 
+                         in  cases  that it is not possible to change the rows.`,
+        "about_text_4": `It is important to note that, although our focus is the  planning of classrooms, 
+                         the developed features can be used in several contexts. For example, layout of seats 
+                         in amphitheaters and stadiums, tables in a restaurant, chairs in hospital waiting rooms, 
+                         among others. `,
+        "about_text_5": `Finally, we emphasize that this tool does not solve others problems inherent to the 
+                         return of presencial classes, which are equally fundamental variables to guarantee the 
+                         safety of all. Therefore, it can not be used as an isolated strategy to the return of 
+                         academic activities, requiring adequate  planning  of the more general context. `,
+        "about_unifesp": "Federal University of São Paulo",
+        "about_ifsp": "Federal Institute of Education, Science and Technology of São Paulo",
+        "about_uem": "State University of Maringá",
+        "about_members": "Members",
+        "about_institutions": "Institutions",
+        "about_extra_1": `Members of the thematic project of FAPESP, “Cutting, packing, lot-sizing, 
+                          scheduling, routing and location problems and their integration in industrial 
+                          and logistics settings”, grant number 2016/01860-1.`,
+        "about_extra_2": `Members of the thematic project of FAPESP, “Computational Methods in Optimization”,
+                          grant number 2018/24293-0 and PRONEX-Optimization, financed by FAPERJ and CNPq.`
     }
 }
 
