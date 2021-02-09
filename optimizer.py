@@ -210,18 +210,20 @@ def optimize_rows():
 		return '{0}({1})'.format(request.args.get('callback'), solution)
 
 
-		# We have to adjust the right-oriented definition of the
-		# problem to the top-oriented way that the algorithm was
-		# made. Also, we artificially increase the "right" (top) part,
-		# so that the chair is inside the correct space, not the
-		# table.
+	# We have to adjust the right-oriented definition of
+        # the problem to the top-oriented way that the
+	# algorithm was made. Also, we artificially increase
+        # the "right" (top) part, so that the chair is inside
+	# the correct space, not the table. Finally, we
+        # compute the average space between two rows.
+	avg_space = (room_height - n_rows * ch_height) / (n_rows - 1.0)
 	result = otimizar_filas(
 		room_height,
 		room_width + 7 * ch_width / 8,
 		ch_height,
 		ch_width,
 		n_chairs,
-		n_rows,
+		(avg_space for i in range(n_rows)),
 		min_dist)
 	print(result)
 	convert_coords_map(result["resposta"], timestamp)
