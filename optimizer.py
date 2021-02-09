@@ -102,11 +102,9 @@ def optimizer_chairs():
 		print(e)
 		return '{0}({1})'.format(request.args.get('callback'), {'response': 100, 'error': e})
 	else:
-		import latex_converter
 		import glob2 as gl
 		import os
 		filename = gl.glob("*"+str(process.pid)+".json").pop()
-		#latex_converter.convert_tex_document(filename)
 		loaded_json = json.loads(open(filename, 'r').read())
 		#print(loaded_json)
 		os.remove(filename) #Removes .JSON file
@@ -153,7 +151,6 @@ def optimize_rows():
 	from otimizador_filas import otimizar_filas
 	from flask import jsonify
 	from flask import request
-	from latex_converter import convert_coords_map
 	import time
 
 	data = list(request.args.values())[1:-1]
@@ -169,7 +166,8 @@ def optimize_rows():
 		ch_height = float(data[3])
 		n_rows = int(data[4])
 		n_chairs = int(data[5])
-
+		
+		opt_type = 1
 		# n_students = None
 		# opt_type = int(data[7])
 		# if opt_type == 2: n_students = int(data[8])
@@ -221,32 +219,44 @@ def optimize_rows():
 	# the correct space, not the table. Finally, we
         # compute the average space between two rows.
 	avg_space = (room_height - n_rows * ch_height) / (n_rows - 1.0)
-	result = otimizar_filas(
-		room_height,
-		room_width + 7 * ch_width / 8,
-		ch_height,
-		ch_width,
-		n_chairs,
-		list(avg_space for i in range(n_rows - 1)),
-		min_dist)
+
+	result = None
+	
+	if opt_type is 1:
+		result = otimizar_filas(
+			room_height, room_width + 7 * ch_width / 8,
+			ch_height, ch_width,
+			n_chairs,
+			list(avg_space for i in range(n_rows - 1)),
+			min_dist)
+	# elif opt_type is 2:
+	# 	result = otimizar_filas(
+	# 		room_height, room_width + 7 * ch_width / 8,
+	# 		ch_height, ch_width,
+	# 		n_chairs,
+	# 		list(avg_space for i in range(n_rows - 1)),
+	# 		min_dist, n_students)
+
+	if result is None:
+		return '{0}({1})'.format(
+			request.args.get('callback'),
+			"System error"), 400
+
 	print(result)
-	convert_coords_map(result["resposta"], timestamp)
 
 	solution = {
 		'status': result["status"],
-				'A': result["resposta"],
-				'rows': result["num_fileiras"],
-				'chairs': result["num_carteiras"],
-				'students': result["num_alunos"],
-				'rowSpace': avg_space,
-				'chairSpace': result["largura_corredor_horizontal"]
+		'A': result["resposta"],
+		'rows': result["num_fileiras"],
+		'chairs': result["num_carteiras"],
+		'students': result["num_alunos"],
+		'rowSpace': avg_space,
+		'chairSpace': result["largura_corredor_horizontal"]
 	}
 
 	database.save_or_update_rows(problem_id, room_width,
-				     room_height, min_dist,
-				     ch_width, ch_height,
-				     n_rows, n_chairs,
-				     solution)
+		room_height, min_dist, ch_width, ch_height, n_rows,
+		n_chairs, solution)
 
 	solution.update({'response': 200,
 			 'timestamp': timestamp})
