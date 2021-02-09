@@ -159,12 +159,29 @@ def optimize_rows():
 	data = list(request.args.values())[1:-1]
 	timestamp = time.time()
 
-	problem_id = database.gen_row_id(float(data[0]),
-					   float(data[1]),
-					   float(data[6]),
-					   float(data[2]),
-					   float(data[3]),
-					   int(data[4]), int(data[5]))
+	# Check arguments and try to convert them
+
+	try:
+		room_width = float(data[0])
+		room_height = float(data[1])
+		min_dist = float(data[6])
+		ch_width = float(data[2])
+		ch_height = float(data[3])
+		n_rows = int(data[4])
+		n_chairs = int(data[5])
+
+	except Exception as e:
+
+		return '{0}({1})'.format(
+			request.args.get('callback'), str(e)
+		), 500
+
+	problem_id = database.gen_row_id(room_width,
+					   room_height,
+					   min_dist,
+					   ch_width,
+					   ch_height,
+					   n_rows, n_chairs)
 
 	database.connect()
 
@@ -172,13 +189,13 @@ def optimize_rows():
                 'type': 'rows',
                 'user_id': '',
                 'problem_id': problem_id,
-		'min_dist': float(data[6]),
-		'room_width': float(data[0]),
-		'room_height': float(data[1]),
-		'chair_width': float(data[2]),
-		'chair_height': float(data[3]),
-		'num_rows': int(data[4]),
-		'num_chairs': int(data[5])
+		'min_dist': min_dist,
+		'room_width': room_width,
+		'room_height': room_height,
+		'chair_width': ch_width,
+		'chair_height': ch_height,
+		'num_rows': n_rows,
+		'num_chairs': n_chairs
 	}
 
 	database.save_problem(jd)
@@ -199,13 +216,13 @@ def optimize_rows():
 		# so that the chair is inside the correct space, not the
 		# table.
 	result = otimizar_filas(
-		float(data[1]),
-		float(data[0]) + 7 * float(data[2]) / 8,
-		float(data[3]),
-		float(data[2]),
-		int(data[5]),
-		int(data[4]),
-		float(data[6]))
+		room_height,
+		room_width + 7 * ch_width / 8,
+		ch_height,
+		ch_width,
+		n_chairs,
+		n_rows,
+		min_dist)
 	print(result)
 	convert_coords_map(result["resposta"], timestamp)
 
@@ -219,10 +236,10 @@ def optimize_rows():
 				'chairSpace': result["largura_corredor_horizontal"]
 	}
 
-	database.save_or_update_rows(problem_id, float(data[0]),
-				     float(data[1]), float(data[6]),
-				     float(data[2]), float(data[3]),
-				     int(data[4]), int(data[5]),
+	database.save_or_update_rows(problem_id, room_width,
+				     room_height, min_dist,
+				     ch_width, ch_height,
+				     n_rows, n_chairs,
 				     solution)
 
 	solution.update({'response': 200,
