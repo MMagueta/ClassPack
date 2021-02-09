@@ -129,6 +129,7 @@ def otimizar_distancia(hs,
                         vc,
                         m,
                         n, #LISTA COM LARGURAS DOS CORREDORES VERTICAIS
+                        dmin,
                         num_alunos):
   #PAINEL DE CONTROLE
   #hs = 10 #largura da sala
@@ -217,7 +218,8 @@ def otimizar_distancia(hs,
   # [END solve]
 
   # [START print_solution]
-  if status == pywraplp.Solver.OPTIMAL:
+  if status == pywraplp.Solver.OPTIMAL and \
+     solver.Objective().Value() >= dmin:
       print('Solucao:')
       print('Funcao objetivo =', solver.Objective().Value())
       resposta = []
@@ -254,10 +256,10 @@ def main():
   vc = 0.5
   m = 6
   n = [1,2,1,1,2,1]
-  #dmin = 1.0
+  dmin = 1.0
   num_alunos = 20
   #print(otimizar_filas(hs,vs,hc,vc,m,n, dmin))
-  print(otimizar_distancia(hs,vs,hc,vc,m,n, num_alunos))
+  print(otimizar_distancia(hs,vs,hc,vc,m,n, dmin, num_alunos))
   
 if __name__ == "__main__":
   main()
