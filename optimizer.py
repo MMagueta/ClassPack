@@ -170,6 +170,10 @@ def optimize_rows():
 		n_rows = int(data[4])
 		n_chairs = int(data[5])
 
+		# n_students = None
+		# opt_type = int(data[7])
+		# if opt_type == 2: n_students = int(data[8])
+
 	except Exception as e:
 
 		return '{0}({1})'.format(
@@ -223,7 +227,7 @@ def optimize_rows():
 		ch_height,
 		ch_width,
 		n_chairs,
-		(avg_space for i in range(n_rows)),
+		list(avg_space for i in range(n_rows - 1)),
 		min_dist)
 	print(result)
 	convert_coords_map(result["resposta"], timestamp)
@@ -234,7 +238,7 @@ def optimize_rows():
 				'rows': result["num_fileiras"],
 				'chairs': result["num_carteiras"],
 				'students': result["num_alunos"],
-				'rowSpace': result["largura_corredor_vertical"],
+				'rowSpace': avg_space,
 				'chairSpace': result["largura_corredor_horizontal"]
 	}
 
