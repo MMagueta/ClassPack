@@ -216,6 +216,10 @@ function drawFixedLayout(result) {
     <h4 class="mt-1 margin-left-adjust">Cadeiras: ${result.chairs}</h4>
     <h4 class="mt-1 margin-left-adjust">Número de estudantes: ${result.students}</h4>
   `)
+  if (result.minDist)
+    $("div#summary").append(`
+        <h4 class="mt-1 marign-left-adjust">Distância mínima: ${myRound(result.minDist, 2)}</h4>
+    `)
   $("div#summary").append("<button class='btn btn-confirm mt-4 margin-left-adjust' id='download' onclick='download_pdf()'>Baixar PDF</button>")
   $("#result").append(`
     <div class="col-sm-12 col-lg-6 mt-4 mb-4">
@@ -296,6 +300,10 @@ function drawFixedLayoutEng(result) {
     <h4 class="mt-1 margin-left-adjust">Chairs: ${result.chairs}</h4>
     <h4 class="mt-1 margin-left-adjust">Students quantity: ${result.students}</h4>
   `)
+  if (result.minDist)
+    $("div#summary").append(`
+        <h4 class="mt-1 margin-left-adjust">Minimum distance: ${myRound(result.minDist, 2)}</h4>
+    `)
   $("div#summary").append("<button class='btn btn-confirm mt-4 margin-left-adjust' id='download' onclick='download_pdf()'>Download PDF</button>")
   $("#result").append(`
     <div class="col-sm-12 col-lg-6 mt-4 mb-4">
@@ -397,8 +405,8 @@ $(document).ready(function() {
               $('#radioMaxima').is(':checked')
     }
     // Modo fixo
-    return  $('#txtQuantidadeFileiras').val() !== '' &&
-            $('#txtQuantidadeCarteirasFileira').val() !== ''
+    return  ($('#txtQuantidadeFileiras').val() !== '' && $('#txtQuantidadeCarteirasFileira').val() !== '') &&
+      ($('#rowsRadioMaxima').is(':checked') || $('#txtQuantidadeAlunosRadio').val() !== '')
   }
 
   function enableCalcularButton() {
@@ -521,6 +529,7 @@ $(document).ready(function() {
         }
       })
     } else { // Modo fixo
+      const selectedRadio = $("input[name=rows-radio-options]:checked").val()
       const data = {
         1: $("#txtLarguraSala").val(),
         2: $("#txtComprimentoSala").val(),
@@ -543,10 +552,10 @@ $(document).ready(function() {
 
           if(localStorage.getItem("language") === 'en') {
             if (result.status) drawFixedLayoutEng(result)
-            else $("div#summary").append('<center><h1 class="mb-0">Results</h1><h3 class="mb-0">There is no optimal solution</h3></center>')
+            else $("div#summary").append('<center><h1 class="mb-0">Results</h1><h3 class="mb-0">There is no optimal solution. Check the problem\'s data.</h3></center>')
           } else {
             if (result.status) drawFixedLayout(result)
-            else $("div#summary").append('<center><h1 class="mb-0">Resultados</h1><h3 class="mb-0">Não há solução ótima</h3></center>')
+            else $("div#summary").append('<center><h1 class="mb-0">Resultados</h1><h3 class="mb-0">Não há solução ótima. Verifique os dados do problema.</h3></center>')
           }
         },
         error: function() {

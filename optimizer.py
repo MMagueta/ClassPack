@@ -148,7 +148,7 @@ def download(filename):
 
 @optimizer.route('/rows')
 def optimize_rows():
-	from otimizador_filas import otimizar_filas
+	from otimizador_filas import otimizar_filas, otimizar_distancia
 	from flask import jsonify
 	from flask import request
 	import time
@@ -167,10 +167,9 @@ def optimize_rows():
 		n_rows = int(data[4])
 		n_chairs = int(data[5])
 		
-		opt_type = 1
-		# n_students = None
-		# opt_type = int(data[7])
-		# if opt_type == 2: n_students = int(data[8])
+		opt_type = int(data[7])
+		n_students = None
+		if opt_type == 2: n_students = int(data[8])
 
 	except Exception as e:
 
@@ -178,12 +177,11 @@ def optimize_rows():
 			request.args.get('callback'), str(e)
 		), 500
 
-	problem_id = database.gen_row_id(room_width,
-					   room_height,
-					   min_dist,
-					   ch_width,
-					   ch_height,
-					   n_rows, n_chairs)
+	problem_id = database.gen_row_id(room_width, room_height,
+					 min_dist,
+					 ch_width, ch_height,
+					 n_rows, n_chairs,
+					 opt_type, n_students)
 
 	database.connect()
 
@@ -197,8 +195,12 @@ def optimize_rows():
 		'chair_width': ch_width,
 		'chair_height': ch_height,
 		'num_rows': n_rows,
-		'num_chairs': n_chairs
+		'num_chairs': n_chairs,
+		'opt_type': opt_type
+		
 	}
+
+	if opt_type == 2: jd['num_students'] = n_students
 
 	database.save_problem(jd)
 
@@ -209,7 +211,7 @@ def optimize_rows():
 		solution.update({'response': 200,
 				 'timestamp': timestamp})
 
-		return '{0}({1})'.format(request.args.get('callback'), solution)
+		return '{0}({1})'.format(request.args.get('callback'), solution), 200
 
 
 	# We have to adjust the right-oriented definition of
@@ -229,13 +231,13 @@ def optimize_rows():
 			n_chairs,
 			list(avg_space for i in range(n_rows - 1)),
 			min_dist)
-	# elif opt_type is 2:
-	# 	result = otimizar_filas(
-	# 		room_height, room_width + 7 * ch_width / 8,
-	# 		ch_height, ch_width,
-	# 		n_chairs,
-	# 		list(avg_space for i in range(n_rows - 1)),
-	# 		min_dist, n_students)
+	elif opt_type is 2:
+		result = otimizar_distancia(
+			room_height, room_width + 7 * ch_width / 8,
+			ch_height, ch_width,
+			n_chairs,
+			list(avg_space for i in range(n_rows - 1)),
+			min_dist, n_students)
 
 	if result is None:
 		return '{0}({1})'.format(
@@ -244,19 +246,24 @@ def optimize_rows():
 
 	print(result)
 
-	solution = {
-		'status': result["status"],
-		'A': result["resposta"],
-		'rows': result["num_fileiras"],
-		'chairs': result["num_carteiras"],
-		'students': result["num_alunos"],
-		'rowSpace': avg_space,
-		'chairSpace': result["largura_corredor_horizontal"]
-	}
+	solution = { 'status': result["status"] }
+
+	if result['status'] != 0:
+
+		solution.update({
+			'A': result["resposta"],
+			'rows': result["num_fileiras"],
+			'chairs': result["num_carteiras"],
+			'students': result["num_alunos"],
+			'rowSpace': avg_space,
+			'chairSpace': result["largura_corredor_horizontal"]
+		})
+
+		if opt_type == 2: solution['minDist'] = result['distancia_minima']
 
 	database.save_or_update_rows(problem_id, room_width,
 		room_height, min_dist, ch_width, ch_height, n_rows,
-		n_chairs, solution)
+		n_chairs, opt_type, solution, n_students)
 
 	solution.update({'response': 200,
 			 'timestamp': timestamp})

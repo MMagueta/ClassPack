@@ -158,13 +158,18 @@ def gen_chair_id(width, height, min_dist, ch_width, ch_height,
 
 
 def gen_row_id(width, height, min_dist, ch_width, ch_height,
-               n_rows, n_chairs):
+               n_rows, n_chairs, opt_type, n_students):
     """Generate unique ids for saving the results of 'rows' problems.
 
     """
 
+    n_students_str = ""
+    if n_students is not None: n_students_str = str(n_students)
+
     id = 'rows:' + ':'.join(
-        str(i) for i in [width, height, ch_width, ch_height, min_dist, n_rows, n_chairs]
+        str(i) for i in [width, height, ch_width, ch_height,
+                         min_dist, n_rows, n_chairs, opt_type,
+                         n_students_str]
     )
 
     return id
@@ -239,7 +244,7 @@ def save_or_update_chairs(problem_id, width, height, min_dist, ch_width, ch_heig
 
 
 def save_or_update_rows(problem_id, width, height, min_dist, ch_width, ch_height,
-                        n_rows, n_chairs, solution):
+                        n_rows, n_chairs, opt_type, solution, n_students=None):
 
     if '_client' not in g: return
     
@@ -261,6 +266,7 @@ def save_or_update_rows(problem_id, width, height, min_dist, ch_width, ch_height
 
         document = {
             '_id': problem_id,
+            'problem_type': opt_type,
             'min_dist': min_dist,
             'room_width': width,
             'room_height': height,
@@ -268,6 +274,7 @@ def save_or_update_rows(problem_id, width, height, min_dist, ch_width, ch_height
             'chair_height': ch_height,
             'number_of_chairs': n_chairs,
             'number_of_rows': n_rows,
+            'number_of_students': n_students,
             'solution': solution
         }
 

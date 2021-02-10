@@ -228,7 +228,7 @@ def otimizar_distancia(hs,
       resposta = np.reshape(resposta,(m,(len(n)+1)))
       return {'status' : 1,
               'distancia_minima' : solver.Objective().Value(),
-              'numero_alunos' : num_alunos,
+              'num_alunos' : num_alunos,
               'num_fileiras' : (len(n)+1),
               'num_carteiras' : m,
               "largura_corredores_verticais": n,
