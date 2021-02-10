@@ -83,6 +83,7 @@ let arrayLang = {
         
         "rows_qty": "Quantidade de fileiras de carteiras",
         "desks_per_row": "Número de carteiras por fileira",
+        "rows_qt_students": "Quantidade de alunos",
 
         "desks_qty": "Quantidade de carteiras",
         "maximum": "Máxima",
@@ -219,6 +220,7 @@ let arrayLang = {
         
         "rows_qty": "Quantity of rows of desks",
         "desks_per_row": "Number of desks per rows",
+        "rows_qt_students": "Number of students",
 
         "desks_qty": "Desks quantity",
         "maximum": "Maximum",
