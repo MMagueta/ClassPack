@@ -538,7 +538,10 @@ $(document).ready(function() {
         5: $("#txtQuantidadeFileiras").val(),
         6: $("#txtQuantidadeCarteirasFileira").val(),
         7: $("#txtDistanciaMinima").val(),
+        8: selectedRadio,
       }
+
+      if (selectedRadio == 2) data[9] = $("#txtQuantidadeAlunosRadio").val()
       
       $.ajax({
         url: "http://200.144.93.70/a/rows",
