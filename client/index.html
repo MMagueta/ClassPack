@@ -199,6 +199,34 @@
                                     <label for="txtQuantidadeCarteirasFileira" class="unifesp-grey lang" key="desks_per_row">Número de carteiras por fileira</label>
                                     <input id="txtQuantidadeCarteirasFileira" class="form-control lang-title" key="integer_tooltip" type="text" placeholder="5" pattern="[0-9]*" title="Inserir números inteiros">
                                   </div>
+                                  <!-- Mode in the fixed format -->
+                                  <div class="form-group">
+                                    <label class="unifesp-grey lang" key="rows_qt_students">Quantidade de alunos</label>
+                                    <div class="row">
+                                      <div class="col-sm-12 col-md-12 col-lg-8">
+                                        <div class="input-group">
+                                          <div class="input-group-prepend">
+                                            <div class="input-group-text">       
+                                              <input id="rowsRadioInserir" name="rows-radio-options" class="rows-radio-carteiras" type="radio" aria-label="Radio button para o seguido input" value="2">
+                                            </div>
+                                          </div>
+                                          <input id="txtQuantidadeAlunosRadio" type="text" class="form-control lang-title" key="integer_tooltip" aria-label="Radio button com input" placeholder="10" pattern="[0-9]*" title="Inserir números inteiros" >
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="row mt-2">
+                                      <div class="col-sm-12 col-md-12 col-lg-8">
+                                        <div class="input-group">
+                                          <div class="input-group-prepend">
+                                            <div class="input-group-text">       
+                                              <input id="rowsRadioMaxima" name="rows-radio-options" class="rows-radio-carteiras" type="radio" aria-label="Radio button para o seguido input" value="1" checked>
+                                            </div>
+                                          </div>
+                                          <input type="text" class="form-control lang-value" key="maximum" aria-label="Radio button com input" value="Máxima" disabled>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
                                 </div>
                                 <div id="modoLivre" style="display: none;">
                                   <div class="form-group">
