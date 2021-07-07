@@ -1,6 +1,7 @@
-from time import time
 from hashlib import sha256
 from random import random
+from time import time
+
 from cloudant.client import CouchDB
 from flask import g, request
 
@@ -10,22 +11,20 @@ DB_PRB_NAME = 'problems'
 
 __DB_USERNAME = None
 __DB_PASSWORD = None
-__DB_ADDRESS  = None
+__DB_ADDRESS = None
 
 
 def init_db(config, app):
-
     global __DB_ADDRESS, __DB_PASSWORD, __DB_USERNAME
 
     app.teardown_appcontext(disconnect)
 
     __DB_USERNAME = config.get('ClassPack', 'db.username', fallback='classpack_user')
     __DB_PASSWORD = config.get('Database', 'db.password')
-    __DB_ADDRESS  = config.get('Database', 'db.address', fallback='http://127.0.0.2')
-    
+    __DB_ADDRESS = config.get('Database', 'db.address', fallback='http://127.0.0.2')
+
 
 def save_problem(json_data):
-
     if '_client' not in g: return
 
     db = g._client[DB_PRB_NAME]
@@ -37,7 +36,7 @@ def save_problem(json_data):
         'user_ip': request.remote_addr,
         'user_agent': str(request.user_agent),
         'timestamp': time()
-        }
+    }
 
     doc.update(json_data)
 
@@ -49,16 +48,15 @@ def connect():
     Conect to the CouchDB server.
     """
 
-    if __DB_ADDRESS  is None or \
-       __DB_PASSWORD is None or \
-       __DB_USERNAME is None:
-
+    if __DB_ADDRESS is None or \
+            __DB_PASSWORD is None or \
+            __DB_USERNAME is None:
         print("Database not initialized.")
 
         return None
-    
+
     try:
-        
+
         g._client = CouchDB(__DB_USERNAME, __DB_PASSWORD,
                             url=__DB_ADDRESS + ':5984', connect=True)
 
@@ -75,7 +73,7 @@ def disconnect(e=None):
     """
 
     if '_client' not in g: return
-    
+
     g._client.disconnect()
 
 
@@ -98,17 +96,16 @@ def _sort_obs(obstacles):
             jobs = obstacles[j]
 
             if vmin[0] > jobs[0] or \
-               (vmin[0] == jobs[0] and vmin[1] > jobs[1]) or \
-               (vmin[0] == jobs[0] and vmin[1] == jobs[1] and vmin[2] > jobs[2]):
-
+                    (vmin[0] == jobs[0] and vmin[1] > jobs[1]) or \
+                    (vmin[0] == jobs[0] and vmin[1] == jobs[1] and vmin[2] > jobs[2]):
                 pmin = j
                 vmin = obstacles[j]
 
         if pmin is not i:
-
             tmp = obstacles[i]
             obstacles[i] = vmin
             obstacles[pmin] = tmp
+
 
 def add_and_return_user(email, name, institution):
     """Store the user and return the document.
@@ -120,7 +117,7 @@ def add_and_return_user(email, name, institution):
     """
 
     if '_client' not in g: return ''
-    
+
     udb = g._client[DB_USR_NAME]
 
     uid = sha256((email + str(time())).encode('latin')).hexdigest()
@@ -133,7 +130,7 @@ def add_and_return_user(email, name, institution):
     }
 
     udb.create_document(user_with_id)
-    
+
     return uid
 
 
@@ -147,7 +144,7 @@ def gen_chair_id(width, height, min_dist, ch_width, ch_height,
 
     num_chairs_str = ""
     if num_chairs is not None: num_chairs_str = str(num_chairs)
-    
+
     id = 'chairs:' + ':'.join(
         str(i) for i in [width, height, ch_width, ch_height, min_dist] +
         list(k for ob in obstacles for k in ob) +
@@ -176,13 +173,11 @@ def gen_row_id(width, height, min_dist, ch_width, ch_height,
 
 
 def get_chairs(problem_id):
-
     if '_client' not in g: return None
 
     db = g._client[DB_SOL_NAME]
 
     if problem_id in db:
-
         doc = db[problem_id]
 
         return doc['solution']
@@ -191,13 +186,11 @@ def get_chairs(problem_id):
 
 
 def get_rows(problem_id):
-
     if '_client' not in g: return None
 
     db = g._client[DB_SOL_NAME]
 
     if problem_id in db:
-
         doc = db[problem_id]
 
         return doc['solution']
@@ -207,9 +200,8 @@ def get_rows(problem_id):
 
 def save_or_update_chairs(problem_id, width, height, min_dist, ch_width, ch_height,
                           ptype, solution, obstacles=[], num_chairs=None):
-
     if '_client' not in g: return
-    
+
     db = g._client[DB_SOL_NAME]
 
     if problem_id in db:
@@ -217,7 +209,6 @@ def save_or_update_chairs(problem_id, width, height, min_dist, ch_width, ch_heig
         olddoc = db[problem_id]
 
         if solution['min_distance'] < olddoc['solution']['min_distance']:
-
             olddoc['solution'] = solution
             olddoc.save()
 
@@ -245,18 +236,16 @@ def save_or_update_chairs(problem_id, width, height, min_dist, ch_width, ch_heig
 
 def save_or_update_rows(problem_id, width, height, min_dist, ch_width, ch_height,
                         n_rows, n_chairs, opt_type, solution, n_students=None):
-
     if '_client' not in g: return
-    
+
     db = g._client[DB_SOL_NAME]
 
     if problem_id in db:
 
         olddoc = db[problem_id]
 
-        if int(olddoc['solution']['status']) is '0' or \
-           solution['students'] > olddoc['solution']['students']:
-
+        if int(olddoc['solution']['status']) == 0 or \
+                solution['students'] > olddoc['solution']['students']:
             olddoc['solution'] = solution
             olddoc.save()
 

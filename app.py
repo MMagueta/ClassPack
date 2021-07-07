@@ -1,4 +1,5 @@
 from configparser import ConfigParser
+
 from flask import Flask
 from flask_cors import CORS
 
@@ -14,7 +15,7 @@ def create_app(ini_file):
 
 	__URL_PREFIX = config.get('ClassPack', 'url.prefix', fallback='/')
 
-	from optimizer import optimizer, config_optimizer
+	from optimizer import config_optimizer, optimizer
 	config_optimizer(config)
 	app.register_blueprint(optimizer, url_prefix=__URL_PREFIX)
 
