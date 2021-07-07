@@ -151,3 +151,4 @@ env/**
 # Ignore configuration files
 *.ini
 .idea
+dbdata/
