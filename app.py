@@ -16,7 +16,7 @@ def create_app(ini_file):
 	__URL_PREFIX = config.get('ClassPack', 'url.prefix', fallback='/')
 
 	from optimizer import config_optimizer, optimizer
-	config_optimizer(config)
+	#config_optimizer(config)
 	app.register_blueprint(optimizer, url_prefix=__URL_PREFIX)
 
 	from database import init_db

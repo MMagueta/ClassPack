@@ -502,7 +502,7 @@ $(document).ready(function() {
       }
 
       $.ajax({
-        url: "http://200.144.93.70/a/optimize",
+        url: "http://10.0.0.177:5000/optimize",
         type: "GET",
         data,
         crossDomain: true,
@@ -544,7 +544,7 @@ $(document).ready(function() {
       if (selectedRadio == 2) data[9] = $("#txtQuantidadeAlunosRadio").val()
       
       $.ajax({
-        url: "http://200.144.93.70/a/rows",
+        url: "http://10.0.0.177:5000/rows",
         type: "GET",
         data,
         crossDomain: true,

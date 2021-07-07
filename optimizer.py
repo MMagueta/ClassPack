@@ -1,6 +1,6 @@
 import json
 
-from flask import Blueprint
+from flask import Blueprint, render_template
 
 import database
 
@@ -12,15 +12,17 @@ def config_optimizer(config):
     global __FORTRAN_EXEC_NAME, __FORTRAN_EXEC_PATH
 
     __FORTRAN_EXEC_NAME = config.get('ClassPack', 'fortran.exec.name', fallback='teste.x')
+    print(__FORTRAN_EXEC_NAME)
     __FORTRAN_EXEC_PATH = config.get('ClassPack', 'fortran.exec.path', fallback='script')
+    print(__FORTRAN_EXEC_PATH)
 
 
-optimizer = Blueprint('mainapp', __name__)
+optimizer = Blueprint('mainapp', __name__, template_folder='client/', static_folder='client/css')
 
 
 @optimizer.route('/')
 def index():
-    return "Index"
+    return render_template('index.html')
 
 
 @optimizer.route('/optimize')
@@ -35,8 +37,6 @@ def optimizer_chairs():
     data = list(request.args.values())[1:-1]
 
     args = [data[4]] + data[2:4] + data[0:2] + data[5:]
-    print(args)
-
     obstacles = list(list(float(args[7 + 3 * i + j]) for j in range(0, 3)) for i in range(0, int(args[6])))
 
     ptype = int(data[6 + 3 * len(obstacles) + 1])
@@ -100,7 +100,9 @@ def optimizer_chairs():
     # print("> ", output, error)
     # print("A")
     except Exception as e:
+        import traceback
         print(e)
+        traceback.print_exc()
         return '{0}({1})'.format(request.args.get('callback'), {'response': 100, 'error': e})
     else:
         import os
@@ -244,7 +246,7 @@ def optimize_rows():
             request.args.get('callback'),
             "System error"), 400
 
-    print(result)
+    print("asdasd", result)
 
     solution = {'status': result["status"]}
 

@@ -21,13 +21,16 @@ def init_db(config, app):
 
     __DB_USERNAME = config.get('ClassPack', 'db.username', fallback='classpack_user')
     __DB_PASSWORD = config.get('Database', 'db.password')
-    __DB_ADDRESS = config.get('Database', 'db.address', fallback='http://127.0.0.2')
+    __DB_ADDRESS = config.get('Database', 'db.address', fallback='http://127.0.0.1')
 
 
 def save_problem(json_data):
     if '_client' not in g: return
 
-    db = g._client[DB_PRB_NAME]
+    try:
+        db = g._client[DB_PRB_NAME]
+    except Exception as e:
+        db = g._client.create_database(DB_PRB_NAME)
 
     id = sha256(str(time() + random()).encode('latin')).hexdigest()
 
@@ -56,10 +59,8 @@ def connect():
         return None
 
     try:
-
         g._client = CouchDB(__DB_USERNAME, __DB_PASSWORD,
-                            url=__DB_ADDRESS + ':5984', connect=True)
-
+                            url=__DB_ADDRESS, connect=True)
     except Exception as e:
 
         print("Error when connecting to database")
@@ -175,7 +176,10 @@ def gen_row_id(width, height, min_dist, ch_width, ch_height,
 def get_chairs(problem_id):
     if '_client' not in g: return None
 
-    db = g._client[DB_SOL_NAME]
+    try:
+        db = g._client[DB_SOL_NAME]
+    except Exception as e:
+        db = g._client.create_database(DB_SOL_NAME)
 
     if problem_id in db:
         doc = db[problem_id]
