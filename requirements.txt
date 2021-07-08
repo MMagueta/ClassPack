@@ -1,0 +1,22 @@
+absl-py==0.13.0
+certifi==2021.5.30; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0"
+chardet==4.0.0; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0"
+click==8.0.1; python_version >= "3.6"
+cloudant==2.14.0
+colorama==0.4.4; python_version >= "3.6" and python_full_version < "3.0.0" and platform_system == "Windows" or platform_system == "Windows" and python_version >= "3.6" and python_full_version >= "3.5.0"
+configparser==5.0.2; python_version >= "3.6"
+flask-cors==3.0.10
+flask==2.0.1; python_version >= "3.6"
+glob2==0.7
+idna==2.10; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0"
+isort==5.9.1; python_full_version >= "3.6.1" and python_version < "4.0"
+itsdangerous==2.0.1; python_version >= "3.6"
+jinja2==3.0.1; python_version >= "3.6"
+markupsafe==2.0.1; python_version >= "3.6"
+numpy==1.21.0; python_version >= "3.7"
+ortools==9.0.9048
+protobuf==3.17.3
+requests==2.25.1; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0"
+six==1.16.0; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.3.0"
+urllib3==1.26.6; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" and python_version < "4"
+werkzeug==2.0.1; python_version >= "3.6"

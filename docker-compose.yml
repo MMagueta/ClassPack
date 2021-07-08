@@ -9,3 +9,31 @@ services:
       - COUCHDB_PASSWORD=admin
     volumes:
         - ./dbdata:/opt/couchdb/data
+
+  #api:
+  #  image: class_pack_api
+  #  container_name: api
+  #  build:
+  #      context: .
+  #      dockerfile: ./docker_images/api/Dockerfile
+  #  volumes:
+  #      - ./src:/app
+  #      - ./class_pack:/app/class_pack
+  #      - ./resources:/app/resources
+  #  depends_on:
+  #      - couchserver
+  #  ports:
+  #      - 8080:8080
+  #  command: python app.py
+  #  restart: always
+  #  network_mode: "host"
+
+  proxy:
+    image: html_static-nginx
+    build:
+      context: .
+      dockerfile: ./docker_images/html_static/Dockerfile
+    ports:
+      - "30000:80"
+    volumes:
+      - ./client:/usr/share/nginx/html

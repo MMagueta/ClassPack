@@ -5,7 +5,7 @@ from flask import Blueprint, render_template
 import database
 
 __FORTRAN_EXEC_NAME = 'teste.x'
-__FORTRAN_EXEC_PATH = 'script'
+__FORTRAN_EXEC_PATH = '../script'
 
 
 def config_optimizer(config):
@@ -27,10 +27,9 @@ def index():
 
 @optimizer.route('/optimize')
 def optimizer_chairs():
-    import os
     import subprocess
 
-    from flask import request, send_file
+    from flask import request
 
     global __FORTRAN_EXEC_NAME, __FORTRAN_EXEC_PATH
 
@@ -153,7 +152,7 @@ def download(filename):
 def optimize_rows():
     import time
 
-    from flask import jsonify, request
+    from flask import request
 
     from otimizador_filas import otimizar_distancia, otimizar_filas
 

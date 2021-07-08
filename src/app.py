@@ -15,11 +15,11 @@ def create_app(ini_file):
 
 	__URL_PREFIX = config.get('ClassPack', 'url.prefix', fallback='/')
 
-	from optimizer import config_optimizer, optimizer
+	from class_pack.optimizer import optimizer
 	#config_optimizer(config)
 	app.register_blueprint(optimizer, url_prefix=__URL_PREFIX)
 
-	from database import init_db
+	from class_pack.database import init_db
 	init_db(config, app)
 
 	return app
@@ -27,6 +27,6 @@ def create_app(ini_file):
 
 if __name__ == '__main__':
 
-	app = create_app("./cp_config.ini")
+	app = create_app("../cp_config.ini")
 
 	app.run(host="0.0.0.0")
