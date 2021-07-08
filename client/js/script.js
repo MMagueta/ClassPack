@@ -85,6 +85,7 @@ function drawOptSolution(s, move) {
 }
 
 function download_pdf(filename){
+  console.log("chama")
   printJS({
       printable: 'map-hidden',
       type: 'html',
