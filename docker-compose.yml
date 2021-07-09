@@ -1,14 +1,14 @@
 version: '3'
 services:
-  couchserver:
-    image: couchdb
-    ports:
-      - "5984:5984"
-    environment:
-      - COUCHDB_USER=admin
-      - COUCHDB_PASSWORD=admin
-    volumes:
-        - ./dbdata:/opt/couchdb/data
+  #couchserver:
+  #  image: couchdb
+  #  ports:
+  #    - "5984:5984"
+  #  environment:
+  #    - COUCHDB_USER=admin
+  #    - COUCHDB_PASSWORD=admin
+  #  volumes:
+  #      - ./dbdata:/opt/couchdb/data
 
   api:
     image: class_pack_api
@@ -31,17 +31,17 @@ services:
       - SECRET_PATH=/run/secrets/my_file_secret
     restart: always
 
-  proxy:
-    image: html_static-nginx
-    build:
-      context: .
-      dockerfile: ./docker_images/html_static/Dockerfile
-    ports:
-      - "30000:80"
-    volumes:
-      - ./client:/usr/share/nginx/html
-    depends_on:
-      - couchserver
+  #proxy:
+  #  image: html_static-nginx
+  #  build:
+  #    context: .
+  #    dockerfile: ./docker_images/html_static/Dockerfile
+  #  ports:
+  #    - "30000:80"
+  #  volumes:
+  #    - ./client:/usr/share/nginx/html
+  #  depends_on:
+  #    - couchserver
 secrets:
   my_file_secret:
     file: cp_config.ini
