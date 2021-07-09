@@ -2,7 +2,7 @@ import json
 
 from flask import Blueprint, render_template
 
-import database
+from . import database
 
 __FORTRAN_EXEC_NAME = 'teste.x'
 __FORTRAN_EXEC_PATH = '../script'
@@ -13,7 +13,7 @@ def config_optimizer(config):
 
     __FORTRAN_EXEC_NAME = config.get('ClassPack', 'fortran.exec.name', fallback='teste.x')
     print(__FORTRAN_EXEC_NAME)
-    __FORTRAN_EXEC_PATH = config.get('ClassPack', 'fortran.exec.path', fallback='script')
+    __FORTRAN_EXEC_PATH = config.get('ClassPack', 'fortran.exec.path', fallback='../script')
     print(__FORTRAN_EXEC_PATH)
 
 

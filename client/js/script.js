@@ -1,5 +1,7 @@
 let solution
 let cntSolution = 0
+const URL = process.env.URL
+
 
 function myRound(x, p) {
   const mult = Math.pow(10, p)
@@ -19,6 +21,8 @@ function clearRoom(ctx, w, h) {
 }
 
 function drawRoomAndTeacherSpace(ctx, w, h, scale, salax, salay) {
+  console.log("eh o mininode papai eh")
+  console.log(process.env.process.env.URL_ENV)
   // Draw room
   ctx.strokeStyle = "black"
   ctx.lineWidth = "1"
@@ -503,7 +507,7 @@ $(document).ready(function() {
       }
 
       $.ajax({
-        url: "http://10.0.0.177:5000/optimize",
+        url: "http://process.env.URL_ENV:5000/optimize",
         type: "GET",
         data,
         crossDomain: true,
@@ -545,7 +549,7 @@ $(document).ready(function() {
       if (selectedRadio == 2) data[9] = $("#txtQuantidadeAlunosRadio").val()
       
       $.ajax({
-        url: "http://10.0.0.177:5000/rows",
+        url: "http://process.env.URL_ENV:5000/rows",
         type: "GET",
         data,
         crossDomain: true,
