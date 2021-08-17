@@ -11,8 +11,9 @@ def config_optimizer(config):
 
 	global __FORTRAN_EXEC_NAME, __FORTRAN_EXEC_PATH
 
-	__FORTRAN_EXEC_NAME = config.get('ClassPack', 'fortran.exec.name', fallback='teste.x')
-	__FORTRAN_EXEC_PATH = config.get('ClassPack', 'fortran.exec.path', fallback='script')
+	__FORTRAN_EXEC_NAME  = config.get('ClassPack', 'fortran.exec.name', fallback='teste.x')
+	__FORTRAN_EXEC_PATH  = config.get('ClassPack', 'fortran.exec.path', fallback='script')
+	__FORTRAN_TIME_LIMIT =  config.get('ClassPack', 'fortran.exec.timelimit', fallback=120.0)
 
 
 optimizer = Blueprint('mainapp', __name__)
@@ -92,9 +93,9 @@ def optimizer_chairs():
 			)
 
 		process = subprocess.Popen(
-						[__FORTRAN_EXEC_PATH + '/' + __FORTRAN_EXEC_NAME],
-						stdin=subprocess.PIPE, stdout=subprocess.PIPE
-				)
+			[__FORTRAN_EXEC_PATH + '/' + __FORTRAN_EXEC_NAME],
+			stdin=subprocess.PIPE, stdout=subprocess.PIPE, timeout=__FORTRAN_TIME_LIMIT
+		)
 		output, error = process.communicate(('\n'.join(args)).encode('utf-8'))
 		#print("> ", output, error)
 		#print("A")
