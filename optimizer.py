@@ -75,7 +75,7 @@ def optimizer_chairs():
 	try:
 		loaded_json = database.get_chairs(problem_id)
 
-		if loaded_json is not None:
+		if loaded_json != None:
 
 			json_return = {'response': 200,
 				       'found_solution': loaded_json['found_solution']}
@@ -246,7 +246,7 @@ def optimize_rows():
 
 	solution = database.get_rows(problem_id)
 
-	if solution is not None:
+	if solution != None:
 
 		solution.update({'response': 200,
 				 'timestamp': timestamp})
