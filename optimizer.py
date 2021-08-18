@@ -263,6 +263,9 @@ def optimize_rows():
 	avg_space = (room_height - n_rows * ch_height) / (n_rows - 1.0)
 
 	result = None
+
+	# Convert to milliseconds
+	timeLimit = __FIXED_LAYOUT_TLIMIT * 1000
 	
 	if opt_type is 1:
 		result = otimizar_filas(
@@ -270,14 +273,14 @@ def optimize_rows():
 			ch_height, ch_width,
 			n_chairs,
 			list(avg_space for i in range(n_rows - 1)),
-			min_dist)
+			min_dist, timeLimit)
 	elif opt_type is 2:
 		result = otimizar_distancia(
 			room_height, room_width + 7 * ch_width / 8,
 			ch_height, ch_width,
 			n_chairs,
 			list(avg_space for i in range(n_rows - 1)),
-			min_dist, n_students)
+			min_dist, n_students, timeLimit)
 
 	if result is None:
 		return '{0}({1})'.format(
