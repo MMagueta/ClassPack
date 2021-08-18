@@ -5,15 +5,19 @@ from flask import Blueprint
 
 __FORTRAN_EXEC_NAME = 'teste.x'
 __FORTRAN_EXEC_PATH = 'script'
+__FREE_LAYOUT_TLIMIT = 120
+__FIXED_LAYOUT_TLIMIT = 120
 
 
 def config_optimizer(config):
 
-	global __FORTRAN_EXEC_NAME, __FORTRAN_EXEC_PATH
+	global __FORTRAN_EXEC_NAME, __FORTRAN_EXEC_PATH, __FIXED_LAYOUT_TLIMIT, \
+		__FREE_LAYOUT_TLIMIT
 
 	__FORTRAN_EXEC_NAME  = config.get('ClassPack', 'fortran.exec.name', fallback='teste.x')
 	__FORTRAN_EXEC_PATH  = config.get('ClassPack', 'fortran.exec.path', fallback='script')
-	__FORTRAN_TIME_LIMIT =  config.get('ClassPack', 'fortran.exec.timelimit', fallback=120.0)
+	__FREE_LAYOUT_TLIMIT = config.getint('ClassPack', 'freelayout.timelimit', fallback=120)
+	__FIXED_LAYOUT_TLIMIT = config.getint('ClassPack', 'fixedlayout.timelimit', fallback=120)
 
 
 optimizer = Blueprint('mainapp', __name__)
@@ -24,11 +28,12 @@ def index():
 
 @optimizer.route('/optimize')
 def optimizer_chairs():
-	import subprocess
+	from subprocess import TimeoutExpired, PIPE, Popen
 	from flask import request, send_file
 	import os
 
-	global __FORTRAN_EXEC_NAME, __FORTRAN_EXEC_PATH
+	global __FORTRAN_EXEC_NAME, __FORTRAN_EXEC_PATH, __FIXED_LAYOUT_TLIMIT, \
+		__FREE_LAYOUT_TLIMIT
 
 	data = list(request.args.values())[1:-1]
 
@@ -92,48 +97,82 @@ def optimizer_chairs():
 				json.dumps(json_return)
 			)
 
-		process = subprocess.Popen(
+		process = Popen(
 			[__FORTRAN_EXEC_PATH + '/' + __FORTRAN_EXEC_NAME],
-			stdin=subprocess.PIPE, stdout=subprocess.PIPE, timeout=__FORTRAN_TIME_LIMIT
+			stdin=PIPE, stdout=PIPE
 		)
-		output, error = process.communicate(('\n'.join(args)).encode('utf-8'))
+		output, error = process.communicate(('\n'.join(args)).encode('utf-8'),
+						    timeout=__FIXED_LAYOUT_TLIMIT)
 		#print("> ", output, error)
 		#print("A")
+
+	except TimeoutExpired:		
+
+		print('Timed out in id ', problem_id)
+
+		if ptype == 1 or ptype == 2:
+
+			ptype += 2
+
+			args[6 + 3 * len(obstacles) + 1] = str(ptype)
+
+			jd['opt_type'] = ptype
+
+			problem_id = database.gen_chair_id(
+				float(args[1]), float(args[2]),
+				float(args[0]), float(args[3]), float(args[4]),
+				obstacles, ptype, num_chairs)
+
+			try:
+				
+				process = Popen(
+					[__FORTRAN_EXEC_PATH + '/' + __FORTRAN_EXEC_NAME],
+					stdin=PIPE, stdout=PIPE
+				)
+				output, error = process.communicate(('\n'.join(args)).encode('utf-8'),
+								    timeout=__FIXED_LAYOUT_TLIMIT)
+
+			except Exception as e:
+				print(e)
+				return '{0}({1})'.format(request.args.get('callback'), {'response': 100, 'error': e})
+		else:
+			return '{0}({1})'.format(request.args.get('callback'), {'response': 100, 'error': e})
+
 	except Exception as e:
 		print(e)
 		return '{0}({1})'.format(request.args.get('callback'), {'response': 100, 'error': e})
-	else:
-		import glob2 as gl
-		import os
-		filename = gl.glob("*"+str(process.pid)+".json").pop()
-		loaded_json = json.loads(open(filename, 'r').read())
-		#print(loaded_json)
-		os.remove(filename) #Removes .JSON file
-		process.terminate()
 
-		database.save_or_update_chairs(problem_id, jd['room_width'], jd['room_height'], jd['min_dist'],
-					       jd['chair_width'], jd['chair_height'], ptype, loaded_json,
-					       obstacles=obstacles, num_chairs=num_chairs)
+	import glob2 as gl
+	import os
+	filename = gl.glob("*"+str(process.pid)+".json").pop()
+	loaded_json = json.loads(open(filename, 'r').read())
+	#print(loaded_json)
+	os.remove(filename) #Removes .JSON file
+	process.terminate()
 
-		json_return = {'response': 200,
-			       'found_solution': loaded_json['found_solution']}
-		
-		if json_return['found_solution']:
+	database.save_or_update_chairs(problem_id, jd['room_width'], jd['room_height'], jd['min_dist'],
+				       jd['chair_width'], jd['chair_height'], ptype, loaded_json,
+				       obstacles=obstacles, num_chairs=num_chairs)
 
-			json_return.update({
-				'file': filename.replace(".tex", ".pdf"),
-				'found_solution': str(loaded_json['found_solution']),
-				'number_items': loaded_json['number_items'],
-				'min_distance': loaded_json['min_distance'],
-				'solutions': len(loaded_json['solutions']),
-				'all_solutions': loaded_json['solutions']
-			})
+	json_return = {'response': 200,
+		       'found_solution': loaded_json['found_solution']}
 
-		
-		return '{0}({1})'.format(
-			request.args.get('callback'),
-			json.dumps(json_return)
-		)
+	if json_return['found_solution']:
+
+		json_return.update({
+			'file': filename.replace(".tex", ".pdf"),
+			'found_solution': str(loaded_json['found_solution']),
+			'number_items': loaded_json['number_items'],
+			'min_distance': loaded_json['min_distance'],
+			'solutions': len(loaded_json['solutions']),
+			'all_solutions': loaded_json['solutions']
+		})
+
+
+	return '{0}({1})'.format(
+		request.args.get('callback'),
+		json.dumps(json_return)
+	)
 
 
 @optimizer.route('/reports/<filename>/pdf', methods=['POST'])
