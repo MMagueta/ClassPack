@@ -10,7 +10,7 @@ def otimizar_filas(hs,
                    vc,
                    m,
                    n, #LISTA COM LARGURAS DOS CORREDORES VERTICAIS
-                   dmin):
+                   dmin, timeLimit=None):
   #PAINEL DE CONTROLE
   #hs = 10 #largura da sala
   #vs = 7 #comprimento da sala
@@ -62,6 +62,9 @@ def otimizar_filas(hs,
   # Create the mip solver with the CBC backend.
   solver = pywraplp.Solver('otimizacao_fileiras',
                             pywraplp.Solver.CBC_MIXED_INTEGER_PROGRAMMING)
+
+  if timeLimit != None: solver.SetTimeLimit(timeLimit)
+  
   # [END solver]
 
   # [START variables]
@@ -130,7 +133,7 @@ def otimizar_distancia(hs,
                         m,
                         n, #LISTA COM LARGURAS DOS CORREDORES VERTICAIS
                         dmin,
-                        num_alunos):
+                        num_alunos, timeLimit=None):
   #PAINEL DE CONTROLE
   #hs = 10 #largura da sala
   #vs = 7 #comprimento da sala
@@ -189,6 +192,9 @@ def otimizar_distancia(hs,
   # Create the mip solver with the CBC backend.
   solver = pywraplp.Solver('otimizacao_distancias',
                             pywraplp.Solver.CBC_MIXED_INTEGER_PROGRAMMING)
+
+  if timeLimit != None: solver.SetTimeLimit(timeLimit)
+  
   # [END solver]
   # [START variables]
   # x binary integer variable.
