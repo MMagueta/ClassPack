@@ -72,6 +72,8 @@ def optimizer_chairs():
 
 	database.save_problem(jd)
 
+        process = None
+        
 	try:
 		loaded_json = database.get_chairs(problem_id)
 
@@ -109,6 +111,8 @@ def optimizer_chairs():
 	except TimeoutExpired:		
 
 		print('Timed out in id ', problem_id)
+
+                process.kill()
 
 		if ptype == 1 or ptype == 2:
 
