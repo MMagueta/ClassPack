@@ -72,7 +72,7 @@ def optimizer_chairs():
 
 	database.save_problem(jd)
 
-        process = None
+	process = None
         
 	try:
 		loaded_json = database.get_chairs(problem_id)
@@ -112,7 +112,7 @@ def optimizer_chairs():
 
 		print('Timed out in id ', problem_id)
 
-                process.kill()
+		process.kill()
 
 		if ptype == 1 or ptype == 2:
 
@@ -271,14 +271,14 @@ def optimize_rows():
 	# Convert to milliseconds
 	timeLimit = __FIXED_LAYOUT_TLIMIT * 1000
 	
-	if opt_type is 1:
+	if opt_type == 1:
 		result = otimizar_filas(
 			room_height, room_width + 7 * ch_width / 8,
 			ch_height, ch_width,
 			n_chairs,
 			list(avg_space for i in range(n_rows - 1)),
 			min_dist, timeLimit)
-	elif opt_type is 2:
+	elif opt_type == 2:
 		result = otimizar_distancia(
 			room_height, room_width + 7 * ch_width / 8,
 			ch_height, ch_width,
