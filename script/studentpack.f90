@@ -5,8 +5,7 @@ program studentpack
   implicit none
 
   ! PARAMETERS
-  character(len=15) :: LTEXSOL = 'solution.tex', &
-                       JSONSOL = 'solution.json'
+  character(len=15) :: JSONSOL = 'solution.json'
   integer           :: MAXMEM = 5
   real(kind=8)      :: PERTURBATION = 0.1D0
   
@@ -418,8 +417,9 @@ program studentpack
   end if
 
 6001 continue
-  
-  call drawsol(nite,W,H,n,nmem,xb(1:n,1:nmem),LTEXSOL)
+
+  ! We do not deliver PDF drawings anymore!
+  ! call drawsol(nite,W,H,n,nmem,xb(1:n,1:nmem),LTEXSOL)
   
   if (nmem .eq. 0) then
      call tojson(n,nmem,xb(1:n,1:nmem),nite,W,H,JSONSOL,.false.)
