@@ -215,12 +215,34 @@ def optimize_rows():
 		n_students = None
 		if opt_type == 2: n_students = int(data[8])
 
+		uniform_rows = request.args.get('10', 1, type=int)
+		row_spacing = [float(d) for d in request.args.get('11', '').split(',') if (not uniform_rows) and d.strip() != '']
+
 	except Exception as e:
 
 		return '{0}({1})'.format(
 			request.args.get('callback'), str(e)
 		), 500
 
+	# Error if the number of spaces does not match the number of rows
+	if (not uniform_rows) and len(row_spacing) != n_rows - 1:
+
+		return '{0}({1})'.format(
+			request.args.get('callback'), 'Wrong number of rows.'
+		), 500
+
+	if uniform_rows:
+
+		# We have to adjust the right-oriented definition of
+		# the problem to the top-oriented way that the
+		# algorithm was made. Also, we artificially increase
+		# the "right" (top) part, so that the chair is inside
+		# the correct space, not the table. Finally, we
+		# compute the average space between two rows.
+		avg_space = (room_height - n_rows * ch_height) / (n_rows - 1.0)
+
+		row_spacing = list(avg_space for i in range(n_rows - 1)),
+	
 	problem_id = database.gen_row_id(room_width, room_height,
 					 min_dist,
 					 ch_width, ch_height,
@@ -257,15 +279,6 @@ def optimize_rows():
 
 		return '{0}({1})'.format(request.args.get('callback'), solution), 200
 
-
-	# We have to adjust the right-oriented definition of
-        # the problem to the top-oriented way that the
-	# algorithm was made. Also, we artificially increase
-        # the "right" (top) part, so that the chair is inside
-	# the correct space, not the table. Finally, we
-        # compute the average space between two rows.
-	avg_space = (room_height - n_rows * ch_height) / (n_rows - 1.0)
-
 	result = None
 
 	# Convert to milliseconds
@@ -276,14 +289,14 @@ def optimize_rows():
 			room_height, room_width + 7 * ch_width / 8,
 			ch_height, ch_width,
 			n_chairs,
-			list(avg_space for i in range(n_rows - 1)),
+			row_spacing,
 			min_dist, timeLimit)
 	elif opt_type == 2:
 		result = otimizar_distancia(
 			room_height, room_width + 7 * ch_width / 8,
 			ch_height, ch_width,
 			n_chairs,
-			list(avg_space for i in range(n_rows - 1)),
+			row_spacing,
 			min_dist, n_students, timeLimit)
 
 	if result is None:
@@ -302,7 +315,7 @@ def optimize_rows():
 			'rows': result["num_fileiras"],
 			'chairs': result["num_carteiras"],
 			'students': result["num_alunos"],
-			'rowSpace': avg_space,
+			'rowSpace': row_spacing,
 			'chairSpace': result["largura_corredor_horizontal"]
 		})
 
