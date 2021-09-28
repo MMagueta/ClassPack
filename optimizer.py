@@ -247,7 +247,8 @@ def optimize_rows():
 					 min_dist,
 					 ch_width, ch_height,
 					 n_rows, n_chairs,
-					 opt_type, n_students)
+					 opt_type, n_students,
+					 row_spacing)
 
 	database.connect()
 
@@ -261,6 +262,7 @@ def optimize_rows():
 		'chair_width': ch_width,
 		'chair_height': ch_height,
 		'num_rows': n_rows,
+		'row_spacing': row_spacing,
 		'num_chairs': n_chairs,
 		'opt_type': opt_type
 		
@@ -270,6 +272,8 @@ def optimize_rows():
 
 	database.save_problem(jd)
 
+	# TODO: If data do not exist and is uniform_rows, try the old
+	# version of the unique id.
 	solution = database.get_rows(problem_id)
 
 	if solution != None:
@@ -323,7 +327,7 @@ def optimize_rows():
 
 	database.save_or_update_rows(problem_id, room_width,
 		room_height, min_dist, ch_width, ch_height, n_rows,
-		n_chairs, opt_type, solution, n_students)
+		n_chairs, opt_type, row_spacing, solution, n_students)
 
 	solution.update({'response': 200,
 			 'timestamp': timestamp})
