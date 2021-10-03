@@ -469,19 +469,32 @@ $(document).ready(function() {
 
     enableCalcularButton()
   })
-  
+
   function inputDistancias () {
     $("#distanciasFileiras").empty()
     const qtdFileiras = parseInt($("#txtQuantidadeFileiras").val())
-    for (i = 0; i < qtdFileiras-1; i++) {
-      $('#distanciasFileiras').append(`
-        <div class="form-group row">
-          <label for="txtFileiraDistancia${i}" class="col-sm-9 col-form-label unifesp-blue">Distância entre fileiras ${i+1} e ${i+2} (m):</label>
-          <div class="col-sm-3">
-            <input type="text" class="form-control fileira-distancia-input" id="txtFileiraDistancia${i}" placeholder="0.55" pattern="[0-9]*\.?[0-9]*" title="Inserir números inteiros ou decimais separados por ponto (.)">
+    if(localStorage.getItem("language") === 'en') {
+      for (i = 0; i < qtdFileiras-1; i++) {
+        $('#distanciasFileiras').append(`
+          <div class="form-group row">
+            <label for="txtFileiraDistancia${i}" class="col-sm-9 col-form-label unifesp-blue">Distance between rows ${i+1} and ${i+2} (m):</label>
+            <div class="col-sm-3">
+              <input type="text" class="form-control fileira-distancia-input" id="txtFileiraDistancia${i}" placeholder="0.55" pattern="[0-9]*\.?[0-9]*" title="Use integer numbers or decimal numbers separated by a dot (.)">
+            </div>
           </div>
-        </div>
-      `)
+        `)
+      }
+    } else {
+      for (i = 0; i < qtdFileiras-1; i++) {
+        $('#distanciasFileiras').append(`
+          <div class="form-group row">
+            <label for="txtFileiraDistancia${i}" class="col-sm-9 col-form-label unifesp-blue">Distância entre fileiras ${i+1} e ${i+2} (m):</label>
+            <div class="col-sm-3">
+              <input type="text" class="form-control fileira-distancia-input" id="txtFileiraDistancia${i}" placeholder="0.55" pattern="[0-9]*\.?[0-9]*" title="Inserir números inteiros ou decimais separados por ponto (.)">
+            </div>
+          </div>
+        `)
+      }
     }
 
     $('.fileira-distancia-input').keyup(function(e) {

@@ -65,6 +65,8 @@ let arrayLang = {
         "can_move": "Você pode mover suas carteiras?",
         "choose_option": "Escolha uma opção",
 
+        "are_they_uniform": "As distâncias entre as fileiras são uniformes?",
+
         "can_move_meaning": "O que isso quer dizer?",
         "can_move_desc": `Escolha a opção 'não' caso a sala tenha cadeiras
                         fixas em fileiras, não sendo possível configurá-las de uma
@@ -203,6 +205,8 @@ let arrayLang = {
 
         "can_move": "Can you move your desks?",
         "choose_option": "Choose an option",
+
+        "are_they_uniform": "Do the rows have the same distance between them?",
 
         "can_move_meaning": "What does that mean?",
         "can_move_desc": `Choose the option ‘no’ if the room has fixed chairs in 
