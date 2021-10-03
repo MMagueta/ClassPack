@@ -406,7 +406,7 @@ $(document).ready(function() {
     }
     // Modo fixo
     return  ($('#txtQuantidadeFileiras').val() !== '' && $('#txtQuantidadeCarteirasFileira').val() !== '') &&
-      ($('#rowsRadioMaxima').is(':checked') || $('#txtQuantidadeAlunosRadio').val() !== '')
+      ($('#rowsRadioMaxima').is(':checked') || ($('#rowsRadioInserir').is(':checked') && $('#txtQuantidadeAlunosRadio').val() !== ''))
   }
 
   function enableCalcularButton() {
@@ -414,9 +414,13 @@ $(document).ready(function() {
     else $('#btnCalcularSubmit').prop('disabled', true)
   }
 
-  $('#txtLarguraSala,#txtComprimentoSala,#txtLarguraCarteira,#txtComprimentoCarteira,#txtQuantidadeFileiras,#txtQuantidadeCarteirasFileira,#txtDistanciaMinima,#txtQuantidadeCarteirasRadio').keyup(function(e) {
+  $('#txtLarguraSala,#txtComprimentoSala,#txtLarguraCarteira,#txtComprimentoCarteira,#txtQuantidadeFileiras,#txtQuantidadeCarteirasFileira,#txtDistanciaMinima,#txtQuantidadeCarteirasRadio,#txtQuantidadeAlunosRadio').keyup(function(e) {
     enableCalcularButton()
   })
+
+  $('#radioInserir,#radioMaxima,#rowsRadioMaxima,#rowsRadioInserir').change(function() {
+    enableCalcularButton()
+  });
 
   $('#selectModo').change(function() {
     const podeMoverCadeiras = parseInt($(this).val())
