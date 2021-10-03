@@ -304,6 +304,10 @@ $('#selectLang').change(function() {
         $("#imgSala").attr("src", "assets/img/sala.png");
         $("#imgSala").attr("alt", "Descrição da sala");
     }
+
+    // esconde o campo de distancia entre as fileiras, já que para eles a linguagem somente é considerada no momento em que os componentes são desenhados
+    $('#selectUniforme').prop('selectedIndex', 0);
+    $("#distanciasFileiras").empty()
 })
 
 $(document).ready(function() {
