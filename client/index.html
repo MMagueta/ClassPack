@@ -131,20 +131,32 @@
                                   <label for="txtDistanciaMinima" class="unifesp-blue lang" key="minimum_distance">Distância mínima entre estudantes (m)</label>
                                   <input id="txtDistanciaMinima" class="form-control lang-title" key="number_tooltip" type="text" placeholder="1.5" pattern="[0-9]*\.?[0-9]*" title="Inserir números inteiros ou decimais separados por ponto (.)">
                                 </div>
-                              </div>
-                              <div class="col-sm-6">
                                 <div id="modoFixo" style="display: none;">
                                   <div class="form-group">
-                                    <label for="txtQuantidadeFileiras" class="unifesp-grey lang" key="rows_qty">Quantidade de fileiras de carteiras</label>
+                                    <label for="txtQuantidadeFileiras" class="unifesp-blue lang" key="rows_qty">Quantidade de fileiras de carteiras</label>
                                     <input id="txtQuantidadeFileiras" class="form-control lang-title" key="integer_tooltip" type="text" placeholder="7" pattern="[0-9]*" title="Inserir números inteiros">
                                   </div>
                                   <div class="form-group">
-                                    <label for="txtQuantidadeCarteirasFileira" class="unifesp-grey lang" key="desks_per_row">Número de carteiras por fileira</label>
+                                    <label for="txtQuantidadeCarteirasFileira" class="unifesp-blue lang" key="desks_per_row">Número de carteiras por fileira</label>
                                     <input id="txtQuantidadeCarteirasFileira" class="form-control lang-title" key="integer_tooltip" type="text" placeholder="5" pattern="[0-9]*" title="Inserir números inteiros">
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="col-sm-6">
+                                <div id="modoFixoDois" style="display: none;">
+                                  <div class="form-group">
+                                    <label for="selectUniforme" class="unifesp-blue">As distâncias entre as fileiras são uniformes?</label>
+                                    <select class="form-control" id="selectUniforme">
+                                      <option disabled selected="selected" class="lang" key="choose_option">Escolha uma opção</option>
+                                      <option value="0" class="lang" key="no">Não</option>
+                                      <option value="1" class="lang" key="yes">Sim</option>
+                                    </select>
+                                  </div>
+                                  <div id="distanciasFileiras" style="display: none;">
                                   </div>
                                   <!-- Mode in the fixed format -->
                                   <div class="form-group">
-                                    <label class="unifesp-grey lang" key="rows_qt_students">Quantidade de alunos</label>
+                                    <label class="unifesp-blue lang" key="rows_qt_students">Quantidade de alunos</label>
                                     <div class="row">
                                       <div class="col-sm-12 col-md-12 col-lg-8">
                                         <div class="input-group">
@@ -173,7 +185,7 @@
                                 </div>
                                 <div id="modoLivre" style="display: none;">
                                   <div class="form-group">
-                                    <label class="unifesp-grey lang" key="desks_qty">Quantidade de carteiras</label>
+                                    <label class="unifesp-blue lang" key="desks_qty">Quantidade de carteiras</label>
                                     <div class="row">
                                       <div class="col-sm-12 col-md-12 col-lg-8">
                                         <div class="input-group">
@@ -203,7 +215,7 @@
                                     <div class="row mt-1">
                                       <div class="col-sm-12 col-md-12 col-lg-8">
                                         <div class="form-check">
-                                          <label class="form-check-label unifesp-grey">
+                                          <label class="form-check-label unifesp-blue">
                                             <input id="checkDesejaFileiras" type="checkbox" class="form-check-input" value=""> <p class="lang" key="solution_row">Solução em fileiras</p>
                                           </label>
                                         </div>
