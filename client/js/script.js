@@ -218,7 +218,7 @@ function drawFixedLayout(result) {
   `)
   if (result.minDist)
     $("div#summary").append(`
-        <h4 class="mt-1 marign-left-adjust">Distância mínima: ${myRound(result.minDist, 2)}</h4>
+        <h4 class="mt-1 margin-left-adjust">Distância mínima: ${myRound(result.minDist, 2)}</h4>
     `)
   $("div#summary").append("<button class='btn btn-confirm mt-4 margin-left-adjust' id='download' onclick='download_pdf()'>Baixar PDF</button>")
   $("#result").append(`
@@ -416,26 +416,6 @@ $(document).ready(function() {
 
   $('#txtLarguraSala,#txtComprimentoSala,#txtLarguraCarteira,#txtComprimentoCarteira,#txtQuantidadeFileiras,#txtQuantidadeCarteirasFileira,#txtDistanciaMinima,#txtQuantidadeCarteirasRadio').keyup(function(e) {
     enableCalcularButton()
-  })
-
-  $('#frmUsuario').submit(function(e) {
-    e.preventDefault()
-    
-    $('#firstPage').hide()
-    $('#secondPage').show()
-
-    // $('#firstPage').show()
-    // $('#secondPage').show()
-    // var url = form.attr('action')
-    
-    // $.ajax({
-    //   type: "POST",
-    //   url: url,
-    //   data: form.serialize(),
-    //   success: function(data) {
-    //       alert(data)
-    //   }
-    // })
   })
 
   $('#selectModo').change(function() {
