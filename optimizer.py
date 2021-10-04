@@ -239,9 +239,9 @@ def optimize_rows():
 		# the "right" (top) part, so that the chair is inside
 		# the correct space, not the table. Finally, we
 		# compute the average space between two rows.
-		avg_space = (room_height - n_rows * ch_height) / (n_rows - 1.0)
+		avg_space = round((room_height - n_rows * ch_height) / (n_rows - 1.0), 2)
 
-		row_spacing = list(avg_space for i in range(n_rows - 1)),
+		row_spacing = list(avg_space for i in range(n_rows - 1))
 	
 	problem_id = database.gen_row_id(room_width, room_height,
 					 min_dist,
