@@ -216,7 +216,7 @@ def optimize_rows():
 		if opt_type == 2: n_students = int(data[8])
 
 		uniform_rows = request.args.get('10', 1, type=int)
-		row_spacing = [float(d) for d in request.args.get('11', '').split(',') if (not uniform_rows) and d.strip() != '']
+		row_spacing = [float(d) for d in (request.args.get('11', '')).split(',') if (not uniform_rows) and d.strip() != '']
 
 	except Exception as e:
 
