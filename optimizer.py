@@ -231,6 +231,15 @@ def optimize_rows():
 			request.args.get('callback'), 'Wrong number of rows.'
 		), 500
 
+	# Error if the size of the room is not compatible with
+	# spacing, size of the chair or number of rows or columns
+	if n_rows * ch_height + sum(row_spacing) > room_height or \
+	   n_chairs * ch_width > room_width:
+
+		return '{0}({1})'.format(
+			request.args.get('callback'), 'Incompatible size.'
+		), 500		
+
 	if uniform_rows:
 
 		# We have to adjust the right-oriented definition of
