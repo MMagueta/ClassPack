@@ -169,8 +169,7 @@ def gen_row_id(width, height, min_dist, ch_width, ch_height,
     id = 'rows:' + ':'.join(
         str(i) for i in [width, height, ch_width, ch_height,
                          min_dist, n_rows, n_chairs, opt_type,
-                         n_students_str] +
-        row_spacing
+                         n_students_str]
     )
 
     if row_spacing == None:
@@ -179,7 +178,7 @@ def gen_row_id(width, height, min_dist, ch_width, ch_height,
 
     else:
 
-        id += ':' + ':'.join(row_spacing)
+        id += ':' + ':'.join((str(i) for i in row_spacing))
 
     return id
 
