@@ -218,7 +218,7 @@ function drawFixedLayout(result) {
   `)
   if (result.minDist)
     $("div#summary").append(`
-        <h4 class="mt-1 marign-left-adjust">Distância mínima: ${myRound(result.minDist, 2)}</h4>
+        <h4 class="mt-1 margin-left-adjust">Distância mínima: ${myRound(result.minDist, 2)}</h4>
     `)
   $("div#summary").append("<button class='btn btn-confirm mt-4 margin-left-adjust' id='download' onclick='download_pdf()'>Baixar PDF</button>")
   $("#result").append(`
@@ -406,55 +406,105 @@ $(document).ready(function() {
     }
     // Modo fixo
     return  ($('#txtQuantidadeFileiras').val() !== '' && $('#txtQuantidadeCarteirasFileira').val() !== '') &&
-      ($('#rowsRadioMaxima').is(':checked') || $('#txtQuantidadeAlunosRadio').val() !== '')
+      ($('#rowsRadioMaxima').is(':checked') || ($('#rowsRadioInserir').is(':checked') && $('#txtQuantidadeAlunosRadio').val() !== ''))
   }
 
+  function checkInputDistancias() {
+    const saoUniformes = parseInt($('#selectUniforme').val())
+    if (saoUniformes) return true;
+
+    let enabled = true;
+    $('.fileira-distancia-input').each(function(i, obj) {
+      const value = $(obj).val();
+      if(!value) enabled = false;
+    })
+
+    return enabled;
+  };
+
   function enableCalcularButton() {
-    if(checkCalcularForm() && checkCalcularFormExtra()) $('#btnCalcularSubmit').prop('disabled', false)
+    if(checkCalcularForm() && checkCalcularFormExtra() && checkInputDistancias()) $('#btnCalcularSubmit').prop('disabled', false)
     else $('#btnCalcularSubmit').prop('disabled', true)
   }
 
-  $('#txtLarguraSala,#txtComprimentoSala,#txtLarguraCarteira,#txtComprimentoCarteira,#txtQuantidadeFileiras,#txtQuantidadeCarteirasFileira,#txtDistanciaMinima,#txtQuantidadeCarteirasRadio').keyup(function(e) {
+  $('#txtLarguraSala,#txtComprimentoSala,#txtLarguraCarteira,#txtComprimentoCarteira,#txtQuantidadeFileiras,#txtQuantidadeCarteirasFileira,#txtDistanciaMinima,#txtQuantidadeCarteirasRadio,#txtQuantidadeAlunosRadio').keyup(function(e) {
     enableCalcularButton()
   })
 
-  $('#frmUsuario').submit(function(e) {
-    e.preventDefault()
-    
-    $('#firstPage').hide()
-    $('#secondPage').show()
-
-    // $('#firstPage').show()
-    // $('#secondPage').show()
-    // var url = form.attr('action')
-    
-    // $.ajax({
-    //   type: "POST",
-    //   url: url,
-    //   data: form.serialize(),
-    //   success: function(data) {
-    //       alert(data)
-    //   }
-    // })
-  })
+  $('#radioInserir,#radioMaxima,#rowsRadioMaxima,#rowsRadioInserir').change(function() {
+    enableCalcularButton()
+  });
 
   $('#selectModo').change(function() {
     const podeMoverCadeiras = parseInt($(this).val())
 
     if(podeMoverCadeiras) { // Modo livre
       $('#modoFixo').hide()
+      $('#modoFixoDois').hide()
       $('#modoLivre').show()
 
       $('#txtQuantidadeFileiras,#txtQuantidadeCarteirasFileira').val('')
     } else { // Modo Fixo
       $('#modoLivre').hide()
       $('#modoFixo').show()
+      $('#modoFixoDois').show()
 
       $('#txtDistanciaMinima,#txtQuantidadeCarteirasRadio').val('')
       $('#radioInserir,#radioMaxima').prop("checked", false)
+      $('#selectUniforme').prop('selectedIndex', 0);
     }
 
     enableCalcularButton()
+  })
+
+  $('#selectUniforme').change(function() {
+    const saoUniformes = parseInt($(this).val())
+
+    if(saoUniformes) { 
+      $('#distanciasFileiras').hide()
+    } else {
+      inputDistancias()
+      $('#distanciasFileiras').show()
+    }
+
+    enableCalcularButton()
+  })
+
+  function inputDistancias () {
+    $("#distanciasFileiras").empty()
+    const qtdFileiras = parseInt($("#txtQuantidadeFileiras").val())
+    if(localStorage.getItem("language") === 'en') {
+      for (i = 0; i < qtdFileiras-1; i++) {
+        $('#distanciasFileiras').append(`
+          <div class="form-group row">
+            <label for="txtFileiraDistancia${i}" class="col-sm-9 col-form-label unifesp-blue">Distance between rows ${i+1} and ${i+2} (m):</label>
+            <div class="col-sm-3">
+              <input type="text" class="form-control fileira-distancia-input" id="txtFileiraDistancia${i}" placeholder="0.55" pattern="[0-9]*\.?[0-9]*" title="Use integer numbers or decimal numbers separated by a dot (.)">
+            </div>
+          </div>
+        `)
+      }
+    } else {
+      for (i = 0; i < qtdFileiras-1; i++) {
+        $('#distanciasFileiras').append(`
+          <div class="form-group row">
+            <label for="txtFileiraDistancia${i}" class="col-sm-9 col-form-label unifesp-blue">Distância entre fileiras ${i+1} e ${i+2} (m):</label>
+            <div class="col-sm-3">
+              <input type="text" class="form-control fileira-distancia-input" id="txtFileiraDistancia${i}" placeholder="0.55" pattern="[0-9]*\.?[0-9]*" title="Inserir números inteiros ou decimais separados por ponto (.)">
+            </div>
+          </div>
+        `)
+      }
+    }
+
+    $('.fileira-distancia-input').keyup(function(e) {
+      enableCalcularButton()
+    })
+  }
+
+  $('#txtQuantidadeFileiras').keyup(function(e) {
+    const saoUniformes = parseInt($('#selectUniforme').val())
+    if (!saoUniformes) inputDistancias()
   })
 
   $('.radio-carteiras').change(function(e) {
@@ -530,6 +580,11 @@ $(document).ready(function() {
       })
     } else { // Modo fixo
       const selectedRadio = $("input[name=rows-radio-options]:checked").val()
+      const saoUniformes = $('#selectUniforme').val(); // se 1, são uniformes. se 0, não são uniformes
+      let distanciaEntreFileiras = []
+      $('.fileira-distancia-input').each(function(i, obj) {
+        if($(obj).val()) distanciaEntreFileiras.push($(obj).val())
+      })
       const data = {
         1: $("#txtLarguraSala").val(),
         2: $("#txtComprimentoSala").val(),
@@ -539,10 +594,11 @@ $(document).ready(function() {
         6: $("#txtQuantidadeCarteirasFileira").val(),
         7: $("#txtDistanciaMinima").val(),
         8: selectedRadio,
+        9: selectedRadio == 2 ? $("#txtQuantidadeAlunosRadio").val() : '',
+        10: saoUniformes,
+        11: distanciaEntreFileiras
       }
 
-      if (selectedRadio == 2) data[9] = $("#txtQuantidadeAlunosRadio").val()
-      
       $.ajax({
         url: "http://200.144.93.70/a/rows",
         type: "GET",
