@@ -555,7 +555,7 @@ $(document).ready(function() {
       }
 
       $.ajax({
-        url: "http://127.0.0.1:5000/a/optimize",
+        url: "http://200.144.93.70/a/optimize",
         type: "GET",
         data,
         crossDomain: true,
@@ -607,7 +607,7 @@ $(document).ready(function() {
       }
 
       $.ajax({
-        url: "http://127.0.0.1:5000/a/rows",
+        url: "http://200.144.93.70/a/rows",
         type: "GET",
         data,
         crossDomain: true,
