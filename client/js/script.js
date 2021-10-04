@@ -167,7 +167,10 @@ function __actuallyDrawRowSolution(mycanvas, s) {
   const rH = parseFloat($('#txtComprimentoSala').val())
   const cW = parseFloat($('#txtLarguraCarteira').val())
   const cH = parseFloat($('#txtComprimentoCarteira').val())
-  const cR = solution.rowSpace
+  // The following line should be removed in the future, it creates an
+  // array of uniform spacings between rows, just to be compatible to
+  // possible old cached solutions.
+  const cR = ((s.rowSpace).length) ? s.rowSpace : Array(s.rows).fill(s.rowSpace)
   const cC = solution.chairSpace
 
   clearRoom(ctx, w, h)
@@ -196,7 +199,7 @@ function __actuallyDrawRowSolution(mycanvas, s) {
       px += (cW + cC) * scale
     }
 
-    py += (cH + cR) * scale
+    py += (cH + cR[i]) * scale
   }
 }
 
@@ -552,7 +555,7 @@ $(document).ready(function() {
       }
 
       $.ajax({
-        url: "http://200.144.93.70/a/optimize",
+        url: "http://127.0.0.1:5000/a/optimize",
         type: "GET",
         data,
         crossDomain: true,
@@ -581,10 +584,14 @@ $(document).ready(function() {
     } else { // Modo fixo
       const selectedRadio = $("input[name=rows-radio-options]:checked").val()
       const saoUniformes = $('#selectUniforme').val(); // se 1, são uniformes. se 0, não são uniformes
-      let distanciaEntreFileiras = []
-      $('.fileira-distancia-input').each(function(i, obj) {
-        if($(obj).val()) distanciaEntreFileiras.push($(obj).val())
-      })
+      const distanciaEntreFileiras = $('.fileira-distancia-input').map(
+            function(){return $(this).val()}
+        ).get()
+         .join()
+      // let distanciaEntreFileiras = []
+      // $('.fileira-distancia-input').each(function(i, obj) {
+      //  if($(obj).val()) distanciaEntreFileiras.push($(obj).val())
+      // })
       const data = {
         1: $("#txtLarguraSala").val(),
         2: $("#txtComprimentoSala").val(),
@@ -600,7 +607,7 @@ $(document).ready(function() {
       }
 
       $.ajax({
-        url: "http://200.144.93.70/a/rows",
+        url: "http://127.0.0.1:5000/a/rows",
         type: "GET",
         data,
         crossDomain: true,
