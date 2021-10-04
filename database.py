@@ -158,7 +158,7 @@ def gen_chair_id(width, height, min_dist, ch_width, ch_height,
 
 
 def gen_row_id(width, height, min_dist, ch_width, ch_height,
-               n_rows, n_chairs, opt_type, n_students, row_spacing):
+               n_rows, n_chairs, opt_type, n_students, row_spacing=None):
     """Generate unique ids for saving the results of 'rows' problems.
 
     """
@@ -172,6 +172,14 @@ def gen_row_id(width, height, min_dist, ch_width, ch_height,
                          n_students_str] +
         row_spacing
     )
+
+    if row_spacing == None:
+
+        print("[Deprecation] Sending row_spacing=None will be disabled in future versions.")
+
+    else:
+
+        id += ':' + ':'.join(row_spacing)
 
     return id
 

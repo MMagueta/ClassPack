@@ -248,7 +248,7 @@ def optimize_rows():
 					 ch_width, ch_height,
 					 n_rows, n_chairs,
 					 opt_type, n_students,
-					 row_spacing)
+					 row_spacing=row_spacing)
 
 	database.connect()
 
@@ -272,8 +272,6 @@ def optimize_rows():
 
 	database.save_problem(jd)
 
-	# TODO: If data do not exist and is uniform_rows, try the old
-	# version of the unique id.
 	solution = database.get_rows(problem_id)
 
 	if solution != None:
@@ -282,6 +280,32 @@ def optimize_rows():
 				 'timestamp': timestamp})
 
 		return '{0}({1})'.format(request.args.get('callback'), solution), 200
+
+	elif uniform_rows:
+
+		# If data does not exist and is in uniform_rows mode,
+		# try the old version of the unique id.
+		
+		oldid = database.gen_row_id(room_width, room_height,
+				min_dist, ch_width, ch_height, n_rows,
+				n_chairs, opt_type, n_students)
+
+		solution = database.get_rows(oldid)
+
+		if solution != None:
+
+			# Add old solution to the new id and include
+			# the row spacing
+			database.save_or_update_rows(
+				problem_id, room_width,
+				room_height, min_dist, ch_width, ch_height, n_rows,
+				n_chairs, opt_type, row_spacing, solution, n_students
+			)
+
+			solution.update({'response': 200,
+					 'timestamp': timestamp})
+
+			return '{0}({1})'.format(request.args.get('callback'), solution), 200
 
 	result = None
 
