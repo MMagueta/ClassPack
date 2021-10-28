@@ -245,12 +245,22 @@ function drawFixedLayout(result) {
 }
 
 function drawFreeLayout(result) {
+
+  /* Deal with infeasible solutions */
+  let attColor = ""
+  if ( result["min_distance"] < $("#txtDistanciaMinima").val() )
+    attColor = "text-danger"
+
   $("div#summary"). append(`
     <h2 class="margin-left-adjust">Resultados</h2>
     <h4 class="mt-1 margin-left-adjust">Soluções encontradas: ${result["solutions"]}</h4>
-    <h4 class="mt-1 margin-left-adjust">Distância ideal calculada: ${myRound(result["min_distance"], 2)}</h4>
+    <h4 class=\"mt-1 margin-left-adjust ${attColor}\">Distância ideal calculada: ${myRound(result["min_distance"], 2)}</h4>
     <h4 class="mt-1 margin-left-adjust">Número de carteiras: ${result["number_items"]}</h4>
   `)
+  /* Deal with infeasible solutions */
+  if ( attColor != "" )
+    $("div#summary").append('<h4 class="mt-1 margin-left-adjust text-danger">Distância mínima não obtida! Use com cautela.</h4>')
+
   $("div#summary").append("<button class='btn btn-confirm mt-4 margin-left-adjust' id='download' onclick='download_pdf()'>Baixar PDF</button>")
 
   $("#result").append('<div id="freeLayoutImage" class="col-sm-12 col-lg-6 mt-4 mb-4"></div>')
@@ -329,12 +339,22 @@ function drawFixedLayoutEng(result) {
 }
 
 function drawFreeLayoutEng(result) {
+
+  /* Deal with infeasible solutions */
+  let attColor = ""
+  if ( result["min_distance"] < $("#txtDistanciaMinima").val() )
+    attColor = "text-danger"
+
   $("div#summary"). append(`
     <h2 class="margin-left-adjust">Results</h2>
     <h4 class="mt-1 margin-left-adjust">Solutions found: ${result["solutions"]}</h4>
-    <h4 class="mt-1 margin-left-adjust">Calculated ideal distance: ${myRound(result["min_distance"], 2)}</h4>
+    <h4 class=\"mt-1 margin-left-adjust ${attColor}\">Calculated ideal distance: ${myRound(result["min_distance"], 2)}</h4>
     <h4 class="mt-1 margin-left-adjust">Number of student desks: ${result["number_items"]}</h4>
   `)
+  /* Deal with infeasible solutions */
+  if ( attColor != "" )
+    $("div#summary").append('<h4 class="mt-1 margin-left-adjust text-danger">Minimum distance not achieved! Use it with care.</h4>')
+  
   $("div#summary").append("<button class='btn btn-confirm mt-4 margin-left-adjust' id='download' onclick='download_pdf()'>Download PDF</button>")
 
   $("#result").append('<div id="freeLayoutImage" class="col-sm-12 col-lg-6 mt-4 mb-4"></div>')
