@@ -271,7 +271,7 @@ def save_or_update_rows(problem_id, width, height, min_dist, ch_width, ch_height
         olddoc = db[problem_id]
 
         # TODO: check using opt_type
-        if int(olddoc['solution']['status']) is '0' or \
+        if int(olddoc['solution']['status']) == 0 or \
            solution['students'] > olddoc['solution']['students']:
 
             olddoc['solution'] = solution
