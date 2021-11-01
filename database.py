@@ -220,31 +220,38 @@ def save_or_update_chairs(problem_id, width, height, min_dist, ch_width, ch_heig
     
     db = g._client[DB_SOL_NAME]
 
+    # We generate the document before, so we can update old entries
+    # too
+    document = {
+        '_id': problem_id,
+        'problem_type': ptype,
+        'num_chairs': num_chairs,
+        'min_dist': min_dist,
+        'room_width': width,
+        'room_height': height,
+        'chair_width': ch_width,
+        'chair_height': ch_height,
+        'obstacles': obstacles,
+        'solution': solution
+    }
+
     if problem_id in db:
 
         olddoc = db[problem_id]
 
-        if solution['min_distance'] < olddoc['solution']['min_distance']:
+        if (not olddoc['solution']['found_solution']) or \
+           ((ptype == 1 or ptype == 3) and solution['min_distance'] > olddoc['solution']['min_distance']) or \
+           ((ptype == 2 or ptype == 4) and \
+            (solution['number_items'] > olddoc['solution']['number_items'] or \
+            (solution['number_items'] == olddoc['solution']['number_items'] and \
+             solution['min_distance'] > olddoc['solution']['min_distance']))) :
 
-            olddoc['solution'] = solution
+            olddoc.update(document)
             olddoc.save()
 
             print('Updated cache')
 
     else:
-
-        document = {
-            '_id': problem_id,
-            'problem_type': ptype,
-            'num_chairs': num_chairs,
-            'min_dist': min_dist,
-            'room_width': width,
-            'room_height': height,
-            'chair_width': ch_width,
-            'chair_height': ch_height,
-            'obstacles': obstacles,
-            'solution': solution
-        }
 
         doc = db.create_document(document)
 
@@ -263,6 +270,7 @@ def save_or_update_rows(problem_id, width, height, min_dist, ch_width, ch_height
 
         olddoc = db[problem_id]
 
+        # TODO: check using opt_type
         if int(olddoc['solution']['status']) is '0' or \
            solution['students'] > olddoc['solution']['students']:
 

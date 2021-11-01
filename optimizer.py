@@ -20,6 +20,18 @@ def config_optimizer(config):
 	__FIXED_LAYOUT_TLIMIT = config.getint('ClassPack', 'fixedlayout.timelimit', fallback=120)
 
 
+def call_fortran(args, fortran_path, tlimit):
+
+	from subprocess import PIPE, Popen
+
+	process = Popen([fortran_path],	stdin=PIPE, stdout=PIPE)
+	output, error = process.communicate(('\n'.join(args)).encode('utf-8'),
+					    timeout=tlimit)
+	#print("> ", output, error)
+
+	return process
+
+
 optimizer = Blueprint('mainapp', __name__)
 
 @optimizer.route('/')
@@ -28,7 +40,7 @@ def index():
 
 @optimizer.route('/optimize')
 def optimizer_chairs():
-	from subprocess import TimeoutExpired, PIPE, Popen
+	from subprocess import TimeoutExpired
 	from flask import request, send_file
 	import os
 
@@ -77,7 +89,12 @@ def optimizer_chairs():
 	try:
 		loaded_json = database.get_chairs(problem_id)
 
-		if loaded_json != None:
+		# We temporarily run FORTRAN in all solution that was
+		# marked as 'not found', since we allow infeasible
+		# solutions.
+		#
+		# TODO: Remove this after some time.
+		if loaded_json != None and loaded_json['found_solution']:
 
 			json_return = {'response': 200,
 				       'found_solution': loaded_json['found_solution']}
@@ -99,14 +116,11 @@ def optimizer_chairs():
 				json.dumps(json_return)
 			)
 
-		process = Popen(
-			[__FORTRAN_EXEC_PATH + '/' + __FORTRAN_EXEC_NAME],
-			stdin=PIPE, stdout=PIPE
+		process = call_fortran(
+			args,
+			__FORTRAN_EXEC_PATH + '/' + __FORTRAN_EXEC_NAME,
+			__FIXED_LAYOUT_TLIMIT
 		)
-		output, error = process.communicate(('\n'.join(args)).encode('utf-8'),
-						    timeout=__FIXED_LAYOUT_TLIMIT)
-		#print("> ", output, error)
-		#print("A")
 
 	except TimeoutExpired:		
 
@@ -128,13 +142,12 @@ def optimizer_chairs():
 				obstacles, ptype, num_chairs)
 
 			try:
-				
-				process = Popen(
-					[__FORTRAN_EXEC_PATH + '/' + __FORTRAN_EXEC_NAME],
-					stdin=PIPE, stdout=PIPE
+
+				process = call_fortran(
+					args,
+					__FORTRAN_EXEC_PATH + '/' + __FORTRAN_EXEC_NAME,
+					__FIXED_LAYOUT_TLIMIT
 				)
-				output, error = process.communicate(('\n'.join(args)).encode('utf-8'),
-								    timeout=__FIXED_LAYOUT_TLIMIT)
 
 			except Exception as e:
 				print(e)
