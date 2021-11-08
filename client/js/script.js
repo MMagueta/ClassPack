@@ -258,8 +258,10 @@ function drawFreeLayout(result) {
     <h4 class="mt-1 margin-left-adjust">Número de carteiras: ${result["number_items"]}</h4>
   `)
   /* Deal with infeasible solutions */
-  if ( attColor != "" )
-    $("div#summary").append('<h4 class="mt-1 margin-left-adjust text-danger">Distância mínima não obtida! Use com cautela.</h4>')
+  if ( attColor != "" ) {
+    $("div#summary").append('<h4 class="mt-1 margin-left-adjust text-danger">Distância mínima não obtida! Use-a com cautela.</h4>')
+    $("div#summary").append('<h6 class="mt-1 margin-left-adjust text-danger">Isto pode ser um problema ou a instância não possui solução. Se seu problema é complexo, envie um email para <b>salaplanejada@unifesp.br</b>.</h6>')
+  }
 
   $("div#summary").append("<button class='btn btn-confirm mt-4 margin-left-adjust' id='download' onclick='download_pdf()'>Baixar PDF</button>")
 
@@ -352,8 +354,10 @@ function drawFreeLayoutEng(result) {
     <h4 class="mt-1 margin-left-adjust">Number of student desks: ${result["number_items"]}</h4>
   `)
   /* Deal with infeasible solutions */
-  if ( attColor != "" )
+  if ( attColor != "" ) {
     $("div#summary").append('<h4 class="mt-1 margin-left-adjust text-danger">Minimum distance not achieved! Use it with care.</h4>')
+    $("div#summary").append('<h6 class="mt-1 margin-left-adjust text-danger">This could be a major problem or the instance has no solution. If your problem is complex, contact <b>salaplanejada@unifesp.br</b>.</h6>')
+  }
   
   $("div#summary").append("<button class='btn btn-confirm mt-4 margin-left-adjust' id='download' onclick='download_pdf()'>Download PDF</button>")
 
@@ -392,7 +396,7 @@ function errorHandlerEng() {
   $("#loading").remove()
   $("#result").append(`
     <div class="alert alert-danger alert-dismissible fade show margin-left-adjust">
-    Error! Check the information entered. If it happens again, send an email to salaplanejada@unifesp.br.</b>.
+    Error! Check the information entered. If it happens again, send an email to <b>salaplanejada@unifesp.br</b>.
       <button type="button" class="close" data-dismiss="alert">
         &times;
       </button>
